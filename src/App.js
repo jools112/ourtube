@@ -1,3 +1,6 @@
+/*
+  Added Redux state (almost) according to tutorial: https://medium.com/backticks-tildes/setting-up-a-redux-project-with-create-react-app-e363ab2329b8
+*/
 import './App.css'
 import { Route, Switch } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
@@ -34,9 +37,9 @@ const unconnectedApp = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  ...state
-})
+const mapStateToProps = (state) => {
+  return { ...state }
+}
 
 const mapDispatchToProps = (dispatch) => ({
   simpleAction: () => dispatch(simpleAction())
