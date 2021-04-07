@@ -6,8 +6,10 @@
 import { combineReducers } from 'redux'
 import simpleReducer from './simpleReducer'
 import loginReducer from './loginReducer'
+import joinRoomReducer from './joinRoomReducer'
 
 export default combineReducers({
   tutorial: simpleReducer,
-  login: loginReducer
+  login: loginReducer,
+  joinRoom: joinRoomReducer
 })
