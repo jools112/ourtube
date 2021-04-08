@@ -44,7 +44,8 @@ const unconnectedLogin = (props) => {
         if (player.paused) player.play();
       }
     };
-    return props.joinRoomClick()
+    // To Daniela: I disabled this row so that the joinRoomClick action won't be dispatched, so you don't need to think about Redux for now.
+    //return props.joinRoomClick()
   }
   const leaveRoomClick = () => {
     conn.close();
