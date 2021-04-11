@@ -35,7 +35,7 @@ const UnconnectedLogin = (props) => {
         'user' + parseInt(99999 * Math.random())
     }
 
-    conn = new WebSocket('ws://ourtube-iprog.herokuapp.com:3000/test')
+    conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       debugger
       var matches
