@@ -1,7 +1,7 @@
 var ws = require('ws')
 var userCount = []
 
-var server = new ws.Server({ port: 3000 })
+var server = new ws.Server({ port: process.env.PORT || 3000 })
 
 server.on('connection', function (conn) {
   server.broadcast('userCount ' + ++userCount)
