@@ -1,0 +1,1 @@
+worker: node src/video-server.js
