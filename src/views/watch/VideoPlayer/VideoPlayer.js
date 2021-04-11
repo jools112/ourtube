@@ -4,21 +4,68 @@
 import { connect } from 'react-redux'
 import { joinRoomAction } from '../../../actions/joinRoomAction'
 import { useEffect } from 'react'
-const conn = new WebSocket('ws://localhost:8000/test')
+import { Helmet } from 'react-helmet'
+import Safe from 'react-safe'
+import { youtube } from './html5-youtube.js'
+let conn
+let player
 function iAmControlling() {
-  return $_('#controller').innerHTML == $_('#name').value
+  return (
+    document.querySelector('#controller').innerHTML ==
+    document.querySelector('#name').value
+  )
 }
 
-function $_(sel) {
-  return document.querySelector(sel)
-}
 const UnconnectedLogin = (props) => {
-  let player
-  let youtube
-  let state
-  useEffect(function () {
-    const elPlayer = document.querySelector('.js-player')
+  useEffect(() => {
+    const scriptHtml5 = document.createElement('script')
+    scriptHtml5.src = 'html5-youtube.js'
+    scriptHtml5.async = false
+    document.body.appendChild(scriptHtml5)
+    const scriptYoutube = document.createElement('script')
+    scriptYoutube.src = 'https://www.youtube.com/iframe_api'
+    scriptYoutube.async = false
+    document.body.appendChild(scriptYoutube)
+
+    let elPlayer = document.querySelector('.js-player')
     player = window.player = youtube({ el: elPlayer })
+
+    if (document.querySelector('#name').value == '') {
+      document.querySelector('#name').value =
+        'user' + parseInt(99999 * Math.random())
+    }
+
+    conn = new WebSocket('ws://localhost:3000/test')
+    conn.onmessage = function (ev) {
+      debugger
+      var matches
+      if ((matches = ev.data.match(/^control (.+)$/))) {
+        document.querySelector('#controller').innerHTML = matches[1]
+      } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
+        // document.querySelector("#userCount").innerHTML = matches[1];
+        document.getElementById('userCount').innerHTML = matches[1]
+      } else if ((matches = ev.data.match(/^pause (.+)$/))) {
+        player.currentTime = matches[1]
+        player.pause()
+      } else {
+        if (iAmControlling()) return
+        var estimatedTimeOnMaster = parseInt(ev.data) + 1
+        if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
+          player.currentTime = estimatedTimeOnMaster
+        if (player.paused) player.play()
+      }
+    }
+
+    // conn.onopen = () => conn.send('hello')
+  }, [])
+
+  const joinRoomClick = () => {
+    console.log('joinRoom button has been pushed!')
+    document.querySelector('#username').innerHTML = document.querySelector(
+      '#name'
+    ).value
+    document.querySelector('#room').className = 'active'
+    document.querySelector('#registration').className = 'inactive'
     player.addEventListener(
       'timeupdate',
       function () {
@@ -34,45 +81,24 @@ const UnconnectedLogin = (props) => {
       },
       true
     )
-  }, [])
-
-  const joinRoomClick = () => {
-    console.log('joinRoom button has been pushed!')
-    conn.onmessage = function (ev) {
-      var matches
-      if ((matches = ev.data.match(/^control (.+)$/))) {
-        $_('#controller').innerHTML = matches[1]
-      } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
-        // $_('#userCount').innerHTML = matches[1];
-        document.getElementById('userCount').innerHTML = matches[1]
-      } else if ((matches = ev.data.match(/^pause (.+)$/))) {
-        player.currentTime = matches[1]
-        player.pause()
-      } else {
-        if (iAmControlling()) return
-        var estimatedTimeOnMaster = parseInt(ev.data) + 1
-        if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
-          player.currentTime = estimatedTimeOnMaster
-        if (player.paused) player.play()
-      }
-    }
     // To Daniela: I disabled this row so that the joinRoomClick action won't be dispatched, so you don't need to think about Redux for now.
-    //return props.joinRoomClick()
+    return props.joinRoomClick()
   }
+
   const leaveRoomClick = () => {
     conn.close()
-    $_('#room').className = 'inactive'
-    $_('#registration').className = 'active'
+    document.querySelector('#room').className = 'inactive'
+    document.querySelector('#registration').className = 'active'
   }
   const takeControlRoomClick = () => {
-    conn.send('control ' + $_('#name').value)
+    conn.send('control ' + document.querySelector('#name').value)
   }
   return (
     <body>
-      <div id="room" class="inactive">
-        <div id="registration" class="active">
+      <div id="room" className="inactive">
+        <div id="registration" className="active">
           <p>
-            Username: {state.name} <input id="name" />1
+            Username: <input id="name" />
             <button onClick={joinRoomClick} id="join">
               Join Room
             </button>
@@ -94,7 +120,7 @@ const UnconnectedLogin = (props) => {
         <p>
           <div
             id="my-youtube-player"
-            class="player js-player"
+            className="player js-player"
             data-youtube-videoid="KFstP0C9sVk"
           ></div>
         </p>

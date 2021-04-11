@@ -8,7 +8,7 @@ export const Watch = () => {
       Let's watch some videos together!
       <Rating />
       <Poll />
-      {/*<VideoPlayer />*/}
+      <VideoPlayer />
     </div>
   )
 }
