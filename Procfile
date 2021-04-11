@@ -1,1 +1,1 @@
-worker: node src/video-server.js
+web: startup.sh
