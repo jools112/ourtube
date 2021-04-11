@@ -312,18 +312,18 @@ prototype._getPlayerVarsOption = function (options, name) {
 prototype._getVideoEvents = function () {
   var events = {}
 
-  ;[
-    'onApiChange',
-    'onError',
-    'onPlaybackQualityChange',
-    'onPlaybackRateChange',
-    'onReady',
-    'onStateChange'
-  ].forEach(
-    function (type, index) {
-      events[type] = Player.bind(this[type], this)
-    }.bind(this)
-  )
+    ;[
+      'onApiChange',
+      'onError',
+      'onPlaybackQualityChange',
+      'onPlaybackRateChange',
+      'onReady',
+      'onStateChange'
+    ].forEach(
+      function (type, index) {
+        events[type] = Player.bind(this[type], this)
+      }.bind(this)
+    )
 
   return events
 }
