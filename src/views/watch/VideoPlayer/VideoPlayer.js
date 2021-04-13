@@ -4,8 +4,6 @@
 import { connect } from 'react-redux'
 import { joinRoomAction } from '../../../actions/joinRoomAction'
 import { useEffect } from 'react'
-import { Helmet } from 'react-helmet'
-import Safe from 'react-safe'
 import { youtube } from './html5-youtube.js'
 let conn
 let player
@@ -36,6 +34,7 @@ const UnconnectedLogin = (props) => {
     }
 
     conn = new WebSocket('ws://localhost:3000/test')
+
     conn.onmessage = function (ev) {
       debugger
       var matches
@@ -55,8 +54,15 @@ const UnconnectedLogin = (props) => {
         if (player.paused) player.play()
       }
     }
-
-    // conn.onopen = () => conn.send('hello')
+    fetch('https://api.ipify.org?format=json')
+      .then((response) => {
+        return response.json()
+      })
+      .then((res) => {
+        console.log('ipaddress:' + res.ip)
+        conn.send('ipaddress:' + res.ip)
+      })
+      .catch((err) => console.log(err))
   }, [])
 
   const joinRoomClick = () => {
