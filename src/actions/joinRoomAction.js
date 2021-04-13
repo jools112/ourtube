@@ -1,9 +1,9 @@
 /*
   Julia's test action
 */
-export const joinRoomAction = () => (dispatch) => {
+export const joinRoomAction = (username) => (dispatch) => {
   dispatch({
     type: 'JOINROOM_ACTION',
-    payload: 'result_of_joinroom_action'
+    payload: username
   })
 }

@@ -14,7 +14,8 @@ function iAmControlling() {
   )
 }
 
-const UnconnectedLogin = (props) => {
+const UnconnectedVideoPlayer = (props) => {
+  console.log(props)
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -66,9 +67,10 @@ const UnconnectedLogin = (props) => {
 
   const joinRoomClick = () => {
     console.log('joinRoom button has been pushed!')
-    document.querySelector('#username').innerHTML = document.querySelector(
-      '#name'
-    ).value
+    props.joinRoomClick('testname')
+    //   document.querySelector('#username').innerHTML = document.querySelector(
+    //   '#name'
+    // ).value
     document.querySelector('#room').className = 'active'
     document.querySelector('#registration').className = 'inactive'
     player.addEventListener(
@@ -135,15 +137,15 @@ const UnconnectedLogin = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  //console.log(state)
-  return { ...state }
+  console.log(state)
+  return { name: state.joinRoom.result }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  joinRoomClick: () => dispatch(joinRoomAction())
+  joinRoomClick: (username) => dispatch(joinRoomAction(username))
 })
 
 export const VideoPlayer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(UnconnectedLogin)
+)(UnconnectedVideoPlayer)
