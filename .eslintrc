@@ -1,4 +1,4 @@
-{
+/*{
     "extends": "react-app",
     "plugins": ["prettier"],
     "rules": {
@@ -14,4 +14,4 @@
       ],
       "semi": "off"
     }
-  }
+  }*/
