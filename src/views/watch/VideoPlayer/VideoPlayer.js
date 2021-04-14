@@ -2,7 +2,11 @@
   Redux component!
 */
 import { connect } from 'react-redux'
-import { joinRoomAction } from '../../../actions/joinRoomAction'
+import {
+  joinRoomActionCreator,
+  takeControlActionCreator,
+  leaveRoomActionCreator
+} from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
 let conn
@@ -15,7 +19,6 @@ function iAmControlling() {
 }
 
 const UnconnectedVideoPlayer = (props) => {
-  console.log(props)
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -67,7 +70,7 @@ const UnconnectedVideoPlayer = (props) => {
 
   const joinRoomClick = () => {
     console.log('joinRoom button has been pushed!')
-    props.joinRoomClick('testname')
+    props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
     //   document.querySelector('#username').innerHTML = document.querySelector(
     //   '#name'
     // ).value
@@ -88,8 +91,6 @@ const UnconnectedVideoPlayer = (props) => {
       },
       true
     )
-    // To Daniela: I disabled this row so that the joinRoomClick action won't be dispatched, so you don't need to think about Redux for now.
-    return props.joinRoomClick()
   }
 
   const leaveRoomClick = () => {
@@ -109,6 +110,7 @@ const UnconnectedVideoPlayer = (props) => {
             <button onClick={joinRoomClick} id="join">
               Join Room
             </button>
+            <div>{props.stateName}</div>
           </p>
         </div>
         User: <span id="username"></span>
@@ -137,13 +139,22 @@ const UnconnectedVideoPlayer = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
-  return { name: state.joinRoom.result }
+  return {
+    stateName: state.videoPlayer.name,
+    stateControlName: state.videoPlayer.controlName
+    // TODO if needed, other state properties
+  }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  joinRoomClick: (username) => dispatch(joinRoomAction(username))
-})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchJoinRoomActionCreator: (username) =>
+      dispatch(joinRoomActionCreator(username)),
+    dispatchTakeControlActionCreator: () =>
+      dispatch(takeControlActionCreator()),
+    dispatchLeaveRoomActionCreator: () => dispatch(leaveRoomActionCreator())
+  }
+}
 
 export const VideoPlayer = connect(
   mapStateToProps,
