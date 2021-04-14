@@ -1,0 +1,10 @@
+.TextField {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 5pt;
+  padding: 10px;
+}
+.TextFieldLabel {
+  font-size: 12pt;
+  font-weight: bold;
+}
