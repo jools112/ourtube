@@ -1,6 +1,10 @@
 import './VideoPlayer.css'
 import { connect } from 'react-redux'
-import { joinRoomAction } from '../../../actions/joinRoomAction'
+import {
+  joinRoomActionCreator,
+  takeControlActionCreator,
+  userCountActionCreator
+} from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
 import { Button } from '../../../components/Button'
@@ -16,7 +20,7 @@ function iAmControlling() {
   )
 }
 
-const UnconnectedLogin = (props) => {
+const UnconnectedVideoPlayer = (props) => {
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -40,10 +44,9 @@ const UnconnectedLogin = (props) => {
       debugger
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
-        document.querySelector('#controller').innerHTML = matches[1]
+        props.dispatchTakeControlActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
-        // document.querySelector("#userCount").innerHTML = matches[1];
-        document.getElementById('userCount').innerHTML = matches[1]
+        props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
         player.currentTime = matches[1]
         player.pause()
@@ -68,9 +71,7 @@ const UnconnectedLogin = (props) => {
 
   const joinRoomClick = () => {
     console.log('joinRoom button has been pushed!')
-    document.querySelector('#username').innerHTML = document.querySelector(
-      '#name'
-    ).value
+    props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
     document.querySelector('#room').className = 'active'
     document.querySelector('#registration').className = 'inactive'
     player.addEventListener(
@@ -88,11 +89,13 @@ const UnconnectedLogin = (props) => {
       },
       true
     )
-    // To Daniela: I disabled this row so that the joinRoomClick action won't be dispatched, so you don't need to think about Redux for now.
-    return props.joinRoomClick()
   }
 
   const leaveRoomClick = () => {
+    props.dispatchJoinRoomActionCreator('room not joined yet')
+    props.dispatchTakeControlActionCreator('---')
+    conn.send('control ' + '---')
+
     conn.close()
     document.querySelector('#room').className = 'inactive'
     document.querySelector('#registration').className = 'active'
@@ -112,6 +115,7 @@ const UnconnectedLogin = (props) => {
               <Button onClick={joinRoomClick} id="join">
                 Join Room
               </Button>
+                <div>{props.stateName}</div>
             </div>
           </div>
         </div>
@@ -120,11 +124,11 @@ const UnconnectedLogin = (props) => {
           Leave Room
         </Button>
         <p>
-          Users: <span id="userCount"></span>
+          Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
-          Controller: <span id="controller">---</span>
-          <Button onClick={takeControlRoomClick} id="takeControl">
+          Controller: <span id="controller">{props.stateControlName}</span>
+          <button onClick={takeControlRoomClick} id="takeControl">
             Take Control
           </Button>
         </p>
@@ -147,15 +151,25 @@ const UnconnectedLogin = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  //console.log(state)
-  return { ...state }
+  return {
+    stateName: state.videoPlayer.name,
+    stateControlName: state.videoPlayer.controlName,
+    stateUserCount: state.videoPlayer.userCount
+  }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  joinRoomClick: () => dispatch(joinRoomAction())
-})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchJoinRoomActionCreator: (name) =>
+      dispatch(joinRoomActionCreator(name)),
+    dispatchTakeControlActionCreator: (controlName) =>
+      dispatch(takeControlActionCreator(controlName)),
+    dispatchUserCountActionCreator: (userCount) =>
+      dispatch(userCountActionCreator(userCount))
+  }
+}
 
 export const VideoPlayer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(UnconnectedLogin)
+)(UnconnectedVideoPlayer)
