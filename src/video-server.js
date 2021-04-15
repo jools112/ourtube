@@ -1,3 +1,4 @@
+/**Inspiration taken from https://softwareas.com/video-sync-with-websocket-and-node/ */
 var ws = require('ws')
 var userCount = []
 let usersConnectedIpAddress = new Map()
