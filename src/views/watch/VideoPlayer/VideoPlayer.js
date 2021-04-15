@@ -115,7 +115,7 @@ const UnconnectedVideoPlayer = (props) => {
               <Button onClick={joinRoomClick} id="join">
                 Join Room
               </Button>
-                <div>{props.stateName}</div>
+              <div>{props.stateName}</div>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ const UnconnectedVideoPlayer = (props) => {
           Controller: <span id="controller">{props.stateControlName}</span>
           <button onClick={takeControlRoomClick} id="takeControl">
             Take Control
-          </Button>
+          </button>
         </p>
         <div className="VideoPlayerContent">
           <SoftBox
