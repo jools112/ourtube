@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Ourtube
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ourtube allows for users to join groups within which they can watch youtube videos together, synchronized. Once finished, users will also be able to find and vote on videos, as well as browse a list of top rated videos.
 
-## Available Scripts
+So far, we have three routes deployed to Heroku:
+* http://ourtube-iprog.herokuapp.com/ - this index page will allow users to log into the website, a functionality which will later be mocked with a username and password field.
+* http://ourtube-iprog.herokuapp.com/explore - this page allows users to create groups, within which users can interact through the video controls on the /watch page. Creating a group is functional, and is persisted through firebase. However, selecting a group currently has no effect. Later on, this page will also feature a list of the website's top rated videos.
 
-In the project directory, you can run:
+* http://ourtube-iprog.herokuapp.com/watch - this is Ourtube's main page. Currently, due to the not-yet implemented login functionality, you must select a username and join the single available group. Due to backend not being the focus of the assignment, all users must have loaded the page and joined the group before proceeding further than this for it to work correctly. Next, any one user may click on the "take control" button, after which they can control the video player. It may take a few seconds for all users to connect fully once the video player has started. Although not yet functional, this page also includes a rating feature for the video, a poll of which video to queue up next, and in the future will also display the current group.
 
-### `yarn start`
+Throughout the website, the header will in the future display your current username. The search bar will also allow for searching youtube for a video to play in the watch page.
+Most of the backend work and actual page navigation is very much a work in progress.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The video synchronization API communication is done through websockets. In the future, some components will also fetch data directly from the youtube API in order to display search results and thumbnails.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## File structure:
+* `src/action` folder contains .js files which defines all redux actions.
+* `src/reducers` similarly contains redux reducers
+* `src/hooks/useScript.js` contains a helper function for importing an external script file
+* `src/components` TODO
+* `src/views/` includes javascript and css files for all views in the project. The components will have both a .js and .css file with the same name. We currently have the following:
+  * Login - see "/" route.
+  * TopBar - the header which is shared between different views
+  * Watch - files within this folder correspond to the components and views visible on the /watch route. Each subfolder correspond to a single feature on that page.
+  * explore - files within this folder correspond to the components and views visible on the /explore route. Each subfolder correspond to a single feature on that page.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To host locally:
+`node src/video-server.js & yarn start` (yarn dependencies may need to be installed first)
