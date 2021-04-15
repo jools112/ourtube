@@ -5,8 +5,9 @@ export const SoftBox = (props) => {
   return (
     <div className="SoftBox">
       <div className="SoftBoxHeader">{props.title}</div>
-      <div {...props} className="SoftBoxBody"></div>
-      {props.content}
+      <div {...props} className="SoftBoxBody">
+        {props.content}
+      </div>
     </div>
   )
 }

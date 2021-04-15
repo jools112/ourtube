@@ -1,14 +1,13 @@
 .SoftBox {
   border-radius: 30px;
-  border: 3px solid var(--primary-color);
-  width: 500px;
-  height: 300px;
+  border: 3px solid var(--neptune);
+  width: 550px;
   overflow: hidden;
 }
 
 .SoftBoxHeader {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: var(--neptune);
+  color: var(--vis-vis);
   font-weight: bold;
   font-size: 24px;
   letter-spacing: 4px;
@@ -16,5 +15,7 @@
 }
 
 .SoftBoxBody {
-  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px;
 }

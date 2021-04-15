@@ -4,3 +4,8 @@
   width: 400px;
   margin: 8px auto;
 }
+
+.RatingBoxContainer {
+  display: flex;
+  justify-content: center;
+}

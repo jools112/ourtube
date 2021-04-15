@@ -47,7 +47,7 @@ export const Group = () => {
   }
 
   if (loading) {
-    return <h1>Loading...</h1>
+    return <h1 className="GroupsLoading">Loading...</h1>
   }
 
   return (
@@ -66,19 +66,26 @@ export const Group = () => {
           onChange={(e) => setData(e.target.value)}
         ></TextField>
         <br />
-        <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
-          Submit
-        </Button>
-        <Button>Create</Button>
+        <div>
+          <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
+            Submit
+          </Button>
+        </div>
+        <br />
+        <div>
+          <Button>Create</Button>
+        </div>
       </div>
       <div>
         <br />
         <SoftBox
-          title="hej svejs"
+          title="GROUPS"
           content={groups.map((group) => (
-            <Button key={group.id} onClick={() => groupInfo(group.data)}>
-              {group.title}
-            </Button>
+            <div className="GroupsButton">
+              <Button key={group.id} onClick={() => groupInfo(group.data)}>
+                {group.title}
+              </Button>
+            </div>
           ))}
         ></SoftBox>
         <br />

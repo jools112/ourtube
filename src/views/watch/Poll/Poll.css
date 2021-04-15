@@ -4,3 +4,8 @@
   width: 400px;
   margin: 8px auto;
 }
+.PollBoxContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}

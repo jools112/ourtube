@@ -18,8 +18,11 @@ const unconnectedApp = (props) => {
   return (
     <div className="App">
       <TopBar />
-      <button onClick={simpleAction}>test redux action</button>
-      <pre>{JSON.stringify(props)}</pre>
+      {
+        //<button onClick={simpleAction}>test redux action</button>
+        //<pre>{JSON.stringify(props)}</pre>
+      }
+      <br />
       <BrowserRouter>
         <Switch>
           <Route exact path="/">

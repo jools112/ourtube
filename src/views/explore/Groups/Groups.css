@@ -1,7 +1,7 @@
 .GroupAll {
   width: 400px;
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   margin: 2px;
 }
 
@@ -34,4 +34,12 @@
 }
 .CreateButton:hover {
   background-color: #50654f61; /* Green */
+}
+
+.GroupsButton {
+  margin: 8px;
+}
+
+.GroupsLoading {
+  color: var(--vis-vis);
 }

@@ -1,10 +1,12 @@
-/*
-  Redux component!
-*/
+import './VideoPlayer.css'
 import { connect } from 'react-redux'
 import { joinRoomAction } from '../../../actions/joinRoomAction'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
+import { Button } from '../../../components/Button'
+import { TextField } from '../../../components/TextField'
+import { SoftBox } from '../../../components/SoftBox'
+
 let conn
 let player
 function iAmControlling() {
@@ -102,25 +104,29 @@ const UnconnectedLogin = (props) => {
     <body>
       <div id="room" className="inactive">
         <div id="registration" className="active">
-          <p>
-            Username: <input id="name" />
-            <button onClick={joinRoomClick} id="join">
-              Join Room
-            </button>
-          </p>
+          <div className="VideoPlayerTextField">
+            <div className="VideoPlayerUsername">
+              <TextField id="name" label="Username:" />
+            </div>
+            <div>
+              <Button onClick={joinRoomClick} id="join">
+                Join Room
+              </Button>
+            </div>
+          </div>
         </div>
         User: <span id="username"></span>
-        <button onClick={leaveRoomClick} id="leave">
+        <Button onClick={leaveRoomClick} id="leave">
           Leave Room
-        </button>
+        </Button>
         <p>
           Users: <span id="userCount"></span>
         </p>
         <p>
           Controller: <span id="controller">---</span>
-          <button onClick={takeControlRoomClick} id="takeControl">
+          <Button onClick={takeControlRoomClick} id="takeControl">
             Take Control
-          </button>
+          </Button>
         </p>
         <p>
           <div
