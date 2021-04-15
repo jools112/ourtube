@@ -1,15 +1,15 @@
-export const joinRoomActionCreator = (username) => ({
+export const joinRoomActionCreator = (name) => ({
   type: 'JOINROOM_ACTION',
-  payload: username
+  payload: name
 })
 
 // TODO complete action creators for other actions in VideoPlayer
-export const takeControlActionCreator = () => ({
+export const takeControlActionCreator = (controlName) => ({
   type: 'TAKECONTROL_ACTION',
-  payload: 'FIX ME'
+  payload: controlName
 })
 
-export const leaveRoomActionCreator = () => ({
-  type: 'LEAVEROOM_ACTION',
-  payload: 'FIX ME'
+export const userCountActionCreator = (userCount) => ({
+  type: 'USERCOUNT_ACTION',
+  payload: userCount
 })

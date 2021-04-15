@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import {
   joinRoomActionCreator,
   takeControlActionCreator,
-  leaveRoomActionCreator
+  userCountActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
@@ -42,10 +42,9 @@ const UnconnectedVideoPlayer = (props) => {
       debugger
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
-        document.querySelector('#controller').innerHTML = matches[1]
+        props.dispatchTakeControlActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
-        // document.querySelector("#userCount").innerHTML = matches[1];
-        document.getElementById('userCount').innerHTML = matches[1]
+        props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
         player.currentTime = matches[1]
         player.pause()
@@ -71,9 +70,6 @@ const UnconnectedVideoPlayer = (props) => {
   const joinRoomClick = () => {
     console.log('joinRoom button has been pushed!')
     props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
-    //   document.querySelector('#username').innerHTML = document.querySelector(
-    //   '#name'
-    // ).value
     document.querySelector('#room').className = 'active'
     document.querySelector('#registration').className = 'inactive'
     player.addEventListener(
@@ -94,6 +90,10 @@ const UnconnectedVideoPlayer = (props) => {
   }
 
   const leaveRoomClick = () => {
+    props.dispatchJoinRoomActionCreator('room not joined yet')
+    props.dispatchTakeControlActionCreator('---')
+    conn.send('control ' + '---')
+
     conn.close()
     document.querySelector('#room').className = 'inactive'
     document.querySelector('#registration').className = 'active'
@@ -118,10 +118,10 @@ const UnconnectedVideoPlayer = (props) => {
           Leave Room
         </button>
         <p>
-          Users: <span id="userCount"></span>
+          Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
-          Controller: <span id="controller">---</span>
+          Controller: <span id="controller">{props.stateControlName}</span>
           <button onClick={takeControlRoomClick} id="takeControl">
             Take Control
           </button>
@@ -141,18 +141,19 @@ const UnconnectedVideoPlayer = (props) => {
 const mapStateToProps = (state) => {
   return {
     stateName: state.videoPlayer.name,
-    stateControlName: state.videoPlayer.controlName
-    // TODO if needed, other state properties
+    stateControlName: state.videoPlayer.controlName,
+    stateUserCount: state.videoPlayer.userCount
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchJoinRoomActionCreator: (username) =>
-      dispatch(joinRoomActionCreator(username)),
-    dispatchTakeControlActionCreator: () =>
-      dispatch(takeControlActionCreator()),
-    dispatchLeaveRoomActionCreator: () => dispatch(leaveRoomActionCreator())
+    dispatchJoinRoomActionCreator: (name) =>
+      dispatch(joinRoomActionCreator(name)),
+    dispatchTakeControlActionCreator: (controlName) =>
+      dispatch(takeControlActionCreator(controlName)),
+    dispatchUserCountActionCreator: (userCount) =>
+      dispatch(userCountActionCreator(userCount))
   }
 }
 
