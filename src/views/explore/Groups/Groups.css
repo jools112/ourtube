@@ -45,3 +45,7 @@
 .GroupsLoading {
   color: var(--vis-vis);
 }
+
+.GroupsSubmitContainer {
+  padding-top: 15px;
+}
