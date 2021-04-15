@@ -1,0 +1,15 @@
+.TextField {
+  background-color: var(--neptune);
+  color: var(--vis-vis);
+  border-radius: 20pt;
+  padding: 10px;
+  width: 400px;
+}
+.TextFieldLabel {
+  font-size: 12pt;
+  font-weight: bold;
+}
+.TextFieldInput {
+  background-color: var(--vis-vis);
+  border: none;
+}

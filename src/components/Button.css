@@ -1,0 +1,11 @@
+.Button {
+  background-color: var(--tahuna-sands);
+  border: none;
+  border-radius: 20px;
+  color: var(--astronaut-blue);
+  font-weight: bold;
+  font-size: 18px;
+  height: 40px;
+  width: 160px;
+  padding: 5px;
+}

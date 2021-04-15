@@ -1,41 +1,40 @@
 import './Groups.css'
 // eslint-disable-next-line
-import { ResponsiveContainer } from 'recharts'
-import firebase from "../../../firebase"
-import React, { useState } from "react";
-import { useEffect } from 'react';
-import { v4 as uuidv4 } from "uuid";
-
-
+import firebase from '../../../firebase'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { Button } from '../../../components/Button'
+import { TextField } from '../../../components/TextField'
+import { SoftBox } from '../../../components/SoftBox'
 
 export const Group = () => {
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState("");
-  const [data, setData] = useState("");
+  const [groups, setGroups] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [title, setTitle] = useState('')
+  const [data, setData] = useState('')
 
-  const ref = firebase.firestore().collection("groups");
+  const ref = firebase.firestore().collection('groups')
 
   function getSchools() {
-    setLoading(true);
+    setLoading(true)
     ref.onSnapshot((querySnapshot) => {
-      const items = [];
+      const items = []
       querySnapshot.forEach((doc) => {
-        items.push(doc.data());
-      });
-      setGroups(items);
-      setLoading(false);
-    });
+        items.push(doc.data())
+      })
+      setGroups(items)
+      setLoading(false)
+    })
   }
 
   function groupInfo(data) {
-    document.getElementById("groupInfo").innerHTML = data;
+    document.getElementById('groupInfo').innerHTML = data
   }
 
   useEffect(() => {
-    getSchools();
-  }, []);
-
+    getSchools()
+  }, [])
 
   // ADD FUNCTION
   function addGroup(newGroup) {
@@ -43,45 +42,56 @@ export const Group = () => {
       .doc(newGroup.id)
       .set(newGroup)
       .catch((err) => {
-        console.error(err);
-      });
+        console.error(err)
+      })
   }
 
-
-
   if (loading) {
-    return <h1>Loading...</h1>
+    return <h1 className="GroupsLoading">Loading...</h1>
   }
 
   return (
     <div>
       <div>
-        title
-        <input
+        <TextField
+          label="title:"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-        /><br></br>
-        data
-        <textarea value={data} onChange={(e) => setData(e.target.value)} />
-        <button onClick={() => addGroup({ title, data, id: uuidv4() })}>
-          Submit
-        </button>
-      </div>
-      <div className="GroupMax">
-        <div className="Create">
-          GROUPS <button className="CreateButton">Create</button>
+        ></TextField>
+        <br></br>
+        <TextField
+          label="data:"
+          value={data}
+          onChange={(e) => setData(e.target.value)}
+        ></TextField>
+        <br />
+        <div>
+          <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
+            Submit
+          </Button>
         </div>
-        <div className="GroupAll">
-          {groups.map((group) => (
-            <button className="GroupBox" key={group.id} onClick={() => groupInfo(group.data)}>{group.title}</button>
+        <br />
+        <div>
+          <Button>Create</Button>
+        </div>
+      </div>
+      <div>
+        <br />
+        <SoftBox
+          title="GROUPS"
+          content={groups.map((group) => (
+            <div className="GroupsButton">
+              <Button key={group.id} onClick={() => groupInfo(group.data)}>
+                {group.title}
+              </Button>
+            </div>
           ))}
-
-        </div>
+        ></SoftBox>
+        <br />
       </div>
+
       <div id="groupInfo"></div>
-
-
     </div>
   )
 }

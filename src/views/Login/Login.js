@@ -1,8 +1,7 @@
-/*
-  Redux component!
-*/
+import './Login.css'
 import { connect } from 'react-redux'
 import { loginAction } from '../../actions/loginAction'
+import { Button } from '../../components/Button'
 
 const unconnectedLogin = (props) => {
   const loginClick = () => {
@@ -11,8 +10,8 @@ const unconnectedLogin = (props) => {
   }
   return (
     <div>
-      <div>Please log in to continue...</div>
-      <button onClick={loginClick}>Log in</button>
+      <span className="LoginSpan">Please log in to continue...</span>
+      <Button onClick={loginClick}>Log in</Button>
     </div>
   )
 }

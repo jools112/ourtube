@@ -1,4 +1,7 @@
 import './Rating.css'
+import { Button } from '../../../components/Button'
+import { TextField } from '../../../components/TextField'
+import { SoftBox } from '../../../components/SoftBox'
 
 const getDisplayStars = (starInt) => {
   switch (starInt) {
@@ -18,13 +21,20 @@ const getDisplayStars = (starInt) => {
 }
 
 export const Rating = () => {
-  const userInput = 3
+  const userInput = 4
 
   return (
-    <div className="RatingBox">
-      Rating
-      <div>User rating {getDisplayStars(userInput)}</div>
-      <div>Group rating: ⭐⭐</div>
+    <div className="RatingBoxContainer">
+      <SoftBox
+        className="RatingBox"
+        title="Rating"
+        content={
+          <div>
+            <div>User rating {getDisplayStars(userInput)}</div>
+            <div>Group rating: ⭐⭐</div>
+          </div>
+        }
+      ></SoftBox>
     </div>
   )
 }

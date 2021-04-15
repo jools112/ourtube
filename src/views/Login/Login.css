@@ -1,3 +1,8 @@
 .hidden {
   display: none;
 }
+.LoginSpan {
+  color: var(--vis-vis);
+  font-size: larger;
+  padding: 10px;
+}
