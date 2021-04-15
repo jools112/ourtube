@@ -3,13 +3,16 @@
   color: var(--vis-vis);
   border-radius: 20pt;
   padding: 10px;
-  width: 400px;
+  width: 550px;
 }
 .TextFieldLabel {
-  font-size: 12pt;
+  font-size: larger;
   font-weight: bold;
 }
 .TextFieldInput {
   background-color: var(--vis-vis);
-  border: none;
+  color: var(--astronaut-blue);
+  font-size: larger;
+  border: 2px solid var(--astronaut-blue);
+  border-radius: 5px;
 }

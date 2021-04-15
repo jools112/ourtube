@@ -128,13 +128,19 @@ const UnconnectedLogin = (props) => {
             Take Control
           </Button>
         </p>
-        <p>
-          <div
-            id="my-youtube-player"
-            className="player js-player"
-            data-youtube-videoid="KFstP0C9sVk"
-          ></div>
-        </p>
+        <div className="VideoPlayerContent">
+          <SoftBox
+            title="VIDEO PLAYER"
+            content={
+              <div
+                id="my-youtube-player"
+                className="player js-player"
+                data-youtube-videoid="KFstP0C9sVk"
+              ></div>
+            }
+            padding="disabled"
+          ></SoftBox>
+        </div>
       </div>
     </body>
   )

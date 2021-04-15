@@ -27,9 +27,9 @@ export const Rating = () => {
     <div className="RatingBoxContainer">
       <SoftBox
         className="RatingBox"
-        title="Rating"
+        title="RATING"
         content={
-          <div>
+          <div className="RatingContentContainer">
             <div>User rating {getDisplayStars(userInput)}</div>
             <div>Group rating: ⭐⭐</div>
           </div>

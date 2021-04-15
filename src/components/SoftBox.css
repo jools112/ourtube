@@ -19,3 +19,7 @@
   flex-wrap: wrap;
   padding: 8px;
 }
+
+.SoftBoxBodyDisabledPadding {
+  padding: 0px;
+}

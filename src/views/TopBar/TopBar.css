@@ -1,5 +1,5 @@
 .TopBar {
-  height: 50px;
+  height: 60px;
   color: var(--vis-vis);
   background-color: var(--outer-space);
   display: flex;
@@ -15,6 +15,9 @@
   font-size: 12pt;
 }
 .TopBarSearch {
+  font-size: larger;
+  color: var(--astronaut-blue);
   background-color: var(--vis-vis);
-  border: none;
+  border: 2px solid var(--neptune);
+  border-radius: 5px;
 }

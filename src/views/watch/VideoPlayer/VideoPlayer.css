@@ -7,3 +7,8 @@
 .VideoPlayerUsername {
   padding-right: 10px;
 }
+
+.VideoPlayerContent {
+  display: flex;
+  justify-content: center;
+}

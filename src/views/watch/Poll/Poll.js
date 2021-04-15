@@ -30,9 +30,9 @@ export const Poll = () => {
   return (
     <div className="PollBoxContainer">
       <SoftBox
-        title="Poll"
+        title="POLL"
         content={
-          <div>
+          <div className="PollContentContainer">
             <div>poll text</div>
             <div>
               choices:
@@ -42,10 +42,8 @@ export const Poll = () => {
             </div>
             <div>
               result
-              <ResponsiveContainer aspect={2} width="100%" height="200px">
+              <ResponsiveContainer aspect={2}>
                 <BarChart
-                  width={500}
-                  height={300}
                   data={data}
                   margin={{
                     top: 5,
@@ -54,10 +52,14 @@ export const Poll = () => {
                     bottom: 5
                   }}
                 >
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fill: '#efe198' }}
+                    stroke="#efe198"
+                  />
+                  <YAxis tick={{ fill: '#efe198' }} stroke="#efe198" />
                   <Tooltip />
-                  <Bar dataKey="amount" fill="#82ca9d" />
+                  <Bar dataKey="amount" fill="#3876a6" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -53,23 +53,25 @@ export const Group = () => {
   return (
     <div>
       <div>
-        <TextField
-          label="title:"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        ></TextField>
-        <br></br>
-        <TextField
-          label="data:"
-          value={data}
-          onChange={(e) => setData(e.target.value)}
-        ></TextField>
-        <br />
-        <div>
-          <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
-            Submit
-          </Button>
+        <div className="GroupsSubmitContainer">
+          <TextField
+            label="title:"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          ></TextField>
+          <br></br>
+          <TextField
+            label="data:"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+          ></TextField>
+          <br />
+          <div>
+            <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
+              Submit
+            </Button>
+          </div>
         </div>
         <br />
         <div>
