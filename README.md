@@ -17,7 +17,7 @@ The video synchronization API communication is done through websockets. In the f
 * `src/action` folder contains .js files which defines all redux actions.
 * `src/reducers` similarly contains redux reducers
 * `src/hooks/useScript.js` contains a helper function for importing an external script file
-* `src/components` TODO
+* `src/components` contains components that are not view-specific, used throughout the app
 * `src/views/` includes javascript and css files for all views in the project. The components will have both a .js and .css file with the same name. We currently have the following:
   * Login - see "/" route.
   * TopBar - the header which is shared between different views
