@@ -2,7 +2,7 @@
 
 Ourtube allows for users to join groups within which they can watch youtube videos together, synchronized. Once finished, users will also be able to find and vote on videos, as well as browse a list of top rated videos.
 
-So far, we have three routes deployed to Heroku:
+So far, we have three routes deployed to Heroku. Please note that it may take a few minutes from the first request before the app starts up (heroku will shut them down after some inactivity):
 * http://ourtube-iprog.herokuapp.com/ - this index page will allow users to log into the website, a functionality which will later be mocked with a username and password field.
 * http://ourtube-iprog.herokuapp.com/explore - this page allows users to create groups, within which users can interact through the video controls on the /watch page. Creating a group is functional, and is persisted through firebase. However, selecting a group currently has no effect. Later on, this page will also feature a list of the website's top rated videos.
 
