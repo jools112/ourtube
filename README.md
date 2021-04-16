@@ -11,7 +11,7 @@ So far, we have three routes deployed to Heroku:
 Throughout the website, the header will in the future display your current username. The search bar will also allow for searching youtube for a video to play in the watch page.
 Most of the backend work and actual page navigation is very much a work in progress.
 
-The video synchronization API communication is done through websockets. In the future, some components will also fetch data directly from the youtube API in order to display search results and thumbnails.
+The video synchronization API communication is done through websockets. In the future, some components will also fetch data directly from the youtube API in order to display search results and thumbnails. A preview of this feature can be seen in the "videosummary" branch.
 
 ## File structure:
 * `src/action` folder contains .js files which defines all redux actions.
