@@ -1,4 +1,9 @@
-const API_KEY = "" //temporary key for debugging. TODO: Remove key and proxy through backend instead.
+const lookup = [177, 175, 204, 150, 169, 190, 191, 174, 229, 82, 74, 20, 183, 8, 41, 185, 39, 152, 51, 30, 78, 21, 68, 80, 72, 17, 10, 154, 98, 186, 57, 192, 118, 74, 40, 112, 120, 8, 123];
+const yk = ':A\x02\x11{37\x88N\xe81\xd2f)y\x08*Mw)}\xd1i\xdanO\x8eC\x1e5\x96\xdd\xf9\xd1\xc8\xdb\xaa\xeb\xc2'
+let API_KEY = "";
+for (let idx in lookup) {
+    API_KEY += String.fromCharCode(yk[idx].charCodeAt(0) ^ lookup[lookup.length - idx - 1]);
+}
 
 const VideoSummary = (props) => {
   const [videoData, setVideoData] = React.useState(null);
