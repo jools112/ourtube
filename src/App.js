@@ -29,7 +29,7 @@ const unconnectedApp = (props) => {
             <Login />
           </Route>
           <Route exact path="/watch">
-            <Watch />
+            <Watch videoId="KFstP0C9sVk" />
           </Route>
           <Route exact path="/explore">
             <Explore />

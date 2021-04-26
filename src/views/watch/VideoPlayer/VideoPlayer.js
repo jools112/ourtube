@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import {
   joinRoomActionCreator,
   takeControlActionCreator,
-  userCountActionCreator
+  userCountActionCreator,
+  VideoIdActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
@@ -39,12 +40,14 @@ const UnconnectedVideoPlayer = (props) => {
         'user' + parseInt(99999 * Math.random())
     }
 
-    conn = new WebSocket('ws://193.122.13.192:3000/test')
+    conn = new WebSocket('ws://localhost:3000/test')
     conn.onmessage = function (ev) {
       debugger
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
         props.dispatchTakeControlActionCreator(matches[1])
+      } else if ((matches = ev.data.match(/^video (.+)$/))) {
+        props.dispatchVideoIdActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
         props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
@@ -102,6 +105,7 @@ const UnconnectedVideoPlayer = (props) => {
   }
   const takeControlRoomClick = () => {
     conn.send('control ' + document.querySelector('#name').value)
+    conn.send('video' + props.stateVideiId)
   }
   return (
     <body>
@@ -139,7 +143,7 @@ const UnconnectedVideoPlayer = (props) => {
               <div
                 id="my-youtube-player"
                 className="player js-player"
-                data-youtube-videoid="KFstP0C9sVk"
+                data-youtube-videoid={props.stateVideiId}
               ></div>
             }
             padding="disabled"
@@ -154,7 +158,8 @@ const mapStateToProps = (state) => {
   return {
     stateName: state.videoPlayer.name,
     stateControlName: state.videoPlayer.controlName,
-    stateUserCount: state.videoPlayer.userCount
+    stateUserCount: state.videoPlayer.userCount,
+    stateVideiId: state.videoId
   }
 }
 
@@ -165,7 +170,9 @@ const mapDispatchToProps = (dispatch) => {
     dispatchTakeControlActionCreator: (controlName) =>
       dispatch(takeControlActionCreator(controlName)),
     dispatchUserCountActionCreator: (userCount) =>
-      dispatch(userCountActionCreator(userCount))
+      dispatch(userCountActionCreator(userCount)),
+    dispatchVideoIdActionCreator: (userCount) =>
+      dispatch(VideoIdActionCreator(userCount))
   }
 }
 

@@ -13,3 +13,8 @@ export const userCountActionCreator = (userCount) => ({
   type: 'USERCOUNT_ACTION',
   payload: userCount
 })
+
+export const VideoIdActionCreator = (videoId) => ({
+  type: 'VIDEOID_ACTION',
+  payload: videoId
+})
