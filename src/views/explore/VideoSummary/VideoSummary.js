@@ -22,8 +22,7 @@ const VideoSummary = (props) => {
         .then(data => setVideoData(data))
         .catch(err => setError(err)));
   }, []);
-  //console.log(videoData);
-  return promiseNoData(videoDataPromise, videoData, error, <VideoSummaryLoading mini={props.mini} />) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} />
+  return promiseNoData(videoDataPromise, videoData, error, <VideoSummaryLoading mini={props.mini} />) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick}/>
 }
 
 
@@ -40,6 +39,7 @@ const VideoSummaryLoading = () => {
 }
 
 const VideoSummaryLoaded = (props) => {
+  const clickHandler = () => props.onClick(props.videoData)
   const videoData = props.videoData
   const videoTitle = videoData.snippet.title;
   const channelTitle = videoData.snippet.channelTitle;
@@ -49,9 +49,9 @@ const VideoSummaryLoaded = (props) => {
     .join(":");
   const viewCount = formatViewers(Number(videoData.statistics.viewCount));
   const likePct = parseFloat((100 * Number(videoData.statistics.likeCount) / (Number(videoData.statistics.likeCount) + Number(videoData.statistics.dislikeCount))).toFixed(1));
-  const thumbnail = videoData.snippet.thumbnails.maxres;
+  const thumbnail = getBestThumbnail(videoData.snippet.thumbnails);
   if (props.mini != "true") {
-    return (<div className="videoSummaryContainer">
+    return (<div className="videoSummaryContainer" onClick={clickHandler}>
       <img src={thumbnail.url} alt="Video Thumbnail" className="videoSummaryThumbnail" />
       <div className="videoSummaryText">
         <span className="videoSummaryTitle">{videoTitle}</span>
@@ -63,16 +63,15 @@ const VideoSummaryLoaded = (props) => {
     </div>);
   }
   else {
-    return (<div className="videoSummaryContainerSmall">
+    return (<div className="videoSummaryContainerSmall" onClick={clickHandler}>
       <span className="videoSummaryTitle">{videoTitle}</span>
     <img src={thumbnail.url} alt="Video Thumbnail" className="videoSummaryThumbnail" />
   </div>);
   }
 }
 
-const getVideoData = (videoID) => { //TODO: change to backend proxy
+const getVideoData = (videoID) => {
   const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=contentDetails&part=statistics&id=${videoID}&key=${API_KEY}`;
-  console.log("getting " + url);
   return fetch(url);
 }
 
@@ -84,4 +83,8 @@ const formatViewers = (num) => {
     return parseFloat((num / 1000).toFixed(1)) + "K";
   }
   return parseFloat((num / 1_000_000).toFixed(1)) + "M";
+}
+
+const getBestThumbnail = (thumbnails) => {
+  return thumbnails.maxres || thumbnails.standard || thumbnails.high || thumbnails.medium || thumbnails.default;
 }
