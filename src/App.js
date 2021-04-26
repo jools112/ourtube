@@ -12,21 +12,24 @@ import { TopBar } from './views/TopBar/TopBar'
 import { Watch } from './views/Watch/Watch'
 
 const unconnectedApp = (props) => {
-  const simpleAction = () => {
-    props.simpleAction()
-  }
+  //const simpleAction = () => {
+  //props.simpleAction()
+  //}
   return (
     <div className="App">
-      <TopBar />
-      <button onClick={simpleAction}>test redux action</button>
-      <pre>{JSON.stringify(props)}</pre>
+      {
+        //<button onClick={simpleAction}>test redux action</button>
+        //<pre>{JSON.stringify(props)}</pre>
+      }
+
       <BrowserRouter>
+        <TopBar />
         <Switch>
           <Route exact path="/">
             <Login />
           </Route>
           <Route exact path="/watch">
-            <Watch />
+            <Watch videoId="KFstP0C9sVk" />
           </Route>
           <Route exact path="/explore">
             <Explore />

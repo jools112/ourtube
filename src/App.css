@@ -1,3 +1,31 @@
 .App {
   text-align: center;
 }
+body {
+  background-color: var(--livid-brown);
+  color: var(--vis-vis);
+}
+:root {
+  /** first attempt color palette*/
+  --primary-color: #007849;
+  --secondary-color: #262228;
+  --tertiary-color: #0374b4;
+  --contrast-color: #ffce00;
+  --contrast-color2: #3b333b;
+
+  /** starry night color palette*/
+  --astronaut-blue: #1a425b;
+  --curious-blue: #3c7ba6;
+  --deco: #c6ca74;
+  --golden-corn: #f4b305;
+  --ironside-grey: #716f64;
+  --livid-brown: #322825;
+  --lochmara: #3876a6;
+  --manz: #dcd655;
+  --neptune: #79a39e;
+  --outer-space: #161c37;
+  --paris: #1e295b;
+  --regal-blue: #193852;
+  --tahuna-sands: #d6d297;
+  --vis-vis: #efe198;
+}

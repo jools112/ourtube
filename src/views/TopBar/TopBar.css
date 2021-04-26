@@ -1,4 +1,23 @@
 .TopBar {
-  color: whitesmoke;
-  background-color: cadetblue;
+  height: 70px;
+  color: var(--vis-vis);
+  background-color: var(--outer-space);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.TopBarLogo {
+  color: var(--golden-corn);
+  font-size: 24pt;
+  font-weight: bold;
+}
+.TopBarStatus {
+  font-size: 12pt;
+}
+.TopBarSearch {
+  font-size: larger;
+  color: var(--astronaut-blue);
+  background-color: var(--vis-vis);
+  border: 2px solid var(--neptune);
+  border-radius: 5px;
 }

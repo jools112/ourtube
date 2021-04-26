@@ -1,7 +1,7 @@
 /*
   Julia's test reducer
 */
-const simpleReducer = (state = {}, action) => {
+const loginReducer = (state = {}, action) => {
   switch (action.type) {
     case 'LOGIN_ACTION':
       return {
@@ -11,4 +11,4 @@ const simpleReducer = (state = {}, action) => {
       return state
   }
 }
-export default simpleReducer
+export default loginReducer

@@ -6,8 +6,10 @@
 import { combineReducers } from 'redux'
 import simpleReducer from './simpleReducer'
 import loginReducer from './loginReducer'
+import videoPlayerReducer from './videoPlayerReducer'
 
 export default combineReducers({
-  simpleReducer,
-  loginReducer
+  tutorial: simpleReducer,
+  login: loginReducer,
+  videoPlayer: videoPlayerReducer
 })

@@ -1,8 +1,8 @@
-/*
-  Redux component!
-*/
+import './Login.css'
 import { connect } from 'react-redux'
 import { loginAction } from '../../actions/loginAction'
+import { Button } from '../../components/Button'
+import { Link } from 'react-router-dom'
 
 const unconnectedLogin = (props) => {
   const loginClick = () => {
@@ -11,8 +11,11 @@ const unconnectedLogin = (props) => {
   }
   return (
     <div>
-      <div>Please log in to continue...</div>
-      <button onClick={loginClick}>Log in</button>
+      <br />
+      <span className="LoginSpan">Please log in to continue...</span>
+      <Link to="/explore">
+        <Button onClick={loginClick}>Log in</Button>
+      </Link>
     </div>
   )
 }
