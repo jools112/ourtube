@@ -12,18 +12,18 @@ import { TopBar } from './views/TopBar/TopBar'
 import { Watch } from './views/Watch/Watch'
 
 const unconnectedApp = (props) => {
-  const simpleAction = () => {
-    props.simpleAction()
-  }
+  //const simpleAction = () => {
+  //props.simpleAction()
+  //}
   return (
     <div className="App">
-      <TopBar />
       {
         //<button onClick={simpleAction}>test redux action</button>
         //<pre>{JSON.stringify(props)}</pre>
       }
-      <br />
+
       <BrowserRouter>
+        <TopBar />
         <Switch>
           <Route exact path="/">
             <Login />
