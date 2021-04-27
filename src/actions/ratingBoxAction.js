@@ -17,7 +17,6 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
     .get()
     .then((snapshot) => {
       if (snapshot.empty) {
-        // creAte
         console.log('creating new entry!!')
         const id_str = uuidv4()
         newRating.id = id_str
@@ -30,7 +29,6 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
       } else {
         snapshot.forEach((doc) => {
           const entry = doc.data()
-          //console.log('in snapshot, ', entry)
           ref.doc(entry.id).update({ rating: newRating.rating })
         })
       }
@@ -45,28 +43,28 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
 export const fetchRatingData = () => (dispatch) => {
   const mockData = { user: 'mary', video: 'shockingVideo' }
   const ref = firebase.firestore().collection('rating')
+
   ref.onSnapshot((querySnapshot) => {
-    const fetched = { arr: [], rating: 0 }
-    //const rating = 0
+    const arr = []
+    let userRating = 0
+
     querySnapshot.forEach((doc) => {
-      fetched.arr.push(doc.data())
+      arr.push(doc.data())
       if (
         doc.data().user === mockData.user &&
         doc.data().video === mockData.video
       ) {
-        const temp = doc.data().rating // tried using const rating but couldnt assign new value :O
-        fetched.rating = temp
+        userRating = doc.data().rating
       }
-      //console.log('in loop', doc.data())
     })
-    const avg =
-      fetched.arr.map((item) => item.rating).reduce((a, b) => a + b) /
-      fetched.arr.length
-
-    //console.log('average rating: ', avg)
+    // TODO: when group data is more defined, make sure the average is counted for the specific group and NOT in general
+    const groupRating =
+      arr.map((item) => item.rating).reduce((a, b) => a + b) / arr.length
+    console.log('about to dispatch ', groupRating)
     dispatch({
       type: 'USERRATING_AVERAGE',
-      payload: { averageRating: avg, userRating: fetched.rating }
+      payload: { groupRating, userRating }
+      // payload: { groupRating: groupRating, userRating: userRating } equivalent to previous row
     })
   })
 }
