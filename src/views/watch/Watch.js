@@ -1,4 +1,4 @@
-import { Rating } from './Rating/Rating'
+import { RatingBox } from './Rating/RatingBox'
 import { Poll } from './Poll/Poll'
 import { VideoPlayer } from './VideoPlayer/VideoPlayer'
 
@@ -7,7 +7,7 @@ export const Watch = () => {
     <div>
       <VideoPlayer />
       <br />
-      <Rating />
+      <RatingBox />
       <Poll />
     </div>
   )
