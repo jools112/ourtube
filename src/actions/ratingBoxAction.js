@@ -30,7 +30,7 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
       } else {
         snapshot.forEach((doc) => {
           const entry = doc.data()
-          console.log('in snapshot, ', entry)
+          //console.log('in snapshot, ', entry)
           ref.doc(entry.id).update({ rating: newRating.rating })
         })
       }
@@ -57,13 +57,13 @@ export const fetchRatingData = () => (dispatch) => {
         const temp = doc.data().rating // tried using const rating but couldnt assign new value :O
         fetched.rating = temp
       }
-      console.log('in loop', doc.data())
+      //console.log('in loop', doc.data())
     })
     const avg =
       fetched.arr.map((item) => item.rating).reduce((a, b) => a + b) /
       fetched.arr.length
 
-    console.log('average rating: ', avg)
+    //console.log('average rating: ', avg)
     dispatch({
       type: 'USERRATING_AVERAGE',
       payload: { averageRating: avg, userRating: fetched.rating }
