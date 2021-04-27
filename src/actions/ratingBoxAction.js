@@ -17,7 +17,6 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
     .get()
     .then((snapshot) => {
       if (snapshot.empty) {
-        console.log('creating new entry!!')
         const id_str = uuidv4()
         newRating.id = id_str
         ref
@@ -60,7 +59,6 @@ export const fetchRatingData = () => (dispatch) => {
     // TODO: when group data is more defined, make sure the average is counted for the specific group and NOT in general
     const groupRating =
       arr.map((item) => item.rating).reduce((a, b) => a + b) / arr.length
-    console.log('about to dispatch ', groupRating)
     dispatch({
       type: 'USERRATING_AVERAGE',
       payload: { groupRating, userRating }
