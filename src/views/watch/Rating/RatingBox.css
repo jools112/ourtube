@@ -1,18 +1,15 @@
 .RatingBox {
-  padding: 8px;
-  border: 4px solid cornflowerblue;
-  width: 400px;
-  margin: 8px auto;
-}
-
-.RatingBoxContainer {
   display: flex;
   justify-content: center;
 }
 
-.RatingContentContainer {
+.RatingBox svg {
+  color: var(--golden-corn);
+}
+.RatingBoxContent {
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 100%;
+  padding: 10px;
 }
