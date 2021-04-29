@@ -2,6 +2,7 @@ import firebase from '../firebase'
 import { v4 as uuidv4 } from 'uuid'
 
 export const ratingBoxAction = (selectedVal) => (dispatch) => {
+  // not really an action :DDDD thunk
   const ref = firebase.firestore().collection('rating')
 
   const newRating = {
@@ -11,7 +12,7 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
     id: ''
   }
 
-  var query = ref
+  ref
     .where('user', '==', newRating.user)
     .where('video', '==', newRating.video)
     .get()
@@ -32,11 +33,6 @@ export const ratingBoxAction = (selectedVal) => (dispatch) => {
         })
       }
     })
-
-  dispatch({
-    type: 'USERRATING_INPUT',
-    payload: selectedVal
-  })
 }
 
 export const fetchRatingData = () => (dispatch) => {
