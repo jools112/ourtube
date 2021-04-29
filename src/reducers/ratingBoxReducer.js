@@ -10,7 +10,6 @@ const ratingBoxReducer = (state = initialState, action) => {
       return {
         ...state,
         userRating: action.payload
-        //groupRating: (action.payload + state.relevantDocs[0].rating) / 2
       }
     case 'USERRATING_AVERAGE':
       return {

@@ -8,10 +8,12 @@ import simpleReducer from './simpleReducer'
 import loginReducer from './loginReducer'
 import videoPlayerReducer from './videoPlayerReducer'
 import ratingBoxReducer from './ratingBoxReducer'
+import pollReducer from './pollReducer'
 
 export default combineReducers({
   tutorial: simpleReducer,
   login: loginReducer,
   videoPlayer: videoPlayerReducer,
-  ratingBox: ratingBoxReducer
+  ratingBox: ratingBoxReducer,
+  poll: pollReducer
 })

@@ -5,10 +5,10 @@ import { VideoPlayer } from './VideoPlayer/VideoPlayer'
 export const Watch = () => {
   return (
     <div>
+      <Poll />
       <VideoPlayer />
       <br />
       <RatingBox />
-      <Poll />
     </div>
   )
 }
