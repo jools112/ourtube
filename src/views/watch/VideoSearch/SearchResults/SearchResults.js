@@ -2,11 +2,12 @@ import React from 'react'
 import {VideoSummary} from '../../../explore/VideoSummary/VideoSummary'
 import {YT_API_KEY} from '../../../../yt-api'
 
+// TODO: Make sure search is "current", aka we change search terms before the previous req has returned
+// TODO: Figure out what to do about terrible youtube quota
 export const SearchResults = (props) => {
   const [searchData, setSearchData] = React.useState(null);
   const [error, setError]=React.useState(null);
   const [searchDataPromise, setSearchDataPromise]=React.useState(null);
-  console.log("Hi I am searching for: " + props.query);
   React.useEffect(() => {
     if (props.query) {
       setSearchDataPromise(
