@@ -5,11 +5,11 @@ import './App.css'
 import { Route, Switch } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Explore } from './views/explore/Explore'
+import { Explore } from './views/Explore/Explore'
 import { Login } from './views/Login/Login'
 import { simpleAction } from './actions/simpleAction'
 import { TopBar } from './views/TopBar/TopBar'
-import { Watch } from './views/watch/Watch'
+import { Watch } from './views/Watch/Watch'
 
 const unconnectedApp = (props) => {
   //const simpleAction = () => {
