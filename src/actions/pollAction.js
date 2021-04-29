@@ -15,10 +15,10 @@ export const pollAction = (selectedVal) => (dispatch) => {
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log(
+        /*console.log(
           mockData.user + ' voted : ',
           doc.data().poll.result[mockData.user]
-        )
+        )*/
         var testUpdate = {}
         testUpdate['poll.result.' + mockData.user] = mockData.choice
 
@@ -41,17 +41,23 @@ export const fetchPollData = () => (dispatch) => {
   ref.where('name', '==', mockData.groupName).onSnapshot((snapshot) => {
     snapshot.forEach((doc) => {
       fetched = doc.data().poll
-      console.log('fetching ', fetched)
+      //console.log('fetching ', fetched)
 
       const keys = Object.keys(fetched.result)
-      console.log('keys: ', keys)
+      //console.log('keys: ', keys)
       keys.forEach((key) => {
         switch (fetched.result[key]) {
           case 0:
+            // console.log(key + ' voted 0')
             return (votes[0] += 1)
+
           case 1:
+            // console.log(key + ' voted 1')
+
             return (votes[1] += 1)
           case 2:
+            // console.log(key + ' voted 2')
+
             return (votes[2] += 1)
         }
       })
@@ -61,7 +67,7 @@ export const fetchPollData = () => (dispatch) => {
       pollData.push({ alternative: vidName, score: votes[index] })
     })
 
-    console.log('data to be returned: ', pollData)
+    //console.log('data to be returned: ', pollData)
     dispatch({
       type: 'POLL_DATA',
       payload: pollData
