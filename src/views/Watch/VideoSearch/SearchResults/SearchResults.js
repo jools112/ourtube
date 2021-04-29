@@ -1,5 +1,5 @@
 import React from 'react'
-import {VideoSummary} from '../../../explore/VideoSummary/VideoSummary'
+import {VideoSummary} from '../../../Explore/VideoSummary/VideoSummary'
 import {YT_API_KEY} from '../../../../yt-api'
 
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
