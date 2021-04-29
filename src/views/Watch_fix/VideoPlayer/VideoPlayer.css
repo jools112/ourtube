@@ -1,0 +1,14 @@
+.VideoPlayerTextField {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.VideoPlayerUsername {
+  padding-right: 10px;
+}
+
+.VideoPlayerContent {
+  display: flex;
+  justify-content: center;
+}
