@@ -1,0 +1,15 @@
+.RatingBox {
+  display: flex;
+  justify-content: center;
+}
+
+.RatingBox svg {
+  color: var(--golden-corn);
+}
+.RatingBoxContent {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+}
