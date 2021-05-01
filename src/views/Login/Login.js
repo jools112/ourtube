@@ -3,30 +3,38 @@ import { connect } from 'react-redux'
 import { loginAction } from '../../actions/loginAction'
 import { Button } from '../../components/Button'
 import { Link } from 'react-router-dom'
+import { TextField } from '../../components/TextField'
 
 const unconnectedLogin = (props) => {
-  const loginClick = () => {
-    console.log('login button has been pushed!')
-    return props.loginClick()
+  const loginClick = (username) => {
+    debugger
+    console.log('login button has been pushed!' + props.mapUsername)
+    return props.loginClick(username)
   }
   return (
     <div>
       <br />
       <span className="LoginSpan">Please log in to continue...</span>
-      <Link to="/explore">
-        <Button onClick={loginClick}>Log in</Button>
-      </Link>
+      <div>
+        <TextField id="username" label="Username:" />
+        <Button
+          onClick={() => {
+            loginClick('testusername')
+          }}
+        >
+          Log in
+        </Button>
+      </div>
     </div>
   )
 }
 
 const mapStateToProps = (state) => {
-  //console.log(state)
-  return { ...state }
+  return { mapUsername: state.login.username }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loginClick: () => dispatch(loginAction())
+  loginClick: (username) => dispatch(loginAction(username))
 })
 
 export const Login = connect(

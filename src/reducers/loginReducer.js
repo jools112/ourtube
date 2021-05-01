@@ -1,11 +1,12 @@
-/*
-  Julia's test reducer
-*/
-const loginReducer = (state = {}, action) => {
+const initialState = {
+  username: ''
+}
+const loginReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN_ACTION':
       return {
-        result: action.payload
+        ...state,
+        username: action.payload
       }
     default:
       return state
