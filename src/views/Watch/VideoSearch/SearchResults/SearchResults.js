@@ -9,6 +9,9 @@ export const SearchResults = (props) => {
   const [error, setError]=React.useState(null);
   const [searchDataPromise, setSearchDataPromise]=React.useState(null);
   React.useEffect(() => {
+    let ignore = false;
+    setSearchDataPromise(null);
+    setSearchData(null);
     if (props.query) {
       setSearchDataPromise(
         getSearchData(props.query)
@@ -17,13 +20,14 @@ export const SearchResults = (props) => {
             if (data.items.length == 0) {
               throw new Error("No results.");
             }
-            return data;
+            if (!ignore) {
+              setSearchData(data);
+            }
           })
-          .then(data => setSearchData(data))
-          .catch(err => setError(err)));
-    } else {
-      setSearchDataPromise(null);
+          .catch(err => setError(err))
+      );
     }
+    return ()=>{ignore=true};
   }, [props.query]);
   return promiseNoData(searchDataPromise, searchData, error, <SearchResultsLoading mini={props.mini} />) || <SearchResultsLoaded results={searchData.items} mini={props.mini} onSelect={props.onSelect} />
 }
