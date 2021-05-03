@@ -1,16 +1,24 @@
 import './TopBar.css'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/Button'
+import { connect } from 'react-redux'
+import { logoutAction } from '../../actions/loginAction'
 
-export const TopBar = () => {
+export const unconnectedTopBar = (props) => {
   return (
     <div className="TopBar">
       <div className="TopBarLogo">OurTube</div>
-      <div className="TopBarStatus">Welcome, Unknown user</div>
+      <div className="TopBarStatus">
+        Welcome{props.mapLoggedIn ? ', ' + props.mapUsername + '!' : '!'}
+      </div>
       <div>
-        <Link to="">
-          <Button>Log out</Button>
-        </Link>
+        {props.mapLoggedIn ? (
+          <Link to="">
+            <Button onClick={() => props.logout()}>Log out</Button>
+          </Link>
+        ) : (
+          ''
+        )}
       </div>
       <div>
         <Link to="/explore">
@@ -22,10 +30,22 @@ export const TopBar = () => {
           <Button>To Watch page</Button>
         </Link>
       </div>
-      <input
-        className="TopBarSearch"
-        placeholder="Search for a video..."
-      ></input>
     </div>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    mapUsername: state.login.username,
+    mapLoggedIn: state.login.loggedIn
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  setUsername: (letters) => dispatch(setUsernameActionCreator(letters)),
+  logout: () => dispatch(logoutAction())
+})
+export const TopBar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(unconnectedTopBar)

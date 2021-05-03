@@ -27,13 +27,16 @@ const unconnectedLogin = (props) => {
             //console.log('result of input', props.mapUserLetters.target.value)
           }}
         />
-        <Button
-          onClick={() => {
-            props.login(props.mapUsername)
-          }}
-        >
-          Log in
-        </Button>
+        <Link to="/explore">
+          {' '}
+          <Button
+            onClick={() => {
+              props.login(props.mapUsername)
+            }}
+          >
+            Log in
+          </Button>
+        </Link>
       </div>
     </div>
   )
@@ -41,7 +44,8 @@ const unconnectedLogin = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mapUsername: state.login.username
+    mapUsername: state.login.username,
+    mapLoggedIn: state.login.loggedIn
   }
 }
 

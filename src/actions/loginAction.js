@@ -6,6 +6,31 @@ export const setUsernameActionCreator = (username) => ({
   payload: username
 })
 
+export const validateLoggedInAction = () => (dispatch) => {
+  console.log('COOKIE, ', document.cookie.slice(8))
+  console.log(
+    'cookie status ',
+    document.cookie === '' ? 'empty cookie' : 'nonempty cookie'
+  )
+  if (document.cookie !== '') {
+    dispatch({
+      type: 'LOGIN_VALIDATE_LOGGED_IN',
+      payload: document.cookie.slice(8)
+    })
+  }
+}
+
+export const logoutAction = () => (dispatch) => {
+  var res = document.cookie
+  var multiple = res.split(';')
+  for (var i = 0; i < multiple.length; i++) {
+    var key = multiple[i].split('=')
+    document.cookie = key[0] + ' =; expires = Thu, 01 Jan 1970 00:00:00 UTC'
+  }
+
+  dispatch({ type: 'LOGIN_LOGOUT_ACTION' })
+}
+
 export const loginAction = (username) => (dispatch) => {
   const ref = firebase.firestore().collection('users')
 
@@ -54,7 +79,7 @@ export const loginAction = (username) => (dispatch) => {
     })
 
   dispatch({
-    type: 'LOGIN_ACTION',
+    type: 'LOGIN_LOGIN_ACTION',
     payload: username
   })
 }

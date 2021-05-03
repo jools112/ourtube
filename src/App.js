@@ -8,13 +8,18 @@ import { connect } from 'react-redux'
 import { Explore } from './views/Explore/Explore'
 import { Login } from './views/Login/Login'
 import { simpleAction } from './actions/simpleAction'
+import { validateLoggedInAction } from './actions/loginAction'
 import { TopBar } from './views/TopBar/TopBar'
 import { Watch } from './views/Watch/Watch'
+import { useEffect } from 'react'
 
 const unconnectedApp = (props) => {
   //const simpleAction = () => {
   //props.simpleAction()
   //}
+
+  useEffect(() => props.validateLoggedInAction(), [])
+
   return (
     <div className="App">
       {
@@ -41,11 +46,12 @@ const unconnectedApp = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return { ...state }
+  return { mapLoggedIn: state.login.loggedIn }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  simpleAction: () => dispatch(simpleAction())
+  simpleAction: () => dispatch(simpleAction()),
+  validateLoggedInAction: () => dispatch(validateLoggedInAction())
 })
 
 export const App = connect(mapStateToProps, mapDispatchToProps)(unconnectedApp)
