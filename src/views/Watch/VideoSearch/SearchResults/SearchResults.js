@@ -1,6 +1,7 @@
 import React from 'react'
 import {VideoSummary} from '../../../Explore/VideoSummary/VideoSummary'
 import {YT_API_KEY} from '../../../../yt-api'
+import {getIDsFromSearchResults} from '../SearchUtil'
 
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
 // TODO: Figure out what to do about terrible youtube quota
@@ -9,23 +10,27 @@ export const SearchResults = (props) => {
   const [error, setError]=React.useState(null);
   const [searchDataPromise, setSearchDataPromise]=React.useState(null);
   React.useEffect(() => {
+    let ignore = false;
+    setSearchDataPromise(null);
+    setSearchData(null);
     if (props.query) {
       setSearchDataPromise(
         getSearchData(props.query)
           .then(response => response.json())
           .then(data => {
-            if (data.items.length == 0) {
-              throw new Error("No results.");
+            // if (data.items.length == 0) {
+            //   throw new Error("No results.");
+            // }
+            if (!ignore) {
+              setSearchData(data);
             }
-            return data;
           })
-          .then(data => setSearchData(data))
-          .catch(err => setError(err)));
-    } else {
-      setSearchDataPromise(null);
+          .catch(err => setError(err))
+      );
     }
+    return ()=>{ignore=true};
   }, [props.query]);
-  return promiseNoData(searchDataPromise, searchData, error, <SearchResultsLoading mini={props.mini} />) || <SearchResultsLoaded results={searchData.items} mini={props.mini} onSelect={props.onSelect} />
+  return promiseNoData(searchDataPromise, searchData, error, <SearchResultsLoading mini={props.mini} />) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
 }
 
 
@@ -46,8 +51,8 @@ const SearchResultsLoaded = (props) => {
         return (
             <div className="searchResults">
                 {props.results.map(
-                    (video) => {
-                        return <VideoSummary videoID={video.id.videoId} mini={props.mini} onClick={props.onSelect} />;
+                    (videoID) => {
+                        return <VideoSummary videoID={videoID} mini={props.mini} onClick={props.onSelect} />;
                     }
                 )}
             </div>

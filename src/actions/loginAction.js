@@ -1,23 +1,48 @@
 import firebase from '../firebase'
 import { v4 as uuidv4 } from 'uuid'
 
+export const setUsernameActionCreator = (username) => ({
+  type: 'LOGIN_SET_USERNAME',
+  payload: username
+})
+
+export const validateLoggedInAction = () => (dispatch) => {
+  if (document.cookie !== '') {
+    dispatch({
+      type: 'LOGIN_VALIDATE_LOGGED_IN',
+      payload: document.cookie.slice(8)
+    })
+  }
+}
+
+export const logoutAction = () => (dispatch) => {
+  var res = document.cookie
+  var multiple = res.split(';')
+  for (var i = 0; i < multiple.length; i++) {
+    var key = multiple[i].split('=')
+    document.cookie = key[0] + ' =; expires = Thu, 01 Jan 1970 00:00:00 UTC'
+  }
+
+  dispatch({ type: 'LOGIN_LOGOUT_ACTION' })
+}
+
 export const loginAction = (username) => (dispatch) => {
   const ref = firebase.firestore().collection('users')
 
-  const mockData = {
+  const userData = {
     name: username,
-    id: uuidv4()
+    id: uuidv4(),
+    groups: []
   }
-  let found = false
+
   ref
-    .where('name', '==', mockData.name)
+    .where('name', '==', userData.name)
     .get()
     .then((snapshot) => {
+      let found = false
       snapshot.forEach((doc) => {
-        //var testUpdate = {}
-        //testUpdate['poll.result.' + mockData.user] = mockData.choice
-        console.log(doc.data())
-        debugger
+        //onsole.log('found a duplicate!!!', doc.data())
+        //debugger
         let expires = ''
         let days = 365
         var date = new Date()
@@ -25,27 +50,31 @@ export const loginAction = (username) => (dispatch) => {
         expires = '; expires=' + date.toUTCString()
 
         document.cookie =
-          'session' + '=' + (mockData.name || '') + expires + '; path=/'
+          'session' + '=' + (userData.name || '') + expires + '; path=/'
         found = true
-        //ref.doc(doc.data().id).update(testUpdate)
       })
+
+      if (!found) {
+        ref
+          .doc(userData.id)
+          .set({
+            id: userData.id,
+            name: userData.name,
+            groups: []
+          })
+          .then(() => {
+            console.log(
+              'Document successfully written for new user ' + userData.name
+            )
+          })
+          .catch((error) => {
+            console.error('Error writing document: ', error)
+          })
+      }
     })
-  if (!found) {
-    ref
-      .doc(mockData.id)
-      .set({
-        id: mockData.id,
-        name: mockData.name
-      })
-      .then(() => {
-        console.log('Document successfully written!')
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error)
-      })
-  }
+
   dispatch({
-    type: 'LOGIN_ACTION',
+    type: 'LOGIN_LOGIN_ACTION',
     payload: username
   })
 }
