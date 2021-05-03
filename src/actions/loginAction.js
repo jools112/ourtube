@@ -7,11 +7,6 @@ export const setUsernameActionCreator = (username) => ({
 })
 
 export const validateLoggedInAction = () => (dispatch) => {
-  console.log('COOKIE, ', document.cookie.slice(8))
-  console.log(
-    'cookie status ',
-    document.cookie === '' ? 'empty cookie' : 'nonempty cookie'
-  )
   if (document.cookie !== '') {
     dispatch({
       type: 'LOGIN_VALIDATE_LOGGED_IN',

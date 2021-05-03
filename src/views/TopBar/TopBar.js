@@ -4,6 +4,8 @@ import { Button } from '../../components/Button'
 import { connect } from 'react-redux'
 import { logoutAction } from '../../actions/loginAction'
 
+// TODO: make the rest of the topbar buttons invisible as you are logged out and fix corresponding CSS
+
 export const unconnectedTopBar = (props) => {
   return (
     <div className="TopBar">
@@ -13,9 +15,11 @@ export const unconnectedTopBar = (props) => {
       </div>
       <div>
         {props.mapLoggedIn ? (
-          <Link to="">
-            <Button onClick={() => props.logout()}>Log out</Button>
-          </Link>
+          <div>
+            <Link to="">
+              <Button onClick={() => props.logout()}>Log out</Button>
+            </Link>
+          </div>
         ) : (
           ''
         )}
