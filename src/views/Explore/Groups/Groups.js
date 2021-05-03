@@ -1,5 +1,7 @@
 import './Groups.css'
 // eslint-disable-next-line
+import { connect } from 'react-redux'
+
 import firebase from '../../../firebase'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
@@ -8,7 +10,7 @@ import { Button } from '../../../components/Button'
 import { TextField } from '../../../components/TextField'
 import { SoftBox } from '../../../components/SoftBox'
 
-export const Group = () => {
+export const unconnectedGroup = (props) => {
   const [groups, setGroups] = useState([])
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
@@ -16,7 +18,7 @@ export const Group = () => {
 
   const ref = firebase.firestore().collection('groups')
 
-  function getSchools() {
+  function getGroups() {
     setLoading(true)
     ref.onSnapshot((querySnapshot) => {
       const items = []
@@ -24,20 +26,23 @@ export const Group = () => {
         items.push(doc.data())
       })
       setGroups(items)
+      //console.log(items)
       setLoading(false)
     })
   }
 
   function groupInfo(data) {
     document.getElementById('groupInfo').innerHTML = data
+
   }
 
   useEffect(() => {
-    getSchools()
+    getGroups()
   }, [])
 
-  // ADD FUNCTION
+  // ADD GROUP FUNCTION
   function addGroup(newGroup) {
+    console.log(newGroup)
     ref
       .doc(newGroup.id)
       .set(newGroup)
@@ -46,10 +51,33 @@ export const Group = () => {
       })
   }
 
+  // USER JOIN FUNCTION
+  function userJoin(userToAdd) {
+    setLoading();
+    ref.doc(userToAdd.id).update({
+      users: firebase.firestore.FieldValue.arrayUnion(userToAdd.user)
+    }).catch((err) => { console.error(err); });
+    console.log("Added user: ", userToAdd.user)
+    console.log("HELLO", props.mapUsername)
+  }
+
+  //Check that the inputs have letters
+  function addGroupValidation(input1, input2) {
+    const regex = /[a-zA-Z]/;
+
+    if (!regex.test(input1) || !regex.test(input2)) {
+      console.log("Fields must contain letters")
+    }
+    else {
+      console.log("Group succesfully added")
+      addGroup({ title, data, id: uuidv4() })
+    }
+  }
+
   if (loading) {
     return <h1 className="GroupsLoading">Loading...</h1>
   }
-
+  ////////////////////////////////////////////////////////////////////////////
   return (
     <div>
       <div>
@@ -68,25 +96,28 @@ export const Group = () => {
           ></TextField>
           <br />
           <div>
-            <Button onClick={() => addGroup({ title, data, id: uuidv4() })}>
-              Submit
+            <Button onClick={() => addGroupValidation(title, data)}>
+              Create
             </Button>
           </div>
         </div>
         <br />
-        <div>
-          <Button>Create</Button>
-        </div>
       </div>
       <div>
         <br />
         <SoftBox
           title="GROUPS"
           content={groups.map((group) => (
-            <div className="GroupsButton">
-              <Button key={group.id} onClick={() => groupInfo(group.data)}>
+            <div className="GroupsDiv">
+              <div key={group.id}>
+
                 {group.title}
-              </Button>
+
+                <button className="GroupsJoin" onClick={() => groupInfo(group.data)} >Info</button>
+                <button className="GroupsJoin" onClick={() =>
+                  userJoin({ id: group.id, user: props.mapUsername })
+                }>Join</button>
+              </div>
             </div>
           ))}
         ></SoftBox>
@@ -97,3 +128,11 @@ export const Group = () => {
     </div>
   )
 }
+
+const mapStateToProps = (state) => {
+  return { mapUsername: state.login.username }
+}
+
+export const Group = connect(
+  mapStateToProps,
+)(unconnectedGroup)

@@ -18,7 +18,7 @@
 }
 
 .GroupBox:hover {
-  background-color: #50654f61; /* Green */
+  background-color: #50654f61; 
 }
 
 .Create {
@@ -30,16 +30,24 @@
   height: 30px;
   width: 60px;
   border-radius: 12px;
-  background-color: #94ff88; /* Green */
+  background-color: #94ff88; 
 }
 .CreateButton:hover {
-  background-color: #50654f61; /* Green */
+  background-color: #50654f61; 
 }
 
-.GroupsButton {
+.GroupsDiv {
+  background-color: rgb(255, 255, 255);
+  color: black;
   margin: 8px;
   display: flex;
   justify-content: center;
+
+}
+
+.GroupsJoin {
+  margin: 8px;
+  display: flex;
 }
 
 .GroupsLoading {
