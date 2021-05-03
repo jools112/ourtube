@@ -1,25 +1,35 @@
 import './Login.css'
 import { connect } from 'react-redux'
-import { loginAction } from '../../actions/loginAction'
+import {
+  loginAction,
+  setUsernameActionCreator
+} from '../../actions/loginAction'
 import { Button } from '../../components/Button'
 import { Link } from 'react-router-dom'
 import { TextField } from '../../components/TextField'
 
 const unconnectedLogin = (props) => {
   const loginClick = (username) => {
-    debugger
+    //debugger
     console.log('login button has been pushed!' + props.mapUsername)
-    return props.loginClick(username)
+    return props.login(username)
   }
   return (
     <div>
       <br />
       <span className="LoginSpan">Please log in to continue...</span>
       <div>
-        <TextField id="username" label="Username:" />
+        <TextField
+          id="username"
+          label="Username:"
+          onChange={(e) => {
+            props.setUsername(e.target.value)
+            //console.log('result of input', props.mapUserLetters.target.value)
+          }}
+        />
         <Button
           onClick={() => {
-            loginClick('testusername')
+            props.login(props.mapUsername)
           }}
         >
           Log in
@@ -30,11 +40,14 @@ const unconnectedLogin = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return { mapUsername: state.login.username }
+  return {
+    mapUsername: state.login.username
+  }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loginClick: (username) => dispatch(loginAction(username))
+  login: (username) => dispatch(loginAction(username)),
+  setUsername: (letters) => dispatch(setUsernameActionCreator(letters))
 })
 
 export const Login = connect(
