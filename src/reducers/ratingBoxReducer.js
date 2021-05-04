@@ -1,8 +1,8 @@
 const initialState = {
   userRating: 0, // user rating is personal
   groupRating: 0, // group rating is not
-  user: 'mary',
-  relevantDocs: [{ rating: 0, user: 'john', video: 'yogaVideo' }]
+  user: 'mary'
+  //relevantDocs: [{ rating: 0, user: 'john', video: 'yogaVideo' }]
 }
 const ratingBoxReducer = (state = initialState, action) => {
   switch (action.type) {

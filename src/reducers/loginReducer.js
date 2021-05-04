@@ -1,7 +1,8 @@
 const initialState = {
   username: '',
   loggedIn: false,
-  groups: []
+  groups: [],
+  ratings: []
 }
 const loginReducer = (state = initialState, action) => {
   switch (action.type) {

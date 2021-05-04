@@ -1,5 +1,4 @@
 import './RatingBox.css'
-import firebase from '../../../firebase'
 import { useEffect } from 'react'
 import Rating from 'react-rating'
 import { connect } from 'react-redux'
@@ -28,7 +27,6 @@ export const unconnectedRatingBox = (props) => {
               color="orange"
               fractions={2}
               onClick={(value) => {
-                //console.log(value)
                 props.ratingBoxAction(value)
                 props.fetchRatingData()
               }}
@@ -56,7 +54,6 @@ const mapStateToProps = (state) => {
   return {
     mapUserRating: state.ratingBox.userRating,
     mapGroupRating: state.ratingBox.groupRating
-    //mapInitialRating: state.ratingBox.??
   }
 }
 

@@ -32,7 +32,8 @@ export const loginAction = (username) => (dispatch) => {
   const userData = {
     name: username,
     id: uuidv4(),
-    groups: []
+    groups: [],
+    ratings: []
   }
 
   ref
@@ -60,7 +61,8 @@ export const loginAction = (username) => (dispatch) => {
           .set({
             id: userData.id,
             name: userData.name,
-            groups: []
+            groups: userData.groups,
+            ratings: userData.ratings
           })
           .then(() => {
             console.log(

@@ -2,59 +2,62 @@ import firebase from '../firebase'
 import { v4 as uuidv4 } from 'uuid'
 
 export const ratingBoxAction = (selectedVal) => (dispatch) => {
-  // not really an action :DDDD thunk
-  const ref = firebase.firestore().collection('rating')
-
+  const ref = firebase.firestore().collection('users')
   const newRating = {
     rating: selectedVal,
     user: 'mary',
-    video: 'shockingVideo',
+    video: 'hathaYogaVideo',
     id: ''
   }
 
   ref
-    .where('user', '==', newRating.user)
-    .where('video', '==', newRating.video)
+    .where('name', '==', newRating.user)
     .get()
     .then((snapshot) => {
       if (snapshot.empty) {
-        const id_str = uuidv4()
-        newRating.id = id_str
-        ref
-          .doc(id_str)
-          .set(newRating)
-          .catch((e) => {
-            console.error(e)
-          })
+        throw new Error('unexpected error in ratingBoxAction')
       } else {
         snapshot.forEach((doc) => {
           const entry = doc.data()
-          ref.doc(entry.id).update({ rating: newRating.rating })
+          ref
+            .doc(entry.id)
+            .update({ ['ratings.' + newRating.video]: newRating.rating }) // hard brackets for dynamic keys
         })
       }
     })
 }
 
 export const fetchRatingData = () => (dispatch) => {
-  const mockData = { user: 'mary', video: 'shockingVideo' }
-  const ref = firebase.firestore().collection('rating')
+  const mockData = { user: 'mary', video: 'hathaYogaVideo' }
+  const ref = firebase.firestore().collection('users')
 
   ref.onSnapshot((querySnapshot) => {
-    const arr = []
+    const groupRatings = []
     let userRating = 0
 
     querySnapshot.forEach((doc) => {
-      arr.push(doc.data())
-      if (
-        doc.data().user === mockData.user &&
-        doc.data().video === mockData.video
-      ) {
-        userRating = doc.data().rating
+      const entry = doc.data()
+      const keys = Object.keys(entry.ratings)
+
+      if (keys.includes(mockData.video)) {
+        // if a user has rated this video
+        /*
+        console.log(
+          mockData.video + ' has been rated by ' + entry.name + ' with rating ',
+          entry.ratings[mockData.video]
+        )
+        */
+        groupRatings.push(entry.ratings[mockData.video])
+        if (entry.name === mockData.user) {
+          // if I have rated this video
+          userRating = entry.ratings[mockData.video]
+        }
       }
     })
-    // TODO: when group data is more defined, make sure the average is counted for the specific group and NOT in general
+
     const groupRating =
-      arr.map((item) => item.rating).reduce((a, b) => a + b) / arr.length
+      groupRatings.reduce((a, b) => a + b) / groupRatings.length
+
     dispatch({
       type: 'USERRATING_AVERAGE',
       payload: { groupRating, userRating }
