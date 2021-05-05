@@ -1,6 +1,7 @@
 import './Groups.css'
 // eslint-disable-next-line
 import { connect } from 'react-redux'
+import { groupsAction } from '../../../actions/groupsActions'
 
 import firebase from '../../../firebase'
 import React, { useState } from 'react'
@@ -33,7 +34,6 @@ export const unconnectedGroup = (props) => {
 
   function groupInfo(data) {
     document.getElementById('groupInfo').innerHTML = data
-
   }
 
   useEffect(() => {
@@ -53,23 +53,27 @@ export const unconnectedGroup = (props) => {
 
   // USER JOIN FUNCTION
   function userJoin(userToAdd) {
-    setLoading();
-    ref.doc(userToAdd.id).update({
-      users: firebase.firestore.FieldValue.arrayUnion(userToAdd.user)
-    }).catch((err) => { console.error(err); });
-    console.log("Added user: ", userToAdd.user)
-    console.log("HELLO", props.mapUsername)
+    setLoading()
+    ref
+      .doc(userToAdd.id)
+      .update({
+        users: firebase.firestore.FieldValue.arrayUnion(userToAdd.user)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    console.log('Added user: ', userToAdd.user)
+    console.log('HELLO', props.mapUsername)
   }
 
   //Check that the inputs have letters
   function addGroupValidation(input1, input2) {
-    const regex = /[a-zA-Z]/;
+    const regex = /[a-zA-Z]/
 
     if (!regex.test(input1) || !regex.test(input2)) {
-      console.log("Fields must contain letters")
-    }
-    else {
-      console.log("Group succesfully added")
+      console.log('Fields must contain letters')
+    } else {
+      console.log('Group succesfully added')
       addGroup({ title, data, id: uuidv4() })
     }
   }
@@ -110,13 +114,23 @@ export const unconnectedGroup = (props) => {
           content={groups.map((group) => (
             <div className="GroupsDiv">
               <div key={group.id}>
-
                 {group.title}
 
-                <button className="GroupsJoin" onClick={() => groupInfo(group.data)} >Info</button>
-                <button className="GroupsJoin" onClick={() =>
-                  userJoin({ id: group.id, user: props.mapUsername })
-                }>Join</button>
+                <button
+                  className="GroupsJoin"
+                  //onClick={() => groupInfo(group.data)}
+                  onClick={() => props.groupInfoAction(group.data)}
+                >
+                  Info
+                </button>
+                <button
+                  className="GroupsJoin"
+                  onClick={() =>
+                    userJoin({ id: group.id, user: props.mapUsername })
+                  }
+                >
+                  Join
+                </button>
               </div>
             </div>
           ))}
@@ -124,15 +138,20 @@ export const unconnectedGroup = (props) => {
         <br />
       </div>
 
-      <div id="groupInfo"></div>
+      <div id="groupInfo"> {props.mapInfoStr} </div>
     </div>
   )
 }
 
 const mapStateToProps = (state) => {
-  return { mapUsername: state.login.username }
+  return { mapUsername: state.login.username, mapInfoStr: state.groups.info }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  groupInfoAction: (infoStr) => dispatch(groupsAction(infoStr))
+})
 
 export const Group = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(unconnectedGroup)

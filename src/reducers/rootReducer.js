@@ -17,5 +17,5 @@ export default combineReducers({
   videoPlayer: videoPlayerReducer,
   ratingBox: ratingBoxReducer,
   poll: pollReducer,
-  group: groupsReducer
+  groups: groupsReducer
 })

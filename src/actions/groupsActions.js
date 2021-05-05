@@ -1,3 +1,4 @@
-const groupsSelection = () => (dispatch) => {
-  dispatch({ type: 'GROUPS_ACTION' })
-}
+export const groupsAction = (infoStr) => ({
+  type: 'GROUPS_DISPLAY_INFO',
+  payload: infoStr
+})
