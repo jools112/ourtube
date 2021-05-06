@@ -15,4 +15,3 @@ const getRelatedVideos = (videoID, maxResults) => {
     return tempPromise.then(response => response.json())
         .then(data => getIDsFromSearchResults(data));
 }
-
