@@ -22,6 +22,7 @@ const unconnectedLogin = (props) => {
         <TextField
           id="username"
           label="Username:"
+          pattern="[a-zA-Z0-9\s]+"
           onChange={(e) => {
             props.setUsername(e.target.value)
             //console.log('result of input', props.mapUserLetters.target.value)

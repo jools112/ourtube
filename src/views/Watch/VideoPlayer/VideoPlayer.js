@@ -20,7 +20,17 @@ function iAmControlling() {
     document.querySelector('#name').value
   )
 }
-
+function readCookie(name) {
+  var nameCookie = name + '='
+  var cookies = document.cookie.split(';')
+  for (var i = 0; i < cookies.length; i++) {
+    var c = cookies[i]
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length)
+    if (c.indexOf(nameCookie) == 0)
+      return c.substring(nameCookie.length, c.length)
+  }
+  return null
+}
 const UnconnectedVideoPlayer = (props) => {
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
@@ -36,8 +46,8 @@ const UnconnectedVideoPlayer = (props) => {
     player = window.player = youtube({ el: elPlayer })
 
     if (document.querySelector('#name').value == '') {
-      document.querySelector('#name').value =
-        'user' + parseInt(99999 * Math.random())
+      debugger
+      document.querySelector('#name').value = readCookie('session')
     }
 
     conn = new WebSocket('ws://localhost:3000/test')
