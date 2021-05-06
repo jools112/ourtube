@@ -109,7 +109,7 @@ const UnconnectedVideoPlayer = (props) => {
   }
   const takeControlRoomClick = () => {
     conn.send('control ' + document.querySelector('#name').value)
-    conn.send('video' + props.stateVideiId)
+    conn.send('video' + props.stateVideoId)
   }
   return (
     <body>
@@ -151,7 +151,7 @@ const UnconnectedVideoPlayer = (props) => {
               <div
                 id="my-youtube-player"
                 className="player js-player"
-                data-youtube-videoid="2HwgXcPaFm8"
+                data-youtube-videoid={props.stateVideoId}
               ></div>
             }
             padding="disabled"
@@ -168,7 +168,7 @@ const mapStateToProps = (state) => {
     stateName: state.videoPlayer.name,
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
-    stateVideiId: state.videoId
+    stateVideoId: state.videoId
   }
 }
 
