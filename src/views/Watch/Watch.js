@@ -8,7 +8,7 @@ export const Watch = () => {
   return (
     <div class="watchMainCont">
       <div>
-        <VideoPlayer />
+        <VideoPlayer videoId="KFstP0C9sVk" />
         <br />
         <RatingBox />
         <Poll />
