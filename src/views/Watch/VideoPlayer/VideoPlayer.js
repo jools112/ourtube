@@ -46,13 +46,11 @@ const UnconnectedVideoPlayer = (props) => {
     player = window.player = youtube({ el: elPlayer })
 
     if (document.querySelector('#name').value == '') {
-      debugger
       document.querySelector('#name').value = readCookie('session')
     }
 
     conn = new WebSocket('ws://localhost:3000/test')
     conn.onmessage = function (ev) {
-      debugger
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
         props.dispatchTakeControlActionCreator(matches[1])
