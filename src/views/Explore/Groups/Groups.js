@@ -1,7 +1,7 @@
 import './Groups.css'
 // eslint-disable-next-line
 import { connect } from 'react-redux'
-import { groupsAction } from '../../../actions/groupsActions'
+import { createGroupOffAction, createGroupAction, groupsAction } from '../../../actions/groupsActions'
 
 import firebase from '../../../firebase'
 import React, { useState } from 'react'
@@ -31,24 +31,19 @@ export const unconnectedGroup = (props) => {
       setLoading(false)
     })
   }
-
-  function groupInfo(data) {
-    document.getElementById('groupInfo').innerHTML = data
-  }
-
   useEffect(() => {
     getGroups()
   }, [])
 
   // ADD GROUP FUNCTION
   function addGroup(newGroup) {
-    console.log(newGroup)
     ref
       .doc(newGroup.id)
       .set(newGroup)
       .catch((err) => {
         console.error(err)
       })
+    props.createOffAction()
   }
 
   // USER JOIN FUNCTION
@@ -63,7 +58,7 @@ export const unconnectedGroup = (props) => {
         console.error(err)
       })
     console.log('Added user: ', userToAdd.user)
-    console.log('HELLO', props.mapUsername)
+    console.log(props.mapCreateGroup)
   }
 
   //Check that the inputs have letters
@@ -75,6 +70,7 @@ export const unconnectedGroup = (props) => {
     } else {
       console.log('Group succesfully added')
       addGroup({ title, data, id: uuidv4() })
+
     }
   }
 
@@ -84,71 +80,80 @@ export const unconnectedGroup = (props) => {
   ////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <div>
-        <div className="GroupsSubmitContainer">
-          <TextField
-            label="title:"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></TextField>
-          <br></br>
-          <TextField
-            label="data:"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
-          ></TextField>
-          <br />
+      {props.mapCreateGroup ? (
+        <div>
+          <h1>Create Group</h1>
           <div>
-            <Button onClick={() => addGroupValidation(title, data)}>
-              Create
-            </Button>
+            <TextField
+              label="Title: "
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            ></TextField>
+            <br />
+            <TextField
+              label="Data: "
+              value={data}
+              onChange={(e) => setData(e.target.value)}
+            ></TextField>
+            <br />
+            <div>
+              <Button onClick={() => props.createOffAction()}>
+                Back
+                  </Button>
+                  &nbsp;
+                  &nbsp;
+                  <Button onClick={() => addGroupValidation(title, data)}>
+                Create
+                  </Button>
+            </div>
           </div>
         </div>
-        <br />
-      </div>
-      <div>
-        <br />
-        <SoftBox
-          title="GROUPS"
-          content={groups.map((group) => (
-            <div className="GroupsDiv">
-              <div key={group.id}>
-                {group.title}
+      ) : (
+        <div>
+          <div>
+            <SoftBox
+              title="GROUPS"
+              content={groups.map((group) => (
+                <div className="GroupsDiv">
+                  <div key={group.id}>
+                    {group.title}
 
-                <button
-                  className="GroupsJoin"
-                  //onClick={() => groupInfo(group.data)}
-                  onClick={() => props.groupInfoAction(group.data)}
-                >
-                  Info
+                    <button
+                      className="GroupsJoin"
+                      onClick={() => props.groupInfoAction(group.data)}
+                    >
+                      Info
                 </button>
-                <button
-                  className="GroupsJoin"
-                  onClick={() =>
-                    userJoin({ id: group.id, user: props.mapUsername })
-                  }
-                >
-                  Join
+                    <button
+                      className="GroupsJoin"
+                      onClick={() =>
+                        userJoin({ id: group.id, user: props.mapUsername })}
+                    >
+                      Join
                 </button>
-              </div>
-            </div>
-          ))}
-        ></SoftBox>
-        <br />
-      </div>
-
-      <div id="groupInfo"> {props.mapInfoStr} </div>
-    </div>
+                  </div>
+                </div>
+              ))}
+            ></SoftBox>
+          </div>
+          <Button onClick={() => props.createAction()}>Create Group</Button>
+        </div>
+      )}
+      <br />
+      <div> {props.mapInfoStr} </div>
+    </div >
   )
 }
 
 const mapStateToProps = (state) => {
-  return { mapUsername: state.login.username, mapInfoStr: state.groups.info }
+  return { mapUsername: state.login.username, mapInfoStr: state.groups.info, mapCreateGroup: state.groups.createGroup }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  groupInfoAction: (infoStr) => dispatch(groupsAction(infoStr))
+  groupInfoAction: (infoStr) => dispatch(groupsAction(infoStr)),
+  createAction: () => dispatch(createGroupAction()),
+  createOffAction: () => dispatch(createGroupOffAction())
 })
 
 export const Group = connect(
