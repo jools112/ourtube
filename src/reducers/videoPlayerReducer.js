@@ -27,6 +27,11 @@ const videoPlayerReducer = (state = initialState, action) => {
         ...state,
         videoId: action.payload
       }
+    case 'USERNAME_ACTION':
+      return {
+        ...state,
+        username: action.payload
+      }
     default:
       return state
   }

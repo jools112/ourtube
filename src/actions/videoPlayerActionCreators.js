@@ -18,3 +18,8 @@ export const VideoIdActionCreator = (videoId) => ({
   type: 'VIDEOID_ACTION',
   payload: videoId
 })
+
+export const UserNameActionCreator = (username) => ({
+  type: 'USERNAME_ACTION',
+  payload: username
+})

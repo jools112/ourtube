@@ -4,7 +4,8 @@ import {
   joinRoomActionCreator,
   takeControlActionCreator,
   userCountActionCreator,
-  VideoIdActionCreator
+  VideoIdActionCreator,
+  UserNameActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
@@ -14,12 +15,6 @@ import { SoftBox } from '../../../components/SoftBox'
 
 let conn
 let player
-function iAmControlling() {
-  return (
-    document.querySelector('#controller').innerHTML ==
-    document.querySelector('#name').value
-  )
-}
 function readCookie(name) {
   var nameCookie = name + '='
   var cookies = document.cookie.split(';')
@@ -44,9 +39,8 @@ const UnconnectedVideoPlayer = (props) => {
 
     let elPlayer = document.querySelector('.js-player')
     player = window.player = youtube({ el: elPlayer })
-
-    if (document.querySelector('#name').value == '') {
-      document.querySelector('#name').value = readCookie('session')
+    if (!props.stateUserName) {
+      props.dispatchUserNameActionCreator(readCookie('session'))
     }
 
     conn = new WebSocket('ws://localhost:3000/test')
@@ -62,7 +56,7 @@ const UnconnectedVideoPlayer = (props) => {
         player.currentTime = matches[1]
         player.pause()
       } else {
-        if (iAmControlling()) return
+        if (props.controlName == props.stateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
           player.currentTime = estimatedTimeOnMaster
@@ -89,14 +83,16 @@ const UnconnectedVideoPlayer = (props) => {
       'timeupdate',
       function () {
         debugger
-        if (iAmControlling()) conn.send(player.currentTime)
+        if (props.controlName == props.stateUserName)
+          conn.send(player.currentTime)
       },
       true
     )
     player.addEventListener(
       'pause',
       function () {
-        if (iAmControlling()) conn.send('pause ' + player.currentTime)
+        if (props.controlName == props.stateUserName)
+          conn.send('pause ' + player.currentTime)
       },
       true
     )
@@ -121,7 +117,11 @@ const UnconnectedVideoPlayer = (props) => {
         <div id="registration" className="active">
           <div className="VideoPlayerTextField">
             <div className="VideoPlayerUsername">
-              <TextField id="name" label="Username:" />
+              <TextField
+                id="name"
+                label="Username:"
+                value={props.stateUserName}
+              />
             </div>
             <div>
               <Button onClick={joinRoomClick} id="join">
@@ -164,6 +164,7 @@ const UnconnectedVideoPlayer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    stateUserName: state.videoPlayer.username,
     stateName: state.videoPlayer.name,
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
@@ -179,8 +180,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(takeControlActionCreator(controlName)),
     dispatchUserCountActionCreator: (userCount) =>
       dispatch(userCountActionCreator(userCount)),
-    dispatchVideoIdActionCreator: (userCount) =>
-      dispatch(VideoIdActionCreator(userCount))
+    dispatchVideoIdActionCreator: (videoId) =>
+      dispatch(VideoIdActionCreator(videoId)),
+    dispatchUserNameActionCreator: (username) =>
+      dispatch(UserNameActionCreator(username))
   }
 }
 
