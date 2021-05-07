@@ -1,6 +1,6 @@
 const initialState = {
   name: 'room not joined yet',
-  controlName: '---',
+  controlName: '--#',
   userCount: 1
   // add a key:value for Leave Room if needed?
 }

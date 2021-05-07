@@ -26,6 +26,7 @@ function readCookie(name) {
   }
   return null
 }
+
 const UnconnectedVideoPlayer = (props) => {
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
@@ -43,12 +44,15 @@ const UnconnectedVideoPlayer = (props) => {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
     conn = new WebSocket('ws://localhost:3000/test')
+    window.conn = conn
 
     //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       var matches
+      console.log(ev, ev.data)
       if ((matches = ev.data.match(/^control (.+)$/))) {
-        debugger
+        //debugger
+        console.log(matches[1])
         props.dispatchTakeControlActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
         props.dispatchUserCountActionCreator(matches[1])
@@ -56,7 +60,8 @@ const UnconnectedVideoPlayer = (props) => {
         player.currentTime = matches[1]
         player.pause()
       } else {
-        debugger
+        //debugger
+        console.log(props.stateControlName, props.stateUserName)
         if (props.stateControlName == props.stateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
@@ -75,20 +80,23 @@ const UnconnectedVideoPlayer = (props) => {
       .catch((err) => console.log(err))
   }, [])
 
+  useEffect(() => {
+    // TODO: Only run this if the user has joined the room?
+    player.removeEventListener('timeupdate', timeUpdate)
+    player.addEventListener('timeupdate', timeUpdate, true)
+  }, [props.stateControlName, props.stateUserName])
+
+  const timeUpdate = () => {
+    if (props.stateControlName == props.stateUserName)
+      conn.send(player.currentTime)
+  }
+
   const joinRoomClick = () => {
     console.log('joinRoom button has been pushed!')
     props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
     document.querySelector('#room').className = 'active'
     document.querySelector('#registration').className = 'inactive'
-    player.addEventListener(
-      'timeupdate',
-      function () {
-        debugger
-        if (props.stateControlName == props.stateUserName)
-          conn.send(player.currentTime)
-      },
-      true
-    )
+
     player.addEventListener(
       'pause',
       function () {
@@ -101,16 +109,19 @@ const UnconnectedVideoPlayer = (props) => {
 
   const leaveRoomClick = () => {
     props.dispatchJoinRoomActionCreator('room not joined yet')
-    props.dispatchTakeControlActionCreator('---')
-    conn.send('control ' + '---')
+    props.dispatchTakeControlActionCreator('--?')
+    conn.send('control ' + '--!')
 
     conn.close()
     document.querySelector('#room').className = 'inactive'
     document.querySelector('#registration').className = 'active'
   }
-  const takeControlRoomClick = () => {
-    conn.send('control ' + document.querySelector('#name').value)
+  const takeControlRoomClick = (name) => {
+    conn.send('control ' + name)
   }
+
+  console.log('re-render', props)
+
   return (
     <body>
       <div id="room" className="inactive">
@@ -141,7 +152,10 @@ const UnconnectedVideoPlayer = (props) => {
         <p>
           Controller:{' '}
           <span id="controller">{'randomstring' + props.stateControlName}</span>
-          <Button onClick={takeControlRoomClick} id="takeControl">
+          <Button
+            onClick={() => takeControlRoomClick(props.stateUserName)}
+            id="takeControl"
+          >
             Take Control
           </Button>
         </p>
@@ -177,12 +191,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchJoinRoomActionCreator: (name) =>
       dispatch(joinRoomActionCreator(name)),
+
     dispatchTakeControlActionCreator: (controlName) =>
       dispatch(takeControlActionCreator(controlName)),
+
     dispatchUserCountActionCreator: (userCount) =>
       dispatch(userCountActionCreator(userCount)),
+
     dispatchVideoIdActionCreator: (videoId) =>
       dispatch(VideoIdActionCreator(videoId)),
+
     dispatchUserNameActionCreator: (username) =>
       dispatch(UserNameActionCreator(username))
   }
