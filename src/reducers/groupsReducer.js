@@ -1,7 +1,8 @@
 import { useStore } from 'react-redux'
 
 const initialState = {
-  info: ''
+  info: '',
+  createGroup: false
 }
 
 const groupsReducer = (state = initialState, action) => {
@@ -10,6 +11,17 @@ const groupsReducer = (state = initialState, action) => {
       return {
         ...state,
         info: action.payload
+      }
+
+    case 'GROUPS_CREATE_TRUE':
+      return {
+        ...state,
+        createGroup: true
+      }
+    case 'GROUPS_CREATE_FALSE':
+      return {
+        ...state,
+        createGroup: false
       }
 
     default:

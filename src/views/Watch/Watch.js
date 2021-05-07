@@ -8,8 +8,8 @@ export const Watch = () => {
   return (
     <div class="Watch">
       <div class="WatchUpperContent">
-        <div class="WatchVideoPlayer">
-          <VideoPlayer />
+        <div class="WatchVideoPlayer watchMainCont">
+          <VideoPlayer videoId="2HwgXcPaFm8" />
         </div>
         <div class="WatchRatingAndPoll">
           <div class="WatchRatingBox">

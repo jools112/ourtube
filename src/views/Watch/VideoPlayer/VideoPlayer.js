@@ -4,7 +4,8 @@ import {
   joinRoomActionCreator,
   takeControlActionCreator,
   userCountActionCreator,
-  VideoIdActionCreator
+  VideoIdActionCreator,
+  UserNameActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
@@ -14,13 +15,17 @@ import { SoftBox } from '../../../components/SoftBox'
 
 let conn
 let player
-function iAmControlling() {
-  return (
-    document.querySelector('#controller').innerHTML ==
-    document.querySelector('#name').value
-  )
+function readCookie(name) {
+  var nameCookie = name + '='
+  var cookies = document.cookie.split(';')
+  for (var i = 0; i < cookies.length; i++) {
+    var c = cookies[i]
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length)
+    if (c.indexOf(nameCookie) == 0)
+      return c.substring(nameCookie.length, c.length)
+  }
+  return null
 }
-
 const UnconnectedVideoPlayer = (props) => {
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
@@ -34,27 +39,25 @@ const UnconnectedVideoPlayer = (props) => {
 
     let elPlayer = document.querySelector('.js-player')
     player = window.player = youtube({ el: elPlayer })
-
-    if (document.querySelector('#name').value == '') {
-      document.querySelector('#name').value =
-        'user' + parseInt(99999 * Math.random())
+    if (!props.stateUserName) {
+      props.dispatchUserNameActionCreator(readCookie('session'))
     }
-
     conn = new WebSocket('ws://localhost:3000/test')
+
+    //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
-      debugger
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
+        debugger
         props.dispatchTakeControlActionCreator(matches[1])
-      } else if ((matches = ev.data.match(/^video (.+)$/))) {
-        props.dispatchVideoIdActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
         props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
         player.currentTime = matches[1]
         player.pause()
       } else {
-        if (iAmControlling()) return
+        debugger
+        if (props.stateControlName == props.stateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
           player.currentTime = estimatedTimeOnMaster
@@ -81,14 +84,16 @@ const UnconnectedVideoPlayer = (props) => {
       'timeupdate',
       function () {
         debugger
-        if (iAmControlling()) conn.send(player.currentTime)
+        if (props.stateControlName == props.stateUserName)
+          conn.send(player.currentTime)
       },
       true
     )
     player.addEventListener(
       'pause',
       function () {
-        if (iAmControlling()) conn.send('pause ' + player.currentTime)
+        if (props.stateControlName == props.stateUserName)
+          conn.send('pause ' + player.currentTime)
       },
       true
     )
@@ -105,7 +110,6 @@ const UnconnectedVideoPlayer = (props) => {
   }
   const takeControlRoomClick = () => {
     conn.send('control ' + document.querySelector('#name').value)
-    conn.send('video' + props.stateVideiId)
   }
   return (
     <body>
@@ -113,7 +117,11 @@ const UnconnectedVideoPlayer = (props) => {
         <div id="registration" className="active">
           <div className="VideoPlayerTextField">
             <div className="VideoPlayerUsername">
-              <TextField id="name" label="Username:" />
+              <TextField
+                id="name"
+                label="Username:"
+                value={props.stateUserName}
+              />
             </div>
             <div>
               <Button onClick={joinRoomClick} id="join">
@@ -131,7 +139,8 @@ const UnconnectedVideoPlayer = (props) => {
           Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
-          Controller: <span id="controller">{props.stateControlName}</span>
+          Controller:{' '}
+          <span id="controller">{'randomstring' + props.stateControlName}</span>
           <Button onClick={takeControlRoomClick} id="takeControl">
             Take Control
           </Button>
@@ -143,7 +152,7 @@ const UnconnectedVideoPlayer = (props) => {
               <div
                 id="my-youtube-player"
                 className="player js-player"
-                data-youtube-videoid={props.stateVideiId}
+                data-youtube-videoid="2HwgXcPaFm8"
               ></div>
             }
             padding="disabled"
@@ -156,10 +165,11 @@ const UnconnectedVideoPlayer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    stateUserName: state.videoPlayer.username,
     stateName: state.videoPlayer.name,
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
-    stateVideiId: state.videoId
+    stateVideoId: state.videoId
   }
 }
 
@@ -171,8 +181,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(takeControlActionCreator(controlName)),
     dispatchUserCountActionCreator: (userCount) =>
       dispatch(userCountActionCreator(userCount)),
-    dispatchVideoIdActionCreator: (userCount) =>
-      dispatch(VideoIdActionCreator(userCount))
+    dispatchVideoIdActionCreator: (videoId) =>
+      dispatch(VideoIdActionCreator(videoId)),
+    dispatchUserNameActionCreator: (username) =>
+      dispatch(UserNameActionCreator(username))
   }
 }
 
