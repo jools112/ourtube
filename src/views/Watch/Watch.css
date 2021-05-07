@@ -1,3 +1,43 @@
-.watchMainCont {
-    
+.Watch {
+  display: flex;
+  flex-direction: column;
+}
+
+.WatchUpperContent {
+  display: flex;
+  flex-direction: row;
+  margin: 0px -5px;
+}
+
+.WatchLowerContent {
+  display: flex;
+  flex-direction: row;
+  margin: 0px -5px;
+}
+
+.WatchVideoPlayer {
+  width: 65%;
+  margin: 0px 5px;
+  margin-bottom: 10px;
+}
+
+.WatchRatingAndPoll {
+  padding-top: 223px;
+  width: 35%;
+  margin: 0px 5px;
+}
+
+.WatchRatingBox {
+  margin-bottom: 10px;
+}
+
+.WatchPollBox {
+  margin-bottom: 10px;
+}
+
+.WatchSearchBox {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }

@@ -272,8 +272,8 @@ prototype._getVideoOptions = function (options) {
   if (height) {
     width = el.clientWidth
   } else {
-    height = 390
-    width = 640
+    height = 577
+    width = '100%'
   }
 
   return {
@@ -312,18 +312,18 @@ prototype._getPlayerVarsOption = function (options, name) {
 prototype._getVideoEvents = function () {
   var events = {}
 
-    ;[
-      'onApiChange',
-      'onError',
-      'onPlaybackQualityChange',
-      'onPlaybackRateChange',
-      'onReady',
-      'onStateChange'
-    ].forEach(
-      function (type, index) {
-        events[type] = Player.bind(this[type], this)
-      }.bind(this)
-    )
+  ;[
+    'onApiChange',
+    'onError',
+    'onPlaybackQualityChange',
+    'onPlaybackRateChange',
+    'onReady',
+    'onStateChange'
+  ].forEach(
+    function (type, index) {
+      events[type] = Player.bind(this[type], this)
+    }.bind(this)
+  )
 
   return events
 }

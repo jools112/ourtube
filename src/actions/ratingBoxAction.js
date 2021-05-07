@@ -56,7 +56,7 @@ export const fetchRatingData = () => (dispatch) => {
     })
 
     const groupRating =
-      groupRatings.reduce((a, b) => a + b) / groupRatings.length
+      groupRatings.reduce((a, b) => a + b, 0) / groupRatings.length
 
     dispatch({
       type: 'USERRATING_AVERAGE',

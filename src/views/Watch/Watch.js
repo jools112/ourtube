@@ -6,14 +6,25 @@ import { VideoSearch } from './VideoSearch/VideoSearch'
 
 export const Watch = () => {
   return (
-    <div class="watchMainCont">
-      <div>
-        <VideoPlayer />
-        <br />
-        <RatingBox />
-        <Poll />
+    <div class="Watch">
+      <div class="WatchUpperContent">
+        <div class="WatchVideoPlayer">
+          <VideoPlayer />
+        </div>
+        <div class="WatchRatingAndPoll">
+          <div class="WatchRatingBox">
+            <RatingBox />
+          </div>
+          <div class="WatchPollBox">
+            <Poll />
+          </div>
+        </div>
       </div>
-      <VideoSearch />
+      <div class="WatchLowerContent">
+        <div class="WatchSearchBox">
+          <VideoSearch />
+        </div>
+      </div>
     </div>
   )
 }

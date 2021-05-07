@@ -29,17 +29,19 @@ const unconnectedApp = (props) => {
 
       <BrowserRouter>
         <TopBar />
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route exact path="/watch">
-            <Watch videoId="KFstP0C9sVk" />
-          </Route>
-          <Route exact path="/explore">
-            <Explore />
-          </Route>
-        </Switch>
+        <div class="AppMainContent">
+          <Switch>
+            <Route exact path="/">
+              <Login />
+            </Route>
+            <Route exact path="/watch">
+              <Watch videoId="KFstP0C9sVk" />
+            </Route>
+            <Route exact path="/explore">
+              <Explore />
+            </Route>
+          </Switch>
+        </div>
       </BrowserRouter>
     </div>
   )
