@@ -1,5 +1,5 @@
 const initialState = {
-  name: 'room not joined yet',
+  joined: false,
   controlName: '--#',
   userCount: 1
   // add a key:value for Leave Room if needed?
@@ -10,7 +10,12 @@ const videoPlayerReducer = (state = initialState, action) => {
     case 'JOINROOM_ACTION':
       return {
         ...state,
-        name: action.payload // the name part of state gets overwritten
+        joined: true
+      }
+    case 'LEAVEROOM_ACTION':
+      return {
+        ...state,
+        joined: false
       }
     case 'TAKECONTROL_ACTION':
       return {
