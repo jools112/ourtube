@@ -43,9 +43,9 @@ const UnconnectedVideoPlayer = (props) => {
     if (!props.stateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
-    //conn = new WebSocket('ws://localhost:3000/test')
+    conn = new WebSocket('ws://localhost:3000/test')
 
-    conn = new WebSocket('ws://193.122.13.192:3000/test')
+    //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       var matches
       console.log(ev, ev.data)
@@ -83,11 +83,18 @@ const UnconnectedVideoPlayer = (props) => {
     // TODO: Only run this if the user has joined the room?
     player.removeEventListener('timeupdate', timeUpdate)
     player.addEventListener('timeupdate', timeUpdate, true)
+    player.removeEventListener('pause', timePause)
+    player.addEventListener('pause', timePause, true)
   }, [props.stateControlName, props.stateUserName])
 
   const timeUpdate = () => {
     if (props.stateControlName == props.stateUserName)
       conn.send(player.currentTime)
+  }
+  const timePause = () => {
+    debugger
+    if (props.stateControlName == props.stateUserName)
+      conn.send('pause ' + player.currentTime)
   }
 
   const joinRoomClick = () => {
@@ -95,15 +102,6 @@ const UnconnectedVideoPlayer = (props) => {
     props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
     document.querySelector('#room').className = 'active'
     document.querySelector('#registration').className = 'inactive'
-
-    player.addEventListener(
-      'pause',
-      function () {
-        if (props.stateControlName == props.stateUserName)
-          conn.send('pause ' + player.currentTime)
-      },
-      true
-    )
   }
 
   const leaveRoomClick = () => {
