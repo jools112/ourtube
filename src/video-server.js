@@ -6,8 +6,9 @@ let usersConnectedIpAddress = new Map()
 var server = new ws.Server({ port: process.env.PORT || 3000 })
 
 server.on('connection', function (conn) {
+  server.broadcast('userCount ' + ++userCount)
   conn.on('message', function (message) {
-    log('message logged' + message)
+    /*log('message logged' + message)
     if (message.includes('ipaddress')) {
       let ipAddress = message.split(':')[1]
       log('ipAddress console log' + ipAddress)
@@ -18,7 +19,7 @@ server.on('connection', function (conn) {
         server.broadcast('userCount ' + userCount)
       }
       return
-    }
+    }*/
     server.broadcast(message)
   })
 })

@@ -42,21 +42,22 @@ const UnconnectedVideoPlayer = (props) => {
     if (!props.stateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
+    conn = new WebSocket('ws://localhost:3000/test')
 
-    conn = new WebSocket('ws://193.122.13.192:3000/test')
+    //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
+        debugger
         props.dispatchTakeControlActionCreator(matches[1])
-      } else if ((matches = ev.data.match(/^video (.+)$/))) {
-        props.dispatchVideoIdActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
         props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
         player.currentTime = matches[1]
         player.pause()
       } else {
-        if (props.controlName == props.stateUserName) return
+        debugger
+        if (props.stateControlName == props.stateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
           player.currentTime = estimatedTimeOnMaster
@@ -83,7 +84,7 @@ const UnconnectedVideoPlayer = (props) => {
       'timeupdate',
       function () {
         debugger
-        if (props.controlName == props.stateUserName)
+        if (props.stateControlName == props.stateUserName)
           conn.send(player.currentTime)
       },
       true
@@ -91,7 +92,7 @@ const UnconnectedVideoPlayer = (props) => {
     player.addEventListener(
       'pause',
       function () {
-        if (props.controlName == props.stateUserName)
+        if (props.stateControlName == props.stateUserName)
           conn.send('pause ' + player.currentTime)
       },
       true
@@ -109,7 +110,6 @@ const UnconnectedVideoPlayer = (props) => {
   }
   const takeControlRoomClick = () => {
     conn.send('control ' + document.querySelector('#name').value)
-    conn.send('video' + props.stateVideoId)
   }
   return (
     <body>
@@ -139,7 +139,8 @@ const UnconnectedVideoPlayer = (props) => {
           Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
-          Controller: <span id="controller">{props.stateControlName}</span>
+          Controller:{' '}
+          <span id="controller">{'randomstring' + props.stateControlName}</span>
           <Button onClick={takeControlRoomClick} id="takeControl">
             Take Control
           </Button>
