@@ -2,15 +2,16 @@ import './VideoPlayer.css'
 import { connect } from 'react-redux'
 import {
   joinRoomActionCreator,
+  leaveRoomActionCreator,
   takeControlActionCreator,
   userCountActionCreator,
   VideoIdActionCreator,
-  UserNameActionCreator
+  UserNameActionCreator,
+  UserNameJoinedActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
 import { Button } from '../../../components/Button'
-import { TextField } from '../../../components/TextField'
 import { SoftBox } from '../../../components/SoftBox'
 
 let conn
@@ -43,9 +44,9 @@ const UnconnectedVideoPlayer = (props) => {
     if (!props.newStateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
-    //  conn = new WebSocket('ws://localhost:3000/test')
+    conn = new WebSocket('ws://localhost:3000/test')
 
-    conn = new WebSocket('ws://193.122.13.192:3000/test')
+    //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       var matches
       console.log(ev, ev.data)
@@ -61,6 +62,10 @@ const UnconnectedVideoPlayer = (props) => {
         console.log('PAUSE')
         player.currentTime = matches[1]
         player.pause()
+      } else if ((matches = ev.data.match(/^username(.+)$/))) {
+        debugger
+        console.log('USERNAME')
+        props.dispatchUserNameJoinedActionCreator(matches[1])
       } else {
         //console.log('NONE OF THE ABOVE')
         //debugger
@@ -77,6 +82,8 @@ const UnconnectedVideoPlayer = (props) => {
         return response.json()
       })
       .then((res) => {
+        console.log('username:' + readCookie('session'))
+        conn.send('username:' + readCookie('session'))
         console.log('ipaddress:' + res.ip)
         conn.send('ipaddress:' + res.ip)
       })
@@ -136,23 +143,24 @@ const UnconnectedVideoPlayer = (props) => {
               />*/}
             </div>
             <div>
-              <Button onClick={joinRoomClick} id="join">
+              {/* <Button onClick={joinRoomClick} id="join">
                 Join Room
-              </Button>
-              <div>{props.newStateUserName}</div>
+            </Button>*/}
+              <div>{props.newStateUserName + ' has joined the room'}</div>
             </div>
           </div>
         </div>
-        User: <span id="username"></span>
         <Button onClick={leaveRoomClick} id="leave">
-          Leave Room
+          Leave Control
         </Button>
         <p>
           Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
-          Controller:{' '}
-          <span id="controller">{'randomstring' + props.stateControlName}</span>
+          Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
+        </p>
+        <p>
+          Controller: <span id="controller">{props.stateControlName}</span>
           <Button
             onClick={() => takeControlRoomClick(props.newStateUserName)}
             id="takeControl"
@@ -186,7 +194,8 @@ const mapStateToProps = (state) => {
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
     stateVideoId: state.videoId,
-    newStateUserName: state.login.username
+    newStateUserName: state.login.username,
+    stateUserNameJoined: state.userNameJoined
   }
 }
 
@@ -206,7 +215,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(VideoIdActionCreator(videoId)),
 
     dispatchUserNameActionCreator: (username) =>
-      dispatch(UserNameActionCreator(username))
+      dispatch(UserNameActionCreator(username)),
+
+    dispatchUserNameJoinedActionCreator: (userNameJoined) =>
+      dispatch(UserNameJoinedActionCreator(userNameJoined))
   }
 }
 

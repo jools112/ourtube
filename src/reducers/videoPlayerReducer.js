@@ -1,7 +1,7 @@
 const initialState = {
   joined: false,
   controlName: '--#',
-  userCount: 1
+  userCount: 0
   // add a key:value for Leave Room if needed?
 }
 
@@ -36,6 +36,11 @@ const videoPlayerReducer = (state = initialState, action) => {
       return {
         ...state,
         username: action.payload
+      }
+    case 'USERNAMEJOINED_ACTION':
+      return {
+        ...state,
+        userNameJoined: action.payload
       }
     default:
       return state

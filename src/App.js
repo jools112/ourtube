@@ -29,7 +29,7 @@ const unconnectedApp = (props) => {
 
       <BrowserRouter>
         <TopBar />
-        <div class="AppMainContent">
+        <div className="AppMainContent">
           <Switch>
             <Route exact path="/">
               <Login />

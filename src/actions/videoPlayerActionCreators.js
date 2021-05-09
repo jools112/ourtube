@@ -25,3 +25,8 @@ export const UserNameActionCreator = (username) => ({
   type: 'USERNAME_ACTION',
   payload: username
 })
+
+export const UserNameJoinedActionCreator = (userNameJoined) => ({
+  type: 'USERNAMEJOINED_ACTION',
+  payload: userNameJoined
+})
