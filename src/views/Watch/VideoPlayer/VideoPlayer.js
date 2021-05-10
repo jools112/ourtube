@@ -44,8 +44,8 @@ const UnconnectedVideoPlayer = (props) => {
     if (!props.newStateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
-    conn = new WebSocket('ws://localhost:3000/test')
-
+    // conn = new WebSocket('ws://localhost:3000/test')
+    conn = new WebSocket('ws://193.122.13.192:3000/test')
     //conn = new WebSocket('ws://193.122.13.192:3000/test')
     conn.onmessage = function (ev) {
       var matches
