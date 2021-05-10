@@ -1,7 +1,8 @@
 const initialState = {
   joined: false,
   controlName: '--#',
-  userCount: 0
+  userCount: 0,
+  userNameJoined: ''
   // add a key:value for Leave Room if needed?
 }
 

@@ -195,7 +195,7 @@ const mapStateToProps = (state) => {
     stateUserCount: state.videoPlayer.userCount,
     stateVideoId: state.videoId,
     newStateUserName: state.login.username,
-    stateUserNameJoined: state.userNameJoined
+    stateUserNameJoined: state.videoPlayer.userNameJoined
   }
 }
 
