@@ -1,11 +1,11 @@
 import './VideoSummary.css'
 import React from 'react'
-import {YT_API_KEY} from '../../../yt-api'
+import { YT_API_KEY } from '../../../yt-api'
 
 export const VideoSummary = (props) => {
   const [videoData, setVideoData] = React.useState(null);
-  const [error, setError]=React.useState(null);
-  const [videoDataPromise, setVideoDataPromise]=React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [videoDataPromise, setVideoDataPromise] = React.useState(null);
   React.useEffect(() => {
     setVideoDataPromise(
       getVideoData(props.videoID)
@@ -19,14 +19,14 @@ export const VideoSummary = (props) => {
         .then(data => setVideoData(data))
         .catch(err => setError(err)));
   }, []);
-  return promiseNoData(videoDataPromise, videoData, error, <VideoSummaryLoading mini={props.mini} />) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick}/>
+  return promiseNoData(videoDataPromise, videoData, error, <VideoSummaryLoading mini={props.mini} />) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick} />
 }
 
 
 // TODO make this a bit more generic and move out of this file?
 const promiseNoData = (promise, data, error, placeholder) => {
   return (!promise && <span>no data</span>
-    ||   (promise && !data && !error) && placeholder
+    || (promise && !data && !error) && placeholder
     || error && <span>err: {error.toString()}</span>
     || false);
 }
@@ -38,11 +38,11 @@ const VideoSummaryLoading = () => {
 const VideoSummaryLoaded = (props) => {
   const clickHandler = () => props.onClick(props.videoData)
   const videoData = props.videoData
-  const videoTitle = videoData.snippet.title;
+  const videoTitle = videoData.snippet.title; //yes!
   const channelTitle = videoData.snippet.channelTitle;
   const videoDuration = videoData.contentDetails.duration
     .match(/(\d+)/g)
-    .map(x=>String(x).padStart(2, 0))
+    .map(x => String(x).padStart(2, 0))
     .join(":");
   const viewCount = formatViewers(Number(videoData.statistics.viewCount));
   const likePct = parseFloat((100 * Number(videoData.statistics.likeCount) / (Number(videoData.statistics.likeCount) + Number(videoData.statistics.dislikeCount))).toFixed(1));
@@ -62,8 +62,8 @@ const VideoSummaryLoaded = (props) => {
   else {
     return (<div className="videoSummaryContainerSmall" onClick={clickHandler}>
       <span className="videoSummaryTitle">{videoTitle}</span>
-    <img src={thumbnail.url} alt="Video Thumbnail" className="videoSummaryThumbnail" />
-  </div>);
+      <img src={thumbnail.url} alt="Video Thumbnail" className="videoSummaryThumbnail" />
+    </div>);
   }
 }
 
@@ -82,6 +82,6 @@ const formatViewers = (num) => {
   return parseFloat((num / 1_000_000).toFixed(1)) + "M";
 }
 
-const getBestThumbnail = (thumbnails) => {
+export const getBestThumbnail = (thumbnails) => {
   return thumbnails.maxres || thumbnails.standard || thumbnails.high || thumbnails.medium || thumbnails.default;
 }

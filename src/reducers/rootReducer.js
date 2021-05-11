@@ -10,6 +10,7 @@ import videoPlayerReducer from './videoPlayerReducer'
 import ratingBoxReducer from './ratingBoxReducer'
 import pollReducer from './pollReducer'
 import groupsReducer from './groupsReducer'
+import playlist from './playlist'
 
 export default combineReducers({
   tutorial: simpleReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   videoPlayer: videoPlayerReducer,
   ratingBox: ratingBoxReducer,
   poll: pollReducer,
-  groups: groupsReducer
+  groups: groupsReducer,
+  playlist: playlist,
 })

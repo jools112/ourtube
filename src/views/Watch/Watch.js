@@ -3,6 +3,7 @@ import { RatingBox } from './Rating/RatingBox'
 import { Poll } from './Poll/Poll'
 import { VideoPlayer } from './VideoPlayer/VideoPlayer'
 import { VideoSearch } from './VideoSearch/VideoSearch'
+import Playlist from './Playlist'
 
 export const Watch = () => {
   return (
@@ -13,6 +14,7 @@ export const Watch = () => {
         <RatingBox />
         <Poll />
       </div>
+      <Playlist />
       <VideoSearch />
     </div>
   )

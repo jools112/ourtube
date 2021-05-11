@@ -1,14 +1,15 @@
 import React from 'react'
-import {VideoSummary} from '../../../Explore/VideoSummary/VideoSummary'
-import {YT_API_KEY} from '../../../../yt-api'
-import {getIDsFromSearchResults} from '../SearchUtil'
+import { getBestThumbnail, VideoSummary } from '../../../Explore/VideoSummary/VideoSummary'
+import { YT_API_KEY } from '../../../../yt-api'
+import { getIDsFromSearchResults } from '../SearchUtil'
+import { addVideosToPlaylist } from '../../Playlist/playlistService'
 
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
 // TODO: Figure out what to do about terrible youtube quota
 export const SearchResults = (props) => {
   const [searchData, setSearchData] = React.useState(null);
-  const [error, setError]=React.useState(null);
-  const [searchDataPromise, setSearchDataPromise]=React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [searchDataPromise, setSearchDataPromise] = React.useState(null);
   React.useEffect(() => {
     let ignore = false;
     setSearchDataPromise(null);
@@ -28,7 +29,7 @@ export const SearchResults = (props) => {
           .catch(err => setError(err))
       );
     }
-    return ()=>{ignore=true};
+    return () => { ignore = true };
   }, [props.query]);
   return promiseNoData(searchDataPromise, searchData, error, <SearchResultsLoading mini={props.mini} />) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
 }
@@ -37,7 +38,7 @@ export const SearchResults = (props) => {
 // TODO make this a bit more generic and move out of this file?
 const promiseNoData = (promise, data, error, placeholder) => {
   return (!promise && <span></span>
-    ||   (promise && !data && !error) && placeholder
+    || (promise && !data && !error) && placeholder
     || error && <span>err: {error.toString()}</span>
     || false);
 }
@@ -47,18 +48,35 @@ const SearchResultsLoading = () => {
 }
 
 const SearchResultsLoaded = (props) => {
-    if (props.results.length != 0) {
-        return (
-            <div className="searchResults">
-                {props.results.map(
-                    (videoID) => {
-                        return <VideoSummary videoID={videoID} mini={props.mini} onClick={props.onSelect} />;
-                    }
-                )}
-            </div>
-        )
-    } 
-    return <div className="searchResults">No results :(</div>
+  const [loading, setLoading] = React.useState(false)
+  if (props.results.length != 0) {
+    return (
+      <div className="searchResults">
+        {props.results.map(
+          (videoID) => {
+            return <VideoSummary videoID={videoID} mini={props.mini} onClick={async (videoData) => {
+              if (loading) {
+                return
+              }
+              setLoading(true)
+              const video = {
+                id: videoID,
+                thumbnail: getBestThumbnail(videoData.snippet.thumbnails).url,
+                name: videoData.snippet.title,
+              }
+              try {
+                await addVideosToPlaylist("7EXjFe3blAyQ8NeGFWFt", [video])
+              } catch {
+
+              }
+              setLoading(false)
+            }} />;
+          }
+        )}
+      </div>
+    )
+  }
+  return <div className="searchResults">No results :(</div>
 }
 
 const getSearchData = (query) => {

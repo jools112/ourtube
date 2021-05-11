@@ -34,7 +34,7 @@ export const unconnectedPoll = (props) => {
                       props.fetchPollData()
                     }}
                   >
-                    {props.mapResult[0].alternative}
+                    {props.mapResult[0].alternative.name}
                   </Button>
                   <Button
                     onClick={() => {
@@ -42,7 +42,7 @@ export const unconnectedPoll = (props) => {
                       props.fetchPollData()
                     }}
                   >
-                    {props.mapResult[1].alternative}
+                    {props.mapResult[1].alternative.name}
                   </Button>
                   <Button
                     onClick={() => {
@@ -50,7 +50,7 @@ export const unconnectedPoll = (props) => {
                       props.fetchPollData()
                     }}
                   >
-                    {props.mapResult[2].alternative}
+                    {props.mapResult[2].alternative.name}
                   </Button>
                 </div>
                 <br />
@@ -60,15 +60,15 @@ export const unconnectedPoll = (props) => {
                     <BarChart
                       data={[
                         {
-                          name: props.mapResult[0].alternative,
+                          name: props.mapResult[0].alternative.name,
                           amount: props.mapResult[0].score
                         },
                         {
-                          name: props.mapResult[1].alternative,
+                          name: props.mapResult[1].alternative.name,
                           amount: props.mapResult[1].score
                         },
                         {
-                          name: props.mapResult[2].alternative,
+                          name: props.mapResult[2].alternative.name,
                           amount: props.mapResult[2].score
                         }
                       ]}
