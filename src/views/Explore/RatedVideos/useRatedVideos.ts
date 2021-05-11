@@ -19,7 +19,7 @@ export const useRatedVideos = () => {
         return 0;
       })
 
-      setRatedVideos(allVideos.slice(0, 5).map(vid => vid.id))
+      setRatedVideos(allVideos.map(vid => vid.id))
     })
     return unsubscribe
   }, [])

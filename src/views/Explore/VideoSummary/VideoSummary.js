@@ -55,7 +55,7 @@ const VideoSummaryLoaded = (props) => {
         <span>{channelTitle}</span>
         <span>{videoDuration}</span>
         <span>{viewCount} views</span>
-        <span>{likePct}% liked</span>
+        <span>{likePct}% liked on YouTube</span>
       </div>
     </div>);
   }
