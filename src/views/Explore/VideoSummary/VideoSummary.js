@@ -36,7 +36,7 @@ const VideoSummaryLoading = () => {
 }
 
 const VideoSummaryLoaded = (props) => {
-  const clickHandler = () => props.onClick(props.videoData)
+  const clickHandler = () => props.onClick && props.onClick(props.videoData)
   const videoData = props.videoData
   const videoTitle = videoData.snippet.title; //yes!
   const channelTitle = videoData.snippet.channelTitle;

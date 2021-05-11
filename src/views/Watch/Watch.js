@@ -21,13 +21,12 @@ export const Watch = () => {
           </div>
         </div>
       </div>
+      <Playlist />
       <div className="WatchLowerContent">
         <div className="WatchSearchBox">
           <VideoSearch />
         </div>
       </div>
-      <Playlist />
-      <VideoSearch />
     </div>
   )
 }

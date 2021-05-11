@@ -1,0 +1,5 @@
+.playlist {
+  border: 1px solid green;
+  display: flex;
+  height: 200px;
+}
