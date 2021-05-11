@@ -8,7 +8,7 @@ import { RatedVideos } from './RatedVideos/RatedVideos'
 export const Explore = () => {
   return (
     <div className="Explore">
-      <Group user="jonathan" />
+      <Group />
       <RatedVideos />
     </div>
   )

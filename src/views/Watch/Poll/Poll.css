@@ -7,7 +7,6 @@
 .PollBoxContainer {
   display: flex;
   justify-content: center;
-  padding: 10px;
 }
 .PollContentContainer {
   width: 100%;

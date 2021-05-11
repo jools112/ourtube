@@ -62,11 +62,11 @@ export const fetchPollData = () => (dispatch) => {
         }
       })
     })
-
-    fetched.alternatives.forEach((vidName, index) => {
-      pollData.push({ alternative: vidName, score: votes[index] })
-    })
-
+    if (fetched.alternatives) {
+      fetched.alternatives.forEach((vidName, index) => {
+        pollData.push({ alternative: vidName, score: votes[index] })
+      })
+    }
     //console.log('data to be returned: ', pollData)
     dispatch({
       type: 'POLL_DATA',

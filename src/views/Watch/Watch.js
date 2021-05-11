@@ -7,12 +7,24 @@ import Playlist from './Playlist'
 
 export const Watch = () => {
   return (
-    <div class="watchMainCont">
-      <div>
-        <VideoPlayer />
-        <br />
-        <RatingBox />
-        <Poll />
+    <div className="Watch">
+      <div className="WatchUpperContent">
+        <div className="WatchVideoPlayer watchMainCont">
+          <VideoPlayer videoId="2HwgXcPaFm8" />
+        </div>
+        <div className="WatchRatingAndPoll">
+          <div className="WatchRatingBox">
+            <RatingBox />
+          </div>
+          <div className="WatchPollBox">
+            <Poll />
+          </div>
+        </div>
+      </div>
+      <div className="WatchLowerContent">
+        <div className="WatchSearchBox">
+          <VideoSearch />
+        </div>
       </div>
       <Playlist />
       <VideoSearch />

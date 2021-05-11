@@ -1,6 +1,12 @@
 .App {
   text-align: center;
 }
+
+.AppMainContent {
+  width: 1280px;
+  margin: 0 auto;
+}
+
 body {
   background-color: var(--livid-brown);
   color: var(--vis-vis);

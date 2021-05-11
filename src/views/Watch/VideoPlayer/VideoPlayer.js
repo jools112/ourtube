@@ -2,24 +2,20 @@ import './VideoPlayer.css'
 import { connect } from 'react-redux'
 import {
   joinRoomActionCreator,
+  leaveRoomActionCreator,
   takeControlActionCreator,
   userCountActionCreator,
-  VideoIdActionCreator
+  VideoIdActionCreator,
+  UserNameActionCreator,
+  UserNameJoinedActionCreator
 } from '../../../actions/videoPlayerActionCreators'
 import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
 import { Button } from '../../../components/Button'
-import { TextField } from '../../../components/TextField'
 import { SoftBox } from '../../../components/SoftBox'
 
 let conn
 let player
-function iAmControlling() {
-  return (
-    document.querySelector('#controller').innerHTML ==
-    document.querySelector('#name').value
-  )
-}
 function readCookie(name) {
   var nameCookie = name + '='
   var cookies = document.cookie.split(';')
@@ -31,6 +27,7 @@ function readCookie(name) {
   }
   return null
 }
+
 const UnconnectedVideoPlayer = (props) => {
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
@@ -44,25 +41,36 @@ const UnconnectedVideoPlayer = (props) => {
 
     let elPlayer = document.querySelector('.js-player')
     player = window.player = youtube({ el: elPlayer })
-
-    if (document.querySelector('#name').value == '') {
-      document.querySelector('#name').value = readCookie('session')
+    if (!props.newStateUserName) {
+      props.dispatchUserNameActionCreator(readCookie('session'))
     }
+    //conn = new WebSocket('ws://localhost:3000/test')
+    conn = new WebSocket('ws://193.122.13.192:3000/test')
 
-    conn = new WebSocket('ws://localhost:3000/test')
     conn.onmessage = function (ev) {
       var matches
+      console.log(ev, ev.data)
       if ((matches = ev.data.match(/^control (.+)$/))) {
+        console.log('CONTROL')
+        //debugger
+        console.log(matches[1])
         props.dispatchTakeControlActionCreator(matches[1])
-      } else if ((matches = ev.data.match(/^video (.+)$/))) {
-        props.dispatchVideoIdActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
+        console.log('USERCOUNT')
         props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
+        console.log('PAUSE')
         player.currentTime = matches[1]
         player.pause()
+      } else if ((matches = ev.data.match(/^username(.+)$/))) {
+        debugger
+        console.log('USERNAME')
+        props.dispatchUserNameJoinedActionCreator(matches[1].replace(':', ''))
       } else {
-        if (iAmControlling()) return
+        //console.log('NONE OF THE ABOVE')
+        //debugger
+        console.log(props.stateControlName, props.newStateUserName)
+        if (props.stateControlName == props.newStateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
           player.currentTime = estimatedTimeOnMaster
@@ -74,64 +82,75 @@ const UnconnectedVideoPlayer = (props) => {
         return response.json()
       })
       .then((res) => {
+        console.log('username:' + readCookie('session'))
+        conn.send('username:' + readCookie('session'))
         console.log('ipaddress:' + res.ip)
         conn.send('ipaddress:' + res.ip)
       })
       .catch((err) => console.log(err))
   }, [])
 
-  const joinRoomClick = () => {
-    console.log('joinRoom button has been pushed!')
-    props.dispatchJoinRoomActionCreator(document.querySelector('#name').value)
-    document.querySelector('#room').className = 'active'
-    document.querySelector('#registration').className = 'inactive'
-    player.addEventListener(
-      'timeupdate',
-      function () {
-        debugger
-        if (iAmControlling()) conn.send(player.currentTime)
-      },
-      true
-    )
-    player.addEventListener(
-      'pause',
-      function () {
-        if (iAmControlling()) conn.send('pause ' + player.currentTime)
-      },
-      true
-    )
+  useEffect(() => {
+    // TODO: Only run this if the user has joined the room?
+    player.removeEventListener('timeupdate', timeUpdate)
+    player.addEventListener('timeupdate', timeUpdate, true)
+    player.removeEventListener('pause', timePause)
+    player.addEventListener('pause', timePause, true)
+  }, [props.stateControlName, props.newStateUserName])
+
+  const timeUpdate = () => {
+    if (!player.paused && props.stateControlName == props.newStateUserName)
+      conn.send(player.currentTime)
+  }
+  const timePause = () => {
+    //debugger
+    if (props.stateControlName == props.newStateUserName)
+      conn.send('pause ' + player.currentTime)
   }
 
-  const leaveRoomClick = () => {
-    props.dispatchJoinRoomActionCreator('room not joined yet')
-    props.dispatchTakeControlActionCreator('---')
-    conn.send('control ' + '---')
+  const leaveControlClick = () => {
+    props.dispatchLeaveRoomActionCreator()
+    props.dispatchTakeControlActionCreator('--?')
+    conn.send('control ' + '--!')
 
-    conn.close()
     document.querySelector('#room').className = 'inactive'
     document.querySelector('#registration').className = 'active'
   }
-  const takeControlRoomClick = () => {
-    conn.send('control ' + document.querySelector('#name').value)
-    conn.send('video' + props.stateVideiId)
+
+  const leaveRoomClick = () => {
+    debugger
+    conn.send('leaveusername:' + props.newStateUserName)
+    //conn.close()
   }
+  const takeControlRoomClick = (name) => {
+    conn.send('control ' + name)
+  }
+
+  console.log('re-render', props)
+
   return (
     <body>
       <div id="room" className="inactive">
         <div id="registration" className="active">
           <div className="VideoPlayerTextField">
             <div className="VideoPlayerUsername">
-              <TextField id="name" label="Username:" />
+              {/*<TextField
+                id="name"
+                label="Username:"
+                value={props.newStateUserName}
+              />*/}
             </div>
             <div>
-              <Button onClick={joinRoomClick} id="join">
+              {/* <Button onClick={joinRoomClick} id="join">
                 Join Room
-              </Button>
-              <div>{props.stateName}</div>
+            </Button>*/}
+              <div>{props.newStateUserName + ' has joined the room'}</div>
             </div>
           </div>
         </div>
-        User: <span id="username"></span>
+        <Button onClick={leaveControlClick} id="leave">
+          Leave Control
+        </Button>
         <Button onClick={leaveRoomClick} id="leave">
           Leave Room
         </Button>
@@ -139,8 +158,14 @@ const UnconnectedVideoPlayer = (props) => {
           Users: <span id="userCount">{props.stateUserCount}</span>
         </p>
         <p>
+          Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
+        </p>
+        <p>
           Controller: <span id="controller">{props.stateControlName}</span>
-          <Button onClick={takeControlRoomClick} id="takeControl">
+          <Button
+            onClick={() => takeControlRoomClick(props.newStateUserName)}
+            id="takeControl"
+          >
             Take Control
           </Button>
         </p>
@@ -151,7 +176,7 @@ const UnconnectedVideoPlayer = (props) => {
               <div
                 id="my-youtube-player"
                 className="player js-player"
-                data-youtube-videoid={props.stateVideiId}
+                data-youtube-videoid="2HwgXcPaFm8"
               ></div>
             }
             padding="disabled"
@@ -164,23 +189,37 @@ const UnconnectedVideoPlayer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    stateName: state.videoPlayer.name,
+    //StateUserName: state.videoPlayer.username,
+    //stateName: state.videoPlayer.name,
+    stateJoined: state.videoPlayer.joined,
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
-    stateVideiId: state.videoId
+    stateVideoId: state.videoId,
+    newStateUserName: state.login.username,
+    stateUserNameJoined: state.videoPlayer.userNameJoined
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchJoinRoomActionCreator: (name) =>
-      dispatch(joinRoomActionCreator(name)),
+    dispatchJoinRoomActionCreator: () => dispatch(joinRoomActionCreator()),
+
+    dispatchLeaveRoomActionCreator: () => dispatch(leaveRoomActionCreator()),
+
     dispatchTakeControlActionCreator: (controlName) =>
       dispatch(takeControlActionCreator(controlName)),
+
     dispatchUserCountActionCreator: (userCount) =>
       dispatch(userCountActionCreator(userCount)),
-    dispatchVideoIdActionCreator: (userCount) =>
-      dispatch(VideoIdActionCreator(userCount))
+
+    dispatchVideoIdActionCreator: (videoId) =>
+      dispatch(VideoIdActionCreator(videoId)),
+
+    dispatchUserNameActionCreator: (username) =>
+      dispatch(UserNameActionCreator(username)),
+
+    dispatchUserNameJoinedActionCreator: (userNameJoined) =>
+      dispatch(UserNameJoinedActionCreator(userNameJoined))
   }
 }
 
