@@ -44,9 +44,9 @@ const UnconnectedVideoPlayer = (props) => {
     if (!props.newStateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
-    // conn = new WebSocket('ws://localhost:3000/test')
+    //conn = new WebSocket('ws://localhost:3000/test')
     conn = new WebSocket('ws://193.122.13.192:3000/test')
-    //conn = new WebSocket('ws://193.122.13.192:3000/test')
+
     conn.onmessage = function (ev) {
       var matches
       console.log(ev, ev.data)
@@ -65,7 +65,7 @@ const UnconnectedVideoPlayer = (props) => {
       } else if ((matches = ev.data.match(/^username(.+)$/))) {
         debugger
         console.log('USERNAME')
-        props.dispatchUserNameJoinedActionCreator(matches[1])
+        props.dispatchUserNameJoinedActionCreator(matches[1].replace(':', ''))
       } else {
         //console.log('NONE OF THE ABOVE')
         //debugger
@@ -108,21 +108,19 @@ const UnconnectedVideoPlayer = (props) => {
       conn.send('pause ' + player.currentTime)
   }
 
-  const joinRoomClick = () => {
-    console.log('joinRoom button has been pushed!')
-    props.dispatchJoinRoomActionCreator()
-    document.querySelector('#room').className = 'active'
-    document.querySelector('#registration').className = 'inactive'
-  }
-
-  const leaveRoomClick = () => {
+  const leaveControlClick = () => {
     props.dispatchLeaveRoomActionCreator()
     props.dispatchTakeControlActionCreator('--?')
     conn.send('control ' + '--!')
 
-    conn.close()
     document.querySelector('#room').className = 'inactive'
     document.querySelector('#registration').className = 'active'
+  }
+
+  const leaveRoomClick = () => {
+    debugger
+    conn.send('leaveusername:' + props.newStateUserName)
+    //conn.close()
   }
   const takeControlRoomClick = (name) => {
     conn.send('control ' + name)
@@ -150,8 +148,11 @@ const UnconnectedVideoPlayer = (props) => {
             </div>
           </div>
         </div>
-        <Button onClick={leaveRoomClick} id="leave">
+        <Button onClick={leaveControlClick} id="leave">
           Leave Control
+        </Button>
+        <Button onClick={leaveRoomClick} id="leave">
+          Leave Room
         </Button>
         <p>
           Users: <span id="userCount">{props.stateUserCount}</span>

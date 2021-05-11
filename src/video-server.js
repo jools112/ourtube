@@ -19,16 +19,29 @@ server.on('connection', function (conn) {
         server.broadcast('userCount ' + userCount)
       }
       return
+    } else if (message.includes('leaveusername')) {
+      let username = message.split(':')[1]
+      if (usersConnectedUserName.has(username)) {
+        usersConnectedUserName.delete(username)
+        console.log(
+          'found' + Array.from(usersConnectedUserName.keys()).toString()
+        )
+        server.broadcast(
+          'username ' + Array.from(usersConnectedUserName.keys()).toString()
+        )
+        server.broadcast('userCount ' + --userCount)
+      }
+      return
     } else if (message.includes('username')) {
       let username = message.split(':')[1]
       if (!usersConnectedUserName.has(username)) {
         usersConnectedUserName.set(username)
       }
+      server.broadcast(
+        'username ' + Array.from(usersConnectedUserName.keys()).toString()
+      )
+      return
     }
-    server.broadcast(message)
-    server.broadcast(
-      'username ' + Array.from(usersConnectedUserName.keys()).toString()
-    )
   })
 })
 
