@@ -45,7 +45,7 @@ export const unconnectedGroup = (props) => {
                   </Button>
                   &nbsp;
                   &nbsp;
-                  <Button onClick={() => props.addGroupAction({ name, description, id: uuidv4() })} >
+                  <Button onClick={() => props.addGroupAction({ name, description, id: uuidv4(), playlist: [] })} >
                 Create
                   </Button>
             </div>
