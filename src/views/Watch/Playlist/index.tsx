@@ -2,9 +2,12 @@ import React from 'react'
 import { VideoSummary } from '../../Explore/VideoSummary/VideoSummary'
 import { usePlaylist } from './playlistService'
 import './Playlist.css'
+import { useSelector } from 'react-redux'
 
 const Playlist: React.FC = () => {
-  const videos = usePlaylist("7EXjFe3blAyQ8NeGFWFt").slice(1)
+  const currentGroup = useSelector((state: any) => state.groups.currentGroup)
+  console.log(currentGroup)
+  const videos = usePlaylist(currentGroup).slice(1)
   return (
     <div className="playlist">
       <p>Playlist</p>

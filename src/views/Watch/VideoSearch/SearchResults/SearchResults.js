@@ -48,6 +48,7 @@ const SearchResultsLoading = () => {
 }
 
 const SearchResultsLoaded = (props) => {
+  const currentGroup = useSelector((state) => state.groups.currentGroup)
   const [loading, setLoading] = React.useState(false)
   if (props.results.length != 0) {
     return (
@@ -65,7 +66,7 @@ const SearchResultsLoaded = (props) => {
                 name: videoData.snippet.title,
               }
               try {
-                await addVideosToPlaylist("7EXjFe3blAyQ8NeGFWFt", [video])
+                await addVideosToPlaylist(currentGroup, [video])
               } catch {
 
               }
