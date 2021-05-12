@@ -1,8 +1,8 @@
 import './Groups.css'
 // eslint-disable-next-line
 import { connect } from 'react-redux'
-import { createGroupOffAction, createGroupAction, groupsAction } from '../../../actions/groupsActions'
-
+import { setGroupId, userJoinAction, addGroupAction, getGroupsAction, createGroupOffAction, createGroupAction, groupsAction } from '../../../actions/groupsActions'
+import { Link } from 'react-router-dom'
 import firebase from '../../../firebase'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
@@ -10,74 +10,16 @@ import { v4 as uuidv4 } from 'uuid'
 import { Button } from '../../../components/Button'
 import { TextField } from '../../../components/TextField'
 import { SoftBox } from '../../../components/SoftBox'
+import { strictEqual } from 'assert'
 
 export const unconnectedGroup = (props) => {
-  const [groups, setGroups] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [title, setTitle] = useState('')
-  const [data, setData] = useState('')
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
 
-  const ref = firebase.firestore().collection('groups')
-
-  function getGroups() {
-    setLoading(true)
-    ref.onSnapshot((querySnapshot) => {
-      const items = []
-      querySnapshot.forEach((doc) => {
-        items.push(doc.data())
-      })
-      setGroups(items)
-      //console.log(items)
-      setLoading(false)
-    })
-  }
   useEffect(() => {
-    getGroups()
+    props.getGroupsAction()
   }, [])
 
-  // ADD GROUP FUNCTION
-  function addGroup(newGroup) {
-    ref
-      .doc(newGroup.id)
-      .set(newGroup)
-      .catch((err) => {
-        console.error(err)
-      })
-    props.createOffAction()
-  }
-
-  // USER JOIN FUNCTION
-  function userJoin(userToAdd) {
-    setLoading()
-    ref
-      .doc(userToAdd.id)
-      .update({
-        users: firebase.firestore.FieldValue.arrayUnion(userToAdd.user)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-    console.log('Added user: ', userToAdd.user)
-    console.log(props.mapCreateGroup)
-  }
-
-  //Check that the inputs have letters
-  function addGroupValidation(input1, input2) {
-    const regex = /[a-zA-Z]/
-
-    if (!regex.test(input1) || !regex.test(input2)) {
-      console.log('Fields must contain letters')
-    } else {
-      console.log('Group succesfully added')
-      addGroup({ title, data, id: uuidv4() })
-
-    }
-  }
-
-  if (loading) {
-    return <h1 className="GroupsLoading">Loading...</h1>
-  }
-  ////////////////////////////////////////////////////////////////////////////
   return (
     <div>
       {props.mapCreateGroup ? (
@@ -85,16 +27,16 @@ export const unconnectedGroup = (props) => {
           <h1>Create Group</h1>
           <div>
             <TextField
-              label="Title: "
+              label="Name: "
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             ></TextField>
             <br />
             <TextField
-              label="Data: "
-              value={data}
-              onChange={(e) => setData(e.target.value)}
+              label="Description: "
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             ></TextField>
             <br />
             <div>
@@ -103,32 +45,36 @@ export const unconnectedGroup = (props) => {
                   </Button>
                   &nbsp;
                   &nbsp;
-                  <Button onClick={() => addGroupValidation(title, data)}>
+                  <Button onClick={() => props.addGroupAction({ name, description, id: uuidv4() })} >
                 Create
                   </Button>
             </div>
           </div>
+          <div>{props.mapValidation ? (props.mapValidation) : (props.mapValidation)}</div>
         </div>
       ) : (
         <div>
           <div>
             <SoftBox
               title="GROUPS"
-              content={groups.map((group) => (
-                <div className="GroupsDiv">
-                  <div key={group.id}>
-                    {group.title}
+              content={props.mapGroups.map((group) => (
 
+                <div className="GroupsDiv">
+                  <div key={group.id} >
+
+                    <Link to="/watch">
+                      <h4 onClick={() => props.setGroupId(group.id)}>{group.name}</h4>
+                    </Link>
                     <button
                       className="GroupsJoin"
-                      onClick={() => props.groupInfoAction(group.data)}
+                      onClick={() => props.groupInfoAction(group.description)}
                     >
                       Info
                 </button>
                     <button
                       className="GroupsJoin"
                       onClick={() =>
-                        userJoin({ id: group.id, user: props.mapUsername })}
+                        props.userJoinAction({ id: group.id, member: props.mapUsername })}
                     >
                       Join
                 </button>
@@ -138,22 +84,40 @@ export const unconnectedGroup = (props) => {
             ></SoftBox>
           </div>
           <Button onClick={() => props.createAction()}>Create Group</Button>
+          <br />
+          {/* This is a validation message, will print 
+          "Log in to join a group if the current username is ''.
+          Will print "You have joined the group" if the username is set */}
+          {props.mapLogValid}
+          <br />
+          Group Description: {props.mapInfoStr}
         </div>
-      )}
-      <br />
-      <div> {props.mapInfoStr} </div>
+      )
+      }
     </div >
   )
 }
 
 const mapStateToProps = (state) => {
-  return { mapUsername: state.login.username, mapInfoStr: state.groups.info, mapCreateGroup: state.groups.createGroup }
+  return {
+    mapUsername: state.login.username,
+    mapInfoStr: state.groups.info,
+    mapCreateGroup: state.groups.createGroup,
+    mapGroups: state.groups.groupsData,
+    mapValidation: state.groups.validation,
+    mapCurrentGroup: state.groups.currentGroup,
+    mapLogValid: state.groups.loggedInValid
+  }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   groupInfoAction: (infoStr) => dispatch(groupsAction(infoStr)),
   createAction: () => dispatch(createGroupAction()),
-  createOffAction: () => dispatch(createGroupOffAction())
+  createOffAction: () => dispatch(createGroupOffAction()),
+  getGroupsAction: () => dispatch(getGroupsAction()),
+  addGroupAction: (newGroup) => dispatch(addGroupAction(newGroup)),
+  userJoinAction: (userToAdd) => dispatch(userJoinAction(userToAdd)),
+  setGroupId: (groupId) => dispatch(setGroupId(groupId))
 })
 
 export const Group = connect(

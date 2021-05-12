@@ -2,7 +2,7 @@ import { firestore } from '../../../firebase'
 import { useState, useEffect } from 'react'
 
 export const useRatedVideos = () => {
-  const [ratedVideos, setRatedVideos] = useState<string[]>([])
+  const [ratedVideos, setRatedVideos] = useState < string[] > ([])
   useEffect(() => {
     const ref = firestore.collection("ratings")
     const unsubscribe = ref.onSnapshot((collection) => {
