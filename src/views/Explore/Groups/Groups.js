@@ -24,7 +24,7 @@ export const unconnectedGroup = (props) => {
     <div>
       {props.mapCreateGroup ? (
         <div>
-          <h1>Create Group</h1>
+          <h1>Create Groups</h1>
           <div>
             <TextField
               label="Name: "
