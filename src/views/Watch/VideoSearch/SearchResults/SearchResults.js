@@ -3,6 +3,7 @@ import { getBestThumbnail, VideoSummary } from '../../../Explore/VideoSummary/Vi
 import { YT_API_KEY } from '../../../../yt-api'
 import { getIDsFromSearchResults } from '../SearchUtil'
 import { addVideosToPlaylist } from '../../Playlist/playlistService'
+import { useSelector } from 'react-redux'
 
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
 // TODO: Figure out what to do about terrible youtube quota

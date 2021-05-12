@@ -45,7 +45,8 @@ const VideoSummaryLoaded = (props) => {
     .map(x => String(x).padStart(2, 0))
     .join(":");
   const viewCount = formatViewers(Number(videoData.statistics.viewCount));
-  const likePct = parseFloat((100 * Number(videoData.statistics.likeCount) / (Number(videoData.statistics.likeCount) + Number(videoData.statistics.dislikeCount))).toFixed(1));
+  const _likePct = parseFloat((100 * Number(videoData.statistics.likeCount) / (Number(videoData.statistics.likeCount) + Number(videoData.statistics.dislikeCount))).toFixed(1));
+  const likePct = isNaN(_likePct) ? 0 : _likePct
   const thumbnail = getBestThumbnail(videoData.snippet.thumbnails);
   if (props.mini != "true") {
     return (<div className="videoSummaryContainer" onClick={clickHandler}>
