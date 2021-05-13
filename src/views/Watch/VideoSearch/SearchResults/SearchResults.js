@@ -3,6 +3,7 @@ import { getBestThumbnail, VideoSummary } from '../../../Explore/VideoSummary/Vi
 import { YT_API_KEY } from '../../../../yt-api'
 import { getIDsFromSearchResults } from '../SearchUtil'
 import { addVideosToPlaylist } from '../../Playlist/playlistService'
+import { useSelector } from 'react-redux'
 
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
 // TODO: Figure out what to do about terrible youtube quota
@@ -48,6 +49,7 @@ const SearchResultsLoading = () => {
 }
 
 const SearchResultsLoaded = (props) => {
+  const currentGroup = useSelector((state) => state.groups.currentGroup)
   const [loading, setLoading] = React.useState(false)
   if (props.results.length != 0) {
     return (
@@ -65,7 +67,7 @@ const SearchResultsLoaded = (props) => {
                 name: videoData.snippet.title,
               }
               try {
-                await addVideosToPlaylist("7EXjFe3blAyQ8NeGFWFt", [video])
+                await addVideosToPlaylist(currentGroup, [video])
               } catch {
 
               }
