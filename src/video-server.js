@@ -2,7 +2,6 @@
 var ws = require('ws')
 var userCount = []
 let usersConnectedIpAddress = new Map()
-let usersConnectedUserName = new Map()
 
 var server = new ws.Server({ port: process.env.PORT || 3000 })
 
@@ -18,28 +17,6 @@ server.on('connection', function (conn) {
       } else {
         server.broadcast('userCount ' + userCount)
       }
-      return
-    } else if (message.includes('leaveusername')) {
-      let username = message.split(':')[1]
-      if (usersConnectedUserName.has(username)) {
-        usersConnectedUserName.delete(username)
-        console.log(
-          'found' + Array.from(usersConnectedUserName.keys()).toString()
-        )
-        server.broadcast(
-          'username ' + Array.from(usersConnectedUserName.keys()).toString()
-        )
-        server.broadcast('userCount ' + --userCount)
-      }
-      return
-    } else if (message.includes('username')) {
-      let username = message.split(':')[1]
-      if (!usersConnectedUserName.has(username)) {
-        usersConnectedUserName.set(username)
-      }
-      server.broadcast(
-        'username ' + Array.from(usersConnectedUserName.keys()).toString()
-      )
       return
     }
   })
