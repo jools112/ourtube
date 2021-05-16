@@ -27,7 +27,7 @@ export const addGroupAction = (newGroup) => (dispatch) => {
   })
 }
 export const setGroupId = (groupId) => (dispatch) => {
-  console.log("groJNKNNJKup", groupId)
+  //console.log("groJNKNNJKup", groupId)
   localStorage.setItem('currentGroup', groupId)
   dispatch({
     type: 'GROUPS_ID',
