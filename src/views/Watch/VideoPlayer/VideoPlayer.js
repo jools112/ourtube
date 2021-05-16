@@ -44,9 +44,7 @@ const UnconnectedVideoPlayer = (props) => {
       if (doc.exists) {
         videoId = doc.data().playlist[0].id
         if (videoId) {
-          dispatchVideoIdActionCreator(videoId)
-        } else {
-          dispatchVideoIdActionCreator('kqDIQmOCaMk')
+          props.dispatchVideoIdActionCreator(videoId)
         }
       } else {
         console.log('No such document!')
