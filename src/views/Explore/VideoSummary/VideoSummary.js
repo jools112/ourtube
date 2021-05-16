@@ -25,14 +25,14 @@ export const VideoSummary = (props) => {
 
 // TODO make this a bit more generic and move out of this file?
 const promiseNoData = (promise, data, error, placeholder) => {
-  return (!promise && <span>no data</span>
+  return (!promise && <span></span>
     || (promise && !data && !error) && placeholder
     || error && <span>err: {error.toString()}</span>
     || false);
 }
 
 const VideoSummaryLoading = () => {
-  return <div>NO DATA YET</div>;
+  return <div>Loading video...</div>;
 }
 
 const VideoSummaryLoaded = (props) => {
