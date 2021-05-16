@@ -11,7 +11,6 @@ export const SoftBox = (props) => {
           'SoftBoxBody' +
           (props.padding === 'disabled' ? ' SoftBoxBodyDisabledPadding' : '')
         }
-        paddingStatus={props.padding}
       >
         {props.content}
       </div>

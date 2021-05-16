@@ -1,7 +1,15 @@
 import './Groups.css'
 // eslint-disable-next-line
 import { connect } from 'react-redux'
-import { setGroupId, userJoinAction, addGroupAction, getGroupsAction, createGroupOffAction, createGroupAction, groupsAction } from '../../../actions/groupsActions'
+import {
+  setGroupId,
+  userJoinAction,
+  addGroupAction,
+  getGroupsAction,
+  createGroupOffAction,
+  createGroupAction,
+  groupsAction
+} from '../../../actions/groupsActions'
 import { Link } from 'react-router-dom'
 import firebase from '../../../firebase'
 import React, { useState } from 'react'
@@ -40,44 +48,56 @@ export const unconnectedGroup = (props) => {
             ></TextField>
             <br />
             <div>
-              <Button onClick={() => props.createOffAction()}>
-                Back
-                  </Button>
-                  &nbsp;
-                  &nbsp;
-                  <Button onClick={() => props.addGroupAction({ name, description, id: uuidv4(), playlist: [] })} >
+              <Button onClick={() => props.createOffAction()}>Back</Button>
+              &nbsp; &nbsp;
+              <Button
+                onClick={() =>
+                  props.addGroupAction({
+                    name,
+                    description,
+                    id: uuidv4(),
+                    playlist: []
+                  })
+                }
+              >
                 Create
-                  </Button>
+              </Button>
             </div>
           </div>
-          <div>{props.mapValidation ? (props.mapValidation) : (props.mapValidation)}</div>
+          <div>
+            {props.mapValidation ? props.mapValidation : props.mapValidation}
+          </div>
         </div>
       ) : (
         <div>
           <div>
             <SoftBox
               title="GROUPS"
-              content={props.mapGroups.map((group) => (
-
-                <div className="GroupsDiv">
-                  <div key={group.id} >
-
+              content={props.mapGroups.map((group, index) => (
+                <div className="GroupsDiv" key={index}>
+                  <div key={group.id}>
                     <Link to="/watch">
-                      <h4 onClick={() => props.setGroupId(group.id)}>{group.name}</h4>
+                      <h4 onClick={() => props.setGroupId(group.id)}>
+                        {group.name}
+                      </h4>
                     </Link>
                     <button
                       className="GroupsJoin"
                       onClick={() => props.groupInfoAction(group.description)}
                     >
                       Info
-                </button>
+                    </button>
                     <button
                       className="GroupsJoin"
                       onClick={() =>
-                        props.userJoinAction({ id: group.id, member: props.mapUsername })}
+                        props.userJoinAction({
+                          id: group.id,
+                          member: props.mapUsername
+                        })
+                      }
                     >
                       Join
-                </button>
+                    </button>
                   </div>
                 </div>
               ))}
@@ -92,9 +112,8 @@ export const unconnectedGroup = (props) => {
           <br />
           Group Description: {props.mapInfoStr}
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   )
 }
 

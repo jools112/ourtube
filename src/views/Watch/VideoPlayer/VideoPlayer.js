@@ -49,27 +49,20 @@ const UnconnectedVideoPlayer = (props) => {
 
     conn.onmessage = function (ev) {
       var matches
-      console.log(ev, ev.data)
       if ((matches = ev.data.match(/^control (.+)$/))) {
-        console.log('CONTROL')
         //debugger
-        console.log(matches[1])
         props.dispatchTakeControlActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
-        console.log('USERCOUNT')
         props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
-        console.log('PAUSE')
         player.currentTime = matches[1]
         player.pause()
       } else if ((matches = ev.data.match(/^username(.+)$/))) {
-        debugger
-        console.log('USERNAME')
+        //debugger
         props.dispatchUserNameJoinedActionCreator(matches[1].replace(':', ''))
       } else {
         //console.log('NONE OF THE ABOVE')
         //debugger
-        console.log(props.stateControlName, props.newStateUserName)
         if (props.stateControlName == props.newStateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
@@ -82,9 +75,9 @@ const UnconnectedVideoPlayer = (props) => {
         return response.json()
       })
       .then((res) => {
-        console.log('username:' + readCookie('session'))
+        //console.log('username:' + readCookie('session'))
         conn.send('username:' + readCookie('session'))
-        console.log('ipaddress:' + res.ip)
+        //console.log('ipaddress:' + res.ip)
         conn.send('ipaddress:' + res.ip)
       })
       .catch((err) => console.log(err))
@@ -118,7 +111,7 @@ const UnconnectedVideoPlayer = (props) => {
   }
 
   const leaveRoomClick = () => {
-    debugger
+    //debugger
     conn.send('leaveusername:' + props.newStateUserName)
     //conn.close()
   }
@@ -126,64 +119,62 @@ const UnconnectedVideoPlayer = (props) => {
     conn.send('control ' + name)
   }
 
-  console.log('re-render', props)
+  //console.log('re-render', props)
 
   return (
-    <body>
-      <div id="room" className="inactive">
-        <div id="registration" className="active">
-          <div className="VideoPlayerTextField">
-            <div className="VideoPlayerUsername">
-              {/*<TextField
+    <div id="room" className="inactive">
+      <div id="registration" className="active">
+        <div className="VideoPlayerTextField">
+          <div className="VideoPlayerUsername">
+            {/*<TextField
                 id="name"
                 label="Username:"
                 value={props.newStateUserName}
               />*/}
-            </div>
-            <div>
-              {/* <Button onClick={joinRoomClick} id="join">
+          </div>
+          <div>
+            {/* <Button onClick={joinRoomClick} id="join">
                 Join Room
             </Button>*/}
-              <div>{props.newStateUserName + ' has joined the room'}</div>
-            </div>
+            <div>{props.newStateUserName + ' has joined the room'}</div>
           </div>
         </div>
-        <Button onClick={leaveControlClick} id="leave">
-          Leave Control
-        </Button>
-        <Button onClick={leaveRoomClick} id="leave">
-          Leave Room
-        </Button>
-        <p>
-          Users: <span id="userCount">{props.stateUserCount}</span>
-        </p>
-        <p>
-          Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
-        </p>
-        <p>
-          Controller: <span id="controller">{props.stateControlName}</span>
-          <Button
-            onClick={() => takeControlRoomClick(props.newStateUserName)}
-            id="takeControl"
-          >
-            Take Control
-          </Button>
-        </p>
-        <div className="VideoPlayerContent">
-          <SoftBox
-            title="VIDEO PLAYER"
-            content={
-              <div
-                id="my-youtube-player"
-                className="player js-player"
-                data-youtube-videoid="2HwgXcPaFm8"
-              ></div>
-            }
-            padding="disabled"
-          ></SoftBox>
-        </div>
       </div>
-    </body>
+      <Button onClick={leaveControlClick} id="leave">
+        Leave Control
+      </Button>
+      <Button onClick={leaveRoomClick} id="leave">
+        Leave Room
+      </Button>
+      <p>
+        Users: <span id="userCount">{props.stateUserCount}</span>
+      </p>
+      <p>
+        Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
+      </p>
+      <p>
+        Controller: <span id="controller">{props.stateControlName}</span>
+        <Button
+          onClick={() => takeControlRoomClick(props.newStateUserName)}
+          id="takeControl"
+        >
+          Take Control
+        </Button>
+      </p>
+      <div className="VideoPlayerContent">
+        <SoftBox
+          title="VIDEO PLAYER"
+          content={
+            <div
+              id="my-youtube-player"
+              className="player js-player"
+              data-youtube-videoid="2HwgXcPaFm8"
+            ></div>
+          }
+          padding="disabled"
+        ></SoftBox>
+      </div>
+    </div>
   )
 }
 

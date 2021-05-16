@@ -29,6 +29,7 @@ export const pollAction = (selectedVal) => (dispatch) => {
 
 export const fetchPollData = () => (dispatch) => {
   const ref = firebase.firestore().collection('group')
+
   const mockData = {
     user: 'mary',
     videoId: 'cheeseTastingVideo',
