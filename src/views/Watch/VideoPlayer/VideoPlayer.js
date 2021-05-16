@@ -158,33 +158,28 @@ const UnconnectedVideoPlayer = (props) => {
   const joinRoomClick = () => {
     var groupRef = ref.collection('group').doc(currentGroup)
     let usersJoined = []
-    groupRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          usersJoined = doc.data().membersjoined
-          if (!usersJoined.includes(props.newStateUserName)) {
-            usersJoined.push(props.newStateUserName)
-            groupRef
-              .set(
-                {
-                  membersjoined: usersJoined
-                },
-                { merge: true }
-              )
-              .catch((err) => {
-                console.error(err)
-              })
-          }
-          props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
-        } else {
-          // doc.data() will be undefined in this case
-          console.log('No such document!')
+    groupRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        usersJoined = doc.data().membersjoined
+        if (!usersJoined.includes(props.newStateUserName)) {
+          usersJoined.push(props.newStateUserName)
+          groupRef
+            .set(
+              {
+                membersjoined: usersJoined
+              },
+              { merge: true }
+            )
+            .catch((err) => {
+              console.error(err)
+            })
         }
-      })
-      .catch((error) => {
-        console.log('Error getting document:', error)
-      })
+        props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!')
+      }
+    })
   }
 
   const takeControlRoomClick = (name) => {
