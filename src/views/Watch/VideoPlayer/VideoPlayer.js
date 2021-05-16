@@ -44,11 +44,7 @@ const UnconnectedVideoPlayer = (props) => {
       debugger
       if (doc.exists) {
         videoId = doc.data().playlist[0].id
-        if (videoId) {
-          props.dispatchVideoIdActionCreator(videoId)
-        }
-      } else {
-        console.log('No such document!')
+        props.dispatchVideoIdActionCreator(videoId)
       }
     })
     .catch((error) => {
@@ -210,11 +206,8 @@ const UnconnectedVideoPlayer = (props) => {
             debugger
             if (doc.exists) {
               videoId = doc.data().playlist[0].id
-              if (videoId) {
-                props.dispatchVideoIdActionCreator(videoId)
-              }
-            } else {
-              console.log('No such document!')
+              props.dispatchVideoIdActionCreator(videoId)
+              console.log('videoid' + videoId)
             }
           })
         } else {
