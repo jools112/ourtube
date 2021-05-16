@@ -41,6 +41,7 @@ const UnconnectedVideoPlayer = (props) => {
   groupRef
     .get()
     .then((doc) => {
+      debugger
       if (doc.exists) {
         videoId = doc.data().playlist[0].id
         if (videoId) {
@@ -158,17 +159,46 @@ const UnconnectedVideoPlayer = (props) => {
   const joinRoomClick = () => {
     var groupRef = ref.collection('group').doc(currentGroup)
     let usersJoined = []
+    groupRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        usersJoined = doc.data().membersjoined
+        if (!usersJoined.includes(props.newStateUserName)) {
+          usersJoined.push(props.newStateUserName)
+          groupRef
+            .set(
+              {
+                membersjoined: usersJoined
+              },
+              { merge: true }
+            )
+            .catch((err) => {
+              console.error(err)
+            })
+        }
+        props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!')
+      }
+    })
+  }
+  const nextVideoClick = (currentVideoId) => {
+    var groupRef = ref.collection('group').doc(currentGroup)
+    let playlist = []
+    let newPlaylist = []
     groupRef
       .get()
       .then((doc) => {
         if (doc.exists) {
-          usersJoined = doc.data().membersjoined
-          if (!usersJoined.includes(props.newStateUserName)) {
-            usersJoined.push(props.newStateUserName)
+          playlist = doc.data().playlist
+          let foundSong = playlist.filter((e) => e.id == currentVideoId)
+          debugger
+          if (foundSong) {
+            newPlaylist = playlist.filter((e) => e.id != currentVideoId)
             groupRef
               .set(
                 {
-                  membersjoined: usersJoined
+                  playlist: newPlaylist
                 },
                 { merge: true }
               )
@@ -176,7 +206,17 @@ const UnconnectedVideoPlayer = (props) => {
                 console.error(err)
               })
           }
-          props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+          groupRef.onSnapshot((doc) => {
+            debugger
+            if (doc.exists) {
+              videoId = doc.data().playlist[0].id
+              if (videoId) {
+                props.dispatchVideoIdActionCreator(videoId)
+              }
+            } else {
+              console.log('No such document!')
+            }
+          })
         } else {
           // doc.data() will be undefined in this case
           console.log('No such document!')
@@ -186,7 +226,6 @@ const UnconnectedVideoPlayer = (props) => {
         console.log('Error getting document:', error)
       })
   }
-
   const takeControlRoomClick = (name) => {
     conn.send('control ' + name)
   }
@@ -227,6 +266,14 @@ const UnconnectedVideoPlayer = (props) => {
           id="joinRoom"
         >
           Join Room
+        </Button>
+      </p>
+      <p>
+        <Button
+          onClick={() => nextVideoClick(props.stateVideoId)}
+          id="takeControl"
+        >
+          Next Video
         </Button>
       </p>
       <p>

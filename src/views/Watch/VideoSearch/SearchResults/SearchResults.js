@@ -4,7 +4,7 @@ import {
   VideoSummary
 } from '../../../Explore/VideoSummary/VideoSummary'
 import { YT_API_KEY } from '../../../../yt-api'
-import { getIDsFromSearchResults } from '../SearchUtil'
+import { getIDsFromSearchResults, promiseNoData } from '../SearchUtil'
 import { addVideosToPlaylist } from '../../Playlist/playlistService'
 import { useSelector } from 'react-redux'
 import { updateRelatedVideosFromID } from '../RelatedSearch'
@@ -36,6 +36,7 @@ export const SearchResults = (props) => {
     return () => {
       ignore = true
     }
+<<<<<<< HEAD
   }, [props.query])
   return (
     promiseNoData(
@@ -65,6 +66,11 @@ const promiseNoData = (promise, data, error, placeholder) => {
 
 const SearchResultsLoading = () => {
   return <div>NO DATA YET</div>
+=======
+    return () => { ignore = true };
+  }, [props.query]);
+  return promiseNoData(searchDataPromise, searchData, error, <div>Searching...</div>) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
+>>>>>>> ed1f146de3aa150c2950e07d10a0bfcaf229e9dc
 }
 
 const SearchResultsLoaded = (props) => {
