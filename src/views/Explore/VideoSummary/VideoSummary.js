@@ -1,7 +1,9 @@
 import './VideoSummary.css'
 import React from 'react'
 import { YT_API_KEY } from '../../../yt-api'
+import { promiseNoData } from '../../Watch/VideoSearch/SearchUtil'
 
+// This is not a real (well, visible) component! Just a utility function that redirects to the actual component. See VideoSummaryLoaded below.
 export const VideoSummary = (props) => {
   const [videoData, setVideoData] = React.useState(null);
   const [error, setError] = React.useState(null);
@@ -19,22 +21,10 @@ export const VideoSummary = (props) => {
         .then(data => setVideoData(data))
         .catch(err => setError(err)));
   }, []);
-  return promiseNoData(videoDataPromise, videoData, error, <VideoSummaryLoading mini={props.mini} />) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick} />
+  return promiseNoData(videoDataPromise, videoData, error, <div>Loading video...</div>) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick} />
 }
 
-
-// TODO make this a bit more generic and move out of this file?
-const promiseNoData = (promise, data, error, placeholder) => {
-  return (!promise && <span></span>
-    || (promise && !data && !error) && placeholder
-    || error && <span>err: {error.toString()}</span>
-    || false);
-}
-
-const VideoSummaryLoading = () => {
-  return <div>Loading video...</div>;
-}
-
+// The actual component is here!
 const VideoSummaryLoaded = (props) => {
   const clickHandler = () => props.onClick && props.onClick(props.videoData)
   const videoData = props.videoData

@@ -1,7 +1,7 @@
 import React from 'react'
 import { getBestThumbnail, VideoSummary } from '../../../Explore/VideoSummary/VideoSummary'
 import { YT_API_KEY } from '../../../../yt-api'
-import { getIDsFromSearchResults } from '../SearchUtil'
+import { getIDsFromSearchResults, promiseNoData } from '../SearchUtil'
 import { addVideosToPlaylist } from '../../Playlist/playlistService'
 import { useSelector } from 'react-redux'
 
@@ -32,20 +32,7 @@ export const SearchResults = (props) => {
     }
     return () => { ignore = true };
   }, [props.query]);
-  return promiseNoData(searchDataPromise, searchData, error, <SearchResultsLoading mini={props.mini} />) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
-}
-
-
-// TODO make this a bit more generic and move out of this file?
-const promiseNoData = (promise, data, error, placeholder) => {
-  return (!promise && <span></span>
-    || (promise && !data && !error) && placeholder
-    || error && <span>err: {error.toString()}</span>
-    || false);
-}
-
-const SearchResultsLoading = () => {
-  return <div>Searching...</div>;
+  return promiseNoData(searchDataPromise, searchData, error, <div>Searching...</div>) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
 }
 
 const SearchResultsLoaded = (props) => {
