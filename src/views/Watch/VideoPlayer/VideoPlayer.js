@@ -41,6 +41,7 @@ const UnconnectedVideoPlayer = (props) => {
   groupRef
     .get()
     .then((doc) => {
+      debugger
       if (doc.exists) {
         videoId = doc.data().playlist[0].id
         if (videoId) {
@@ -181,7 +182,50 @@ const UnconnectedVideoPlayer = (props) => {
       }
     })
   }
-
+  const nextVideoClick = (currentVideoId) => {
+    var groupRef = ref.collection('group').doc(currentGroup)
+    let playlist = []
+    let newPlaylist = []
+    groupRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          playlist = doc.data().playlist
+          let foundSong = playlist.filter((e) => e.id == currentVideoId)
+          debugger
+          if (foundSong) {
+            newPlaylist = playlist.filter((e) => e.id != currentVideoId)
+            groupRef
+              .set(
+                {
+                  playlist: newPlaylist
+                },
+                { merge: true }
+              )
+              .catch((err) => {
+                console.error(err)
+              })
+          }
+          groupRef.onSnapshot((doc) => {
+            debugger
+            if (doc.exists) {
+              videoId = doc.data().playlist[0].id
+              if (videoId) {
+                props.dispatchVideoIdActionCreator(videoId)
+              }
+            } else {
+              console.log('No such document!')
+            }
+          })
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!')
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting document:', error)
+      })
+  }
   const takeControlRoomClick = (name) => {
     conn.send('control ' + name)
   }
@@ -222,6 +266,14 @@ const UnconnectedVideoPlayer = (props) => {
           id="joinRoom"
         >
           Join Room
+        </Button>
+      </p>
+      <p>
+        <Button
+          onClick={() => nextVideoClick(props.stateVideoId)}
+          id="takeControl"
+        >
+          Next Video
         </Button>
       </p>
       <p>
