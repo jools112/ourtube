@@ -45,7 +45,7 @@ const promiseNoData = (promise, data, error, placeholder) => {
 }
 
 const SearchResultsLoading = () => {
-  return <div>NO DATA YET</div>;
+  return <div>Searching...</div>;
 }
 
 const SearchResultsLoaded = (props) => {
