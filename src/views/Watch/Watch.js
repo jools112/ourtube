@@ -10,7 +10,7 @@ export const Watch = () => {
     <div className="Watch">
       <div className="WatchUpperContent">
         <div className="WatchVideoPlayer watchMainCont">
-          <VideoPlayer videoId="2HwgXcPaFm8" />
+          <VideoPlayer />
         </div>
         <div className="WatchRatingAndPoll">
           <div className="WatchRatingBox">

@@ -2,7 +2,8 @@ const initialState = {
   joined: false,
   controlName: '--#',
   userCount: 0,
-  userNameJoined: ''
+  userNameJoined: '',
+  videoId: 'kqDIQmOCaMk'
   // add a key:value for Leave Room if needed?
 }
 

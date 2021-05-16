@@ -1,8 +1,6 @@
 import firebase from '../firebase'
 import { v4 as uuidv4 } from 'uuid'
 
-const ref = firebase.firestore().collection('group')
-
 export const groupsAction = (infoStr) => (dispatch) => {
   dispatch({
     type: 'GROUPS_DISPLAY_INFO',
@@ -11,6 +9,7 @@ export const groupsAction = (infoStr) => (dispatch) => {
 }
 
 export const addGroupAction = (newGroup) => (dispatch) => {
+  const ref = firebase.firestore().collection('group')
   const regex = /[a-zA-Z]/
 
   if (!regex.test(newGroup.name) || !regex.test(newGroup.description)) {
@@ -27,12 +26,14 @@ export const addGroupAction = (newGroup) => (dispatch) => {
     payload: status
   })
 }
-
-export const setGroupId = (groupId) => ({
-  type: 'GROUPS_ID',
-  payload: groupId
-})
-
+export const setGroupId = (groupId) => (dispatch) => {
+  console.log("groJNKNNJKup", groupId)
+  localStorage.setItem('currentGroup', groupId)
+  dispatch({
+    type: 'GROUPS_ID',
+    payload: groupId
+  })
+}
 
 export const createGroupAction = () => ({
   type: 'GROUPS_CREATE_TRUE'
@@ -43,6 +44,7 @@ export const createGroupOffAction = () => ({
 })
 
 export const getGroupsAction = () => (dispatch) => {
+  const ref = firebase.firestore().collection('group')
 
   ref.onSnapshot((querySnapshot) => {
     const groupItems = []
@@ -60,6 +62,7 @@ export const getGroupsAction = () => (dispatch) => {
 
 
 export const userJoinAction = (userToAdd) => (dispatch) => {
+  const ref = firebase.firestore().collection('group')
   if (userToAdd.member) {
     ref
       .doc(userToAdd.id)

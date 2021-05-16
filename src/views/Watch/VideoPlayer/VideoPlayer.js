@@ -13,9 +13,14 @@ import { useEffect } from 'react'
 import { youtube } from './html5-youtube.js'
 import { Button } from '../../../components/Button'
 import { SoftBox } from '../../../components/SoftBox'
+import { useSelector } from 'react-redux'
+import firebase from '../../../firebase'
 
+let currentGroup
 let conn
 let player
+const ref = firebase.firestore()
+
 function readCookie(name) {
   var nameCookie = name + '='
   var cookies = document.cookie.split(';')
@@ -29,6 +34,25 @@ function readCookie(name) {
 }
 
 const UnconnectedVideoPlayer = (props) => {
+  currentGroup = useSelector((state) => state.groups.currentGroup)
+  //debugger
+  var groupRef = ref.collection('group').doc(currentGroup)
+  let videoId = ''
+  groupRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        videoId = doc.data().playlist[0].id
+        if (videoId) {
+          props.dispatchVideoIdActionCreator(videoId)
+        }
+      } else {
+        console.log('No such document!')
+      }
+    })
+    .catch((error) => {
+      console.log('Error getting document:', error)
+    })
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -50,19 +74,11 @@ const UnconnectedVideoPlayer = (props) => {
     conn.onmessage = function (ev) {
       var matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
-        //debugger
         props.dispatchTakeControlActionCreator(matches[1])
-      } else if ((matches = ev.data.match(/^userCount (.+)$/))) {
-        props.dispatchUserCountActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
         player.currentTime = matches[1]
         player.pause()
-      } else if ((matches = ev.data.match(/^username(.+)$/))) {
-        //debugger
-        props.dispatchUserNameJoinedActionCreator(matches[1].replace(':', ''))
       } else {
-        //console.log('NONE OF THE ABOVE')
-        //debugger
         if (props.stateControlName == props.newStateUserName) return
         var estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
@@ -75,16 +91,12 @@ const UnconnectedVideoPlayer = (props) => {
         return response.json()
       })
       .then((res) => {
-        //console.log('username:' + readCookie('session'))
-        conn.send('username:' + readCookie('session'))
-        //console.log('ipaddress:' + res.ip)
         conn.send('ipaddress:' + res.ip)
       })
       .catch((err) => console.log(err))
   }, [])
 
   useEffect(() => {
-    // TODO: Only run this if the user has joined the room?
     player.removeEventListener('timeupdate', timeUpdate)
     player.addEventListener('timeupdate', timeUpdate, true)
     player.removeEventListener('pause', timePause)
@@ -111,32 +123,82 @@ const UnconnectedVideoPlayer = (props) => {
   }
 
   const leaveRoomClick = () => {
-    //debugger
-    conn.send('leaveusername:' + props.newStateUserName)
-    //conn.close()
+    var groupRef = ref.collection('group').doc(currentGroup)
+    let usersJoined = []
+    groupRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          usersJoined = doc.data().membersjoined
+          if (usersJoined.includes(props.newStateUserName)) {
+            usersJoined = usersJoined.filter(function (value) {
+              return value != props.newStateUserName
+            })
+            groupRef
+              .set(
+                {
+                  membersjoined: usersJoined
+                },
+                { merge: true }
+              )
+              .catch((err) => {
+                console.error(err)
+              })
+          }
+          props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!')
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting document:', error)
+      })
   }
+  const joinRoomClick = () => {
+    var groupRef = ref.collection('group').doc(currentGroup)
+    let usersJoined = []
+    groupRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          usersJoined = doc.data().membersjoined
+          if (!usersJoined.includes(props.newStateUserName)) {
+            usersJoined.push(props.newStateUserName)
+            groupRef
+              .set(
+                {
+                  membersjoined: usersJoined
+                },
+                { merge: true }
+              )
+              .catch((err) => {
+                console.error(err)
+              })
+          }
+          props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!')
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting document:', error)
+      })
+  }
+
   const takeControlRoomClick = (name) => {
     conn.send('control ' + name)
   }
 
-  //console.log('re-render', props)
-
   return (
-    <div id="room" className="inactive">
-      <div id="registration" className="active">
-        <div className="VideoPlayerTextField">
-          <div className="VideoPlayerUsername">
-            {/*<TextField
-                id="name"
-                label="Username:"
-                value={props.newStateUserName}
-              />*/}
-          </div>
-          <div>
-            {/* <Button onClick={joinRoomClick} id="join">
-                Join Room
-            </Button>*/}
-            <div>{props.newStateUserName + ' has joined the room'}</div>
+    <div>
+      <div id="room" className="inactive">
+        <div id="registration" className="active">
+          <div className="VideoPlayerTextField">
+            <div>
+              {/* <div>{props.newStateUserName + ' has joined the room'}</div> */}
+            </div>
           </div>
         </div>
       </div>
@@ -160,6 +222,24 @@ const UnconnectedVideoPlayer = (props) => {
         >
           Take Control
         </Button>
+        <Button
+          onClick={() => joinRoomClick(props.newStateUserName)}
+          id="joinRoom"
+        >
+          Join Room
+        </Button>
+      </p>
+      <p>
+        Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
+      </p>
+      <p>
+        Controller: <span id="controller">{props.stateControlName}</span>
+        <Button
+          onClick={() => takeControlRoomClick(props.newStateUserName)}
+          id="takeControl"
+        >
+          Take Control
+        </Button>
       </p>
       <div className="VideoPlayerContent">
         <SoftBox
@@ -168,7 +248,7 @@ const UnconnectedVideoPlayer = (props) => {
             <div
               id="my-youtube-player"
               className="player js-player"
-              data-youtube-videoid="2HwgXcPaFm8"
+              data-youtube-videoid={props.stateVideoId}
             ></div>
           }
           padding="disabled"
@@ -180,12 +260,10 @@ const UnconnectedVideoPlayer = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    //StateUserName: state.videoPlayer.username,
-    //stateName: state.videoPlayer.name,
     stateJoined: state.videoPlayer.joined,
     stateControlName: state.videoPlayer.controlName,
     stateUserCount: state.videoPlayer.userCount,
-    stateVideoId: state.videoId,
+    stateVideoId: state.videoPlayer.videoId,
     newStateUserName: state.login.username,
     stateUserNameJoined: state.videoPlayer.userNameJoined
   }

@@ -68,19 +68,21 @@ export const unconnectedGroup = (props) => {
             {props.mapValidation ? props.mapValidation : props.mapValidation}
           </div>
         </div>
-      ) : (
+      ) : props.mapGroups.length > 0 ? (
         <div>
           <div>
+            {/* {props.mapCurrentGroup} */}
             <SoftBox
               title="GROUPS"
-              content={props.mapGroups.map((group, index) => (
-                <div className="GroupsDiv" key={index}>
+              content={props.mapGroups.map((group) => (
+                <div className="GroupsDiv">
                   <div key={group.id}>
                     <Link to="/watch">
                       <h4 onClick={() => props.setGroupId(group.id)}>
                         {group.name}
                       </h4>
                     </Link>
+
                     <button
                       className="GroupsJoin"
                       onClick={() => props.groupInfoAction(group.description)}
@@ -112,6 +114,8 @@ export const unconnectedGroup = (props) => {
           <br />
           Group Description: {props.mapInfoStr}
         </div>
+      ) : (
+        '\nloading...'
       )}
     </div>
   )

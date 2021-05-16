@@ -5,7 +5,7 @@ const initialState = {
   createGroup: false,
   groupsData: [],
   validation: '',
-  currentGroup: '',
+  currentGroup: localStorage.getItem('currentGroup'),
   loggedInValid: ''
 }
 
