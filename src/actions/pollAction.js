@@ -1,17 +1,20 @@
 import firebase from '../firebase'
 
-export const pollAction = (selectedVal) => (dispatch) => {
+export const pollAction = (selectedVal) => (dispatch, getState) => {
   const ref = firebase.firestore().collection('group')
+  const user = getState().login.username
+  const videoId = getState().playlist.videos[0].name
+  const groupId = getState().groups.currentGroup
 
   const mockData = {
     choice: selectedVal,
-    user: 'mary',
-    videoId: 'cheeseVideo',
-    groupName: 'cookAlong'
+    user,
+    videoId,
+    groupId
   }
 
   ref
-    .where('name', '==', mockData.groupName)
+    .where('id', '==', mockData.groupId)
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -27,19 +30,23 @@ export const pollAction = (selectedVal) => (dispatch) => {
     })
 }
 
-export const fetchPollData = () => (dispatch) => {
+export const fetchPollData = () => (dispatch, getState) => {
   const ref = firebase.firestore().collection('group')
+  const user = getState().login.username
+  const videoId = getState().playlist.videos[0].name
+  const groupId = getState().groups.currentGroup
 
   const mockData = {
-    user: 'mary',
-    videoId: 'cheeseTastingVideo',
-    groupName: 'cookAlong'
+    user,
+    videoId,
+    groupId
   }
+
   let votes = [0, 0, 0]
   let pollData = []
   let fetched = {}
 
-  ref.where('name', '==', mockData.groupName).onSnapshot((snapshot) => {
+  ref.where('id', '==', mockData.groupId).onSnapshot((snapshot) => {
     snapshot.forEach((doc) => {
       fetched = doc.data().poll
       //console.log('fetching ', fetched)
@@ -49,11 +56,11 @@ export const fetchPollData = () => (dispatch) => {
       keys.forEach((key) => {
         switch (fetched.result[key]) {
           case 0:
-            // console.log(key + ' voted 0')
+            //console.log(key + ' voted 0')
             return (votes[0] += 1)
 
           case 1:
-            // console.log(key + ' voted 1')
+            //console.log(key + ' voted 1')
 
             return (votes[1] += 1)
           case 2:
@@ -63,11 +70,12 @@ export const fetchPollData = () => (dispatch) => {
         }
       })
     })
-    if (fetched.alternatives) {
-      fetched.alternatives.forEach((vidName, index) => {
-        pollData.push({ alternative: vidName, score: votes[index] })
-      })
-    }
+    //if (fetched.alternatives) {
+    //console.log('HÄNDER ENS DETTA', fetched)
+    fetched.alternatives.forEach((vidName, index) => {
+      pollData.push({ alternative: vidName, score: votes[index] })
+    })
+    //}
     //console.log('data to be returned: ', pollData)
     dispatch({
       type: 'POLL_DATA',
