@@ -1,21 +1,20 @@
 const initialState = {
   userRating: 0, // user rating is personal
-  groupRating: 0, // group rating is not
+  averageRating: 0, // group rating is not
   user: 'mary'
   //relevantDocs: [{ rating: 0, user: 'john', video: 'yogaVideo' }]
 }
 const ratingBoxReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'USERRATING_INPUT':
+    case 'RATING_USER':
       return {
         ...state,
         userRating: action.payload
       }
-    case 'USERRATING_AVERAGE':
+    case 'RATING_AVERAGE':
       return {
         ...state,
-        userRating: action.payload.userRating,
-        groupRating: action.payload.groupRating
+        averageRating: action.payload
       }
     default:
       return state

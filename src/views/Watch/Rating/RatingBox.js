@@ -11,7 +11,7 @@ import { SoftBox } from '../../../components/SoftBox'
 export const unconnectedRatingBox = (props) => {
   useEffect(() => {
     props.fetchRatingData()
-  }, [])
+  }, [props.mapVideos])
 
   return (
     <div className="RatingBox">
@@ -26,6 +26,7 @@ export const unconnectedRatingBox = (props) => {
               fullSymbol="fa fa-star fa-2x"
               color="orange"
               fractions={2}
+              readonly={props.mapUserRating}
               onClick={(value) => {
                 props.ratingBoxAction(value)
                 props.fetchRatingData()
@@ -36,7 +37,7 @@ export const unconnectedRatingBox = (props) => {
             <div>
               <Rating
                 readonly
-                initialRating={props.mapGroupRating}
+                initialRating={props.mapAverageRating}
                 //initialRating={props.initialRating}
                 emptySymbol="far fa-star fa-2x"
                 fullSymbol="fa fa-star fa-2x"
@@ -53,7 +54,8 @@ export const unconnectedRatingBox = (props) => {
 const mapStateToProps = (state) => {
   return {
     mapUserRating: state.ratingBox.userRating,
-    mapGroupRating: state.ratingBox.groupRating
+    mapAverageRating: state.ratingBox.averageRating,
+    mapVideos: state.playlist.videos
   }
 }
 
