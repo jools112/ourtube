@@ -44,12 +44,14 @@ export const endPollAction = () => (dispatch) => {}
 const getResults = (fetched) => {
   let votes = [0, 0, 0]
   let pollData = []
-  const keys = Object.keys(fetched.result)
-  keys.forEach((key) => {
-    votes[fetched.result[key]]++
-  })
-  fetched.alternatives.forEach((vidName, index) => {
-    pollData.push({ alternative: vidName, score: votes[index] })
-  })
+  if (fetched && fetched.result) {
+    const keys = Object.keys(fetched.result)
+    keys.forEach((key) => {
+      votes[fetched.result[key]]++
+    })
+    fetched.alternatives.forEach((vidName, index) => {
+      pollData.push({ alternative: vidName, score: votes[index] })
+    })
+  }
   return pollData
 }
