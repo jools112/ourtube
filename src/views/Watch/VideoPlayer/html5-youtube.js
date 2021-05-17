@@ -729,8 +729,8 @@ Player._undefinedProperties = {
       return this._src
     },
     set: function (value) {
-      if (this.player) {
-        // this.player.cueVideoById(value)
+      if (this.player && this.player.cueVideoById) {
+        this.player.cueVideoById(value)
       } else {
         this._unsetVideoId = value
       }
