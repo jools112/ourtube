@@ -37,10 +37,6 @@ function readCookie(name) {
 const UnconnectedVideoPlayer = (props) => {
   currentGroup = useSelector((state) => state.groups.currentGroup)
   useEffect(() => {
-    const scriptHtml5 = document.createElement('script')
-    scriptHtml5.src = 'html5-youtube.js'
-    scriptHtml5.async = false
-    document.body.appendChild(scriptHtml5)
     const scriptYoutube = document.createElement('script')
     scriptYoutube.src = 'https://www.youtube.com/iframe_api'
     scriptYoutube.async = false
@@ -247,9 +243,6 @@ const UnconnectedVideoPlayer = (props) => {
       <Button onClick={leaveRoomClick} id="leave">
         Leave Room
       </Button>
-      <p>
-        Users: <span id="userCount">{props.stateUserCount}</span>
-      </p>
       <p>
         Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
       </p>
