@@ -39,6 +39,8 @@ export const pollDataActionCreator = (pollData) => ({
   payload: pollData
 })
 
+export const endPollAction = () => (dispatch) => {}
+
 const getResults = (fetched) => {
   let votes = [0, 0, 0]
   let pollData = []

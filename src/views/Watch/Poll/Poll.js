@@ -18,7 +18,7 @@ export const unconnectedPoll = (props) => {
   useEffect(() => {
     setTimeout(props.fetchPollData, 2000)
   }, [])
-  console.log('video stuff: ', props.mapPlaylist)
+  //console.log('video stuff: ', props.mapPlaylist)
   return (
     <div className="PollBoxContainer">
       <SoftBox
@@ -96,6 +96,9 @@ export const unconnectedPoll = (props) => {
                       <Bar dataKey="amount" fill="#3876a6" />
                     </BarChart>
                   </ResponsiveContainer>
+                  <Button onClick={() => console.log('TODO end poll')}>
+                    End poll
+                  </Button>
                 </div>{' '}
               </div>
             ) : (
@@ -114,7 +117,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   pollAction: (value) => dispatch(pollAction(value)),
-  fetchPollData: () => dispatch(fetchPollData())
+  fetchPollData: () => dispatch(fetchPollData()),
+  endPollAction: () => dispatch(endPollAction())
 })
 
 export const Poll = connect(
