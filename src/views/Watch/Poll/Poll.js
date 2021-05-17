@@ -32,7 +32,6 @@ export const unconnectedPoll = (props) => {
                   <Button
                     onClick={() => {
                       props.pollAction(0)
-                      props.fetchPollData()
                     }}
                   >
                     {props.mapResult[0].alternative.name}
@@ -40,7 +39,6 @@ export const unconnectedPoll = (props) => {
                   <Button
                     onClick={() => {
                       props.pollAction(1)
-                      props.fetchPollData()
                     }}
                   >
                     {props.mapResult[1].alternative.name}
@@ -48,7 +46,6 @@ export const unconnectedPoll = (props) => {
                   <Button
                     onClick={() => {
                       props.pollAction(2)
-                      props.fetchPollData()
                     }}
                   >
                     {props.mapResult[2].alternative.name}
