@@ -3,7 +3,11 @@ import { Button } from '../../../components/Button'
 import { TextField } from '../../../components/TextField'
 import { SoftBox } from '../../../components/SoftBox'
 import { connect } from 'react-redux'
-import { pollAction, fetchPollData } from '../../../actions/pollAction'
+import {
+  pollAction,
+  fetchPollData,
+  endPollAction
+} from '../../../actions/pollAction'
 import { useEffect } from 'react'
 import {
   BarChart,
@@ -96,13 +100,13 @@ export const unconnectedPoll = (props) => {
                       <Bar dataKey="amount" fill="#3876a6" />
                     </BarChart>
                   </ResponsiveContainer>
-                  <Button onClick={() => console.log('TODO end poll')}>
+                  <Button onClick={() => props.endPollAction()}>
                     End poll
                   </Button>
                 </div>{' '}
               </div>
             ) : (
-              '\nloading...'
+              '\nno active poll'
             )}
           </div>
         }

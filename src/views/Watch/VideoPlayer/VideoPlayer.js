@@ -15,6 +15,7 @@ import { Button } from '../../../components/Button'
 import { SoftBox } from '../../../components/SoftBox'
 import { useSelector } from 'react-redux'
 import firebase from '../../../firebase'
+import { updateRelatedVideosFromID } from '../VideoSearch/RelatedSearch'
 
 let currentGroup
 let conn
@@ -188,6 +189,9 @@ const UnconnectedVideoPlayer = (props) => {
                   playlist: newPlaylist
                 },
                 { merge: true }
+              )
+              .then(() =>
+                updateRelatedVideosFromID(currentGroup, newPlaylist[0].id)
               )
               .catch((err) => {
                 console.error(err)
