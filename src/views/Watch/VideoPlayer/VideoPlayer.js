@@ -48,7 +48,7 @@ const UnconnectedVideoPlayer = (props) => {
     let videoId = ''
     groupRef.onSnapshot((doc) => {
       if (doc.exists) {
-        if (doc.data().playlist.length[0]) {
+        if (doc.data().playlist[0]) {
           videoId = doc.data().playlist[0].id
           props.dispatchVideoIdActionCreator(videoId)
           player.src = videoId
@@ -195,7 +195,7 @@ const UnconnectedVideoPlayer = (props) => {
           }
           groupRef.onSnapshot((doc) => {
             if (doc.exists) {
-              if (doc.data().playlist.length[0]) {
+              if (doc.data().playlist[0]) {
                 let videoId = doc.data().playlist[0].id
                 props.dispatchVideoIdActionCreator(videoId)
                 player.src = videoId
