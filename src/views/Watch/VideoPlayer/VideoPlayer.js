@@ -22,10 +22,10 @@ let player
 const ref = firebase.firestore()
 
 function readCookie(name) {
-  var nameCookie = name + '='
-  var cookies = document.cookie.split(';')
-  for (var i = 0; i < cookies.length; i++) {
-    var c = cookies[i]
+  let nameCookie = name + '='
+  let cookies = document.cookie.split(';')
+  for (let i = 0; i < cookies.length; i++) {
+    let c = cookies[i]
     while (c.charAt(0) == ' ') c = c.substring(1, c.length)
     if (c.indexOf(nameCookie) == 0)
       return c.substring(nameCookie.length, c.length)
@@ -35,20 +35,6 @@ function readCookie(name) {
 
 const UnconnectedVideoPlayer = (props) => {
   currentGroup = useSelector((state) => state.groups.currentGroup)
-  //
-  var groupRef = ref.collection('group').doc(currentGroup)
-  let videoId = ''
-  groupRef
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        videoId = doc.data().playlist[0].id
-        props.dispatchVideoIdActionCreator(videoId)
-      }
-    })
-    .catch((error) => {
-      console.log('Error getting document:', error)
-    })
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -58,17 +44,28 @@ const UnconnectedVideoPlayer = (props) => {
     scriptYoutube.src = 'https://www.youtube.com/iframe_api'
     scriptYoutube.async = false
     document.body.appendChild(scriptYoutube)
-
+    let groupRef = ref.collection('group').doc(currentGroup)
+    let videoId = ''
+    groupRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        if (doc.data().playlist.length[0]) {
+          videoId = doc.data().playlist[0].id
+          props.dispatchVideoIdActionCreator(videoId)
+          player.src = videoId
+        }
+      }
+    })
     let elPlayer = document.querySelector('.js-player')
     player = window.player = youtube({ el: elPlayer })
     if (!props.newStateUserName) {
       props.dispatchUserNameActionCreator(readCookie('session'))
     }
+
     //conn = new WebSocket('ws://localhost:3000/test')
     conn = new WebSocket('ws://193.122.13.192:3000/test')
 
     conn.onmessage = function (ev) {
-      var matches
+      let matches
       if ((matches = ev.data.match(/^control (.+)$/))) {
         props.dispatchTakeControlActionCreator(matches[1])
       } else if ((matches = ev.data.match(/^pause (.+)$/))) {
@@ -76,7 +73,7 @@ const UnconnectedVideoPlayer = (props) => {
         player.pause()
       } else {
         if (props.stateControlName == props.newStateUserName) return
-        var estimatedTimeOnMaster = parseInt(ev.data) + 1
+        let estimatedTimeOnMaster = parseInt(ev.data) + 1
         if (Math.abs(estimatedTimeOnMaster - player.currentTime) > 5)
           player.currentTime = estimatedTimeOnMaster
         if (player.paused) player.play()
@@ -104,7 +101,6 @@ const UnconnectedVideoPlayer = (props) => {
       conn.send(player.currentTime)
   }
   const timePause = () => {
-    //
     if (props.stateControlName == props.newStateUserName)
       conn.send('pause ' + player.currentTime)
   }
@@ -113,13 +109,10 @@ const UnconnectedVideoPlayer = (props) => {
     props.dispatchLeaveRoomActionCreator()
     props.dispatchTakeControlActionCreator('--?')
     conn.send('control ' + '--!')
-
-    document.querySelector('#room').className = 'inactive'
-    document.querySelector('#registration').className = 'active'
   }
 
   const leaveRoomClick = () => {
-    var groupRef = ref.collection('group').doc(currentGroup)
+    let groupRef = ref.collection('group').doc(currentGroup)
     let usersJoined = []
     groupRef
       .get()
@@ -152,7 +145,7 @@ const UnconnectedVideoPlayer = (props) => {
       })
   }
   const joinRoomClick = () => {
-    var groupRef = ref.collection('group').doc(currentGroup)
+    let groupRef = ref.collection('group').doc(currentGroup)
     let usersJoined = []
     groupRef.onSnapshot((doc) => {
       if (doc.exists) {
@@ -178,7 +171,7 @@ const UnconnectedVideoPlayer = (props) => {
     })
   }
   const nextVideoClick = (currentVideoId) => {
-    var groupRef = ref.collection('group').doc(currentGroup)
+    let groupRef = ref.collection('group').doc(currentGroup)
     let playlist = []
     let newPlaylist = []
     groupRef
@@ -187,7 +180,6 @@ const UnconnectedVideoPlayer = (props) => {
         if (doc.exists) {
           playlist = doc.data().playlist
           let foundSong = playlist.filter((e) => e.id == currentVideoId)
-
           if (foundSong) {
             newPlaylist = playlist.filter((e) => e.id != currentVideoId)
             groupRef
@@ -203,9 +195,11 @@ const UnconnectedVideoPlayer = (props) => {
           }
           groupRef.onSnapshot((doc) => {
             if (doc.exists) {
-              videoId = doc.data().playlist[0].id
-              props.dispatchVideoIdActionCreator(videoId)
-              console.log('videoid' + videoId)
+              if (doc.data().playlist.length[0]) {
+                let videoId = doc.data().playlist[0].id
+                props.dispatchVideoIdActionCreator(videoId)
+                player.src = videoId
+              }
             }
           })
         } else {
