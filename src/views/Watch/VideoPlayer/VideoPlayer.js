@@ -249,9 +249,6 @@ const UnconnectedVideoPlayer = (props) => {
         Leave Room
       </Button>
       <p>
-        Users: <span id="userCount">{props.stateUserCount}</span>
-      </p>
-      <p>
         Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
       </p>
       <p>
