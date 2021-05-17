@@ -9,27 +9,26 @@ import { Link } from 'react-router-dom'
 import { TextField } from '../../components/TextField'
 
 const unconnectedLogin = (props) => {
-  const loginClick = (username) => {
-    //debugger
-    console.log('login button has been pushed!' + props.mapUsername)
-    return props.login(username)
-  }
   return (
-    <div>
-      <br />
-      <span className="LoginSpan">Please log in to continue...</span>
-      <div>
+    <div className="LoginContent">
+      <span className="LoginSpan">
+        Welcome to OurTube! This is an app for watching videos together with
+        your friends. To start, chose a username and press Log in. Then you may
+        create a new or join an already existing Group...{' '}
+      </span>
+
+      <div className="LoginTextfield">
         <TextField
           id="username"
           label="Username:"
           pattern="[a-zA-Z0-9\s]+"
           onChange={(e) => {
             props.setUsername(e.target.value)
-            //console.log('result of input', props.mapUserLetters.target.value)
           }}
         />
+      </div>
+      <div className="LoginButton">
         <Link to="/explore">
-          {' '}
           <Button
             onClick={() => {
               props.login(props.mapUsername)

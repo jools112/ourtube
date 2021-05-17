@@ -1,5 +1,20 @@
+.playlistWrapper {
+  margin-bottom: 10px;
+}
+
 .playlist {
-  border: 1px solid green;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.playlistInner {
   display: flex;
+  overflow-x: auto;
+
   height: 200px;
+}
+
+.playlistInner > span {
+  display: block;
+  min-width: 200px;
 }

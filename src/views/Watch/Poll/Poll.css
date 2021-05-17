@@ -4,10 +4,23 @@
   width: 400px;
   margin: 8px auto;
 }
+.PollBoxContainer h4 {
+  margin-top: 0;
+}
 .PollBoxContainer {
   display: flex;
   justify-content: center;
 }
 .PollContentContainer {
   width: 100%;
+}
+.PollButtonContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.PollButtonContainer > button {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
 }

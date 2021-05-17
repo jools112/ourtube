@@ -19,7 +19,7 @@ export const unconnectedRatingBox = (props) => {
         title="RATING"
         content={
           <div className="RatingBoxContent">
-            <div>User rating </div>
+            <h4>User rating </h4>
             <Rating
               initialRating={props.mapUserRating}
               emptySymbol="far fa-star fa-2x" // behöver kunna förklara vad som händer... js?? css??
@@ -32,8 +32,7 @@ export const unconnectedRatingBox = (props) => {
                 props.fetchRatingData()
               }}
             />
-            <br />
-            <div>Group rating</div>
+            <h4>Group rating</h4>
             <div>
               <Rating
                 readonly

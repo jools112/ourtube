@@ -230,6 +230,7 @@ const UnconnectedVideoPlayer = (props) => {
     conn.send('control ' + name)
   }
 
+  console.log(props)
   return (
     <div>
       <div id="room" className="inactive">
@@ -241,44 +242,53 @@ const UnconnectedVideoPlayer = (props) => {
           </div>
         </div>
       </div>
-      <Button onClick={leaveControlClick} id="leave">
-        Leave Control
-      </Button>
-      <Button onClick={leaveRoomClick} id="leave">
-        Leave Room
-      </Button>
-      <p>
-        Users: <span id="userCount">{props.stateUserCount}</span>
-      </p>
-      <p>
-        Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
-      </p>
-      <p>
-        Controller: <span id="controller">{props.stateControlName}</span>
-        <Button
-          onClick={() => takeControlRoomClick(props.newStateUserName)}
-          id="takeControl"
-        >
-          Take Control
-        </Button>
-        <Button
-          onClick={() => joinRoomClick(props.newStateUserName)}
-          id="joinRoom"
-        >
-          Join Room
-        </Button>
-      </p>
-      <p>
-        <Button
-          onClick={() => nextVideoClick(props.stateVideoId)}
-          id="takeControl"
-        >
-          Next Video
-        </Button>
-      </p>
-      <p>
-        Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
-      </p>
+
+      <div className="VideoPlayerButtonContainer">
+        <div className="VideoPlayerButton">
+          <Button onClick={leaveRoomClick} id="leave">
+            Leave Room
+          </Button>
+        </div>
+        <div className="VideoPlayerButton">
+          <Button
+            onClick={() => joinRoomClick(props.newStateUserName)}
+            id="joinRoom"
+          >
+            Join Room
+          </Button>
+        </div>
+      </div>
+      {props.stateUserNameJoined && (
+        <div>
+          <h4>
+            Users joined:{' '}
+            <span id="userJoined">{props.stateUserNameJoined}</span>
+          </h4>
+          <div className="VideoPlayerButtonContainer">
+            <div className="VideoPlayerButton">
+              <Button onClick={leaveControlClick} id="leave">
+                Release Control
+              </Button>
+            </div>
+            <div className="VideoPlayerButton">
+              <Button
+                onClick={() => takeControlRoomClick(props.newStateUserName)}
+                id="takeControl"
+              >
+                Take Control
+              </Button>
+            </div>
+            <div className="VideoPlayerButton">
+              <Button
+                onClick={() => nextVideoClick(props.stateVideoId)}
+                id="takeControl"
+              >
+                Next Video
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="VideoPlayerContent">
         <SoftBox

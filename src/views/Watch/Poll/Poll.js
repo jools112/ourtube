@@ -29,10 +29,10 @@ export const unconnectedPoll = (props) => {
         title="POLL"
         content={
           <div className="PollContentContainer">
-            <div>which video do we watch next?</div>
+            <h4>Please vote for which video to watch next</h4>
             {props.mapResult.length > 0 ? (
               <div>
-                <div>
+                <div className="PollButtonContainer">
                   <Button
                     onClick={() => {
                       props.pollAction(0)
@@ -57,7 +57,7 @@ export const unconnectedPoll = (props) => {
                 </div>
                 <br />
                 <div>
-                  result
+                  <h4>Result</h4>
                   <ResponsiveContainer aspect={2}>
                     <BarChart
                       data={[

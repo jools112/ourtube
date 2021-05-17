@@ -70,49 +70,58 @@ export const unconnectedGroup = (props) => {
         </div>
       ) : props.mapGroups.length > 0 ? (
         <div>
-          <div>
+          <div className="SoftBoxWrapper">
             {/* {props.mapCurrentGroup} */}
+
             <SoftBox
               title="GROUPS"
-              content={props.mapGroups.map((group) => (
-                <div className="GroupsDiv">
-                  <div key={group.id}>
-                    <Link to="/watch">
-                      <h4 onClick={() => props.setGroupId(group.id)}>
-                        {group.name}
-                      </h4>
-                    </Link>
-
-                    <button
-                      className="GroupsJoin"
-                      onClick={() => props.groupInfoAction(group.description)}
-                    >
-                      Info
-                    </button>
-                    <button
-                      className="GroupsJoin"
-                      onClick={() =>
-                        props.userJoinAction({
-                          id: group.id,
-                          member: props.mapUsername
-                        })
-                      }
-                    >
-                      Join
-                    </button>
-                  </div>
+              content={
+                <div className="GroupsContainer">
+                  {props.mapGroups.map((group) => (
+                    <div className="GroupsSubContainer">
+                      <SoftBox
+                        title={group.name}
+                        content={
+                          <>
+                            <div className="GroupsInfo">
+                              {group.description}
+                            </div>
+                            <div className="GroupsContentButtons">
+                              <Button
+                                className="GroupsJoin"
+                                onClick={() =>
+                                  props.userJoinAction({
+                                    id: group.id,
+                                    member: props.mapUsername
+                                  })
+                                }
+                              >
+                                Join
+                              </Button>
+                              <Link to="/watch">
+                                <Button
+                                  onClick={() => props.setGroupId(group.id)}
+                                >
+                                  Go to room
+                                </Button>
+                              </Link>
+                            </div>
+                          </>
+                        }
+                      ></SoftBox>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              }
             ></SoftBox>
           </div>
-          <Button onClick={() => props.createAction()}>Create Group</Button>
-          <br />
+          <div className="CreateGroupButton">
+            <Button onClick={() => props.createAction()}>Create Group</Button>
+          </div>
           {/* This is a validation message, will print 
           "Log in to join a group if the current username is ''.
           Will print "You have joined the group" if the username is set */}
           {props.mapLogValid}
-          <br />
-          Group Description: {props.mapInfoStr}
         </div>
       ) : (
         '\nloading...'

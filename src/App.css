@@ -5,6 +5,7 @@
 .AppMainContent {
   width: 1280px;
   margin: 0 auto;
+  padding-top: 10px;
 }
 
 body {

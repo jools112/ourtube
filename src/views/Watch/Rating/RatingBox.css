@@ -3,6 +3,10 @@
   justify-content: center;
 }
 
+.RatingBox h4:first-child {
+  margin-top: 0;
+}
+
 .RatingBox svg {
   color: var(--golden-corn);
 }

@@ -18,7 +18,7 @@
 }
 
 .GroupBox:hover {
-  background-color: #50654f61; 
+  background-color: #50654f61;
 }
 
 .Create {
@@ -30,19 +30,30 @@
   height: 30px;
   width: 60px;
   border-radius: 12px;
-  background-color: #94ff88; 
+  background-color: #94ff88;
 }
 .CreateButton:hover {
-  background-color: #50654f61; 
+  background-color: #50654f61;
 }
 
-.GroupsDiv {
-  background-color: rgb(255, 255, 255);
-  color: black;
-  margin: 8px;
+.GroupsContainer {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  margin: -8px -8px;
+  padding: 24px 8px 8px;
+}
 
+.SoftBoxWrapper {
+  margin-bottom: 10px;
+}
+.GroupsSubContainer {
+  /* flex-basis: calc(100% / 3); */
+  width: calc(100% / 3 - 16px);
+  margin: 8px 8px;
+}
+
+.GroupsSubContainer > .SoftBox {
+  width: auto;
 }
 
 .GroupsJoin {
@@ -56,4 +67,16 @@
 
 .GroupsSubmitContainer {
   padding-top: 15px;
+}
+
+.GroupsContentButtons {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.GroupsInfo {
+  margin-bottom: 10px;
+  text-align: center;
+  width: 100%;
 }
