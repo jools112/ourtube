@@ -8,12 +8,10 @@ export const VideoSearch = (props) => {
   const [query, setQuery] = React.useState(null)
   let debounceTimer
   const debounceSearch = (text) => {
-    //console.log("Debouncing: " + text);
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
     debounceTimer = setTimeout(() => {
-      //console.log("Searching for: " + text);
       debounceTimer = null
       setQuery(text)
     }, 750)

@@ -52,7 +52,6 @@ export const usePlaylist = (groupID: string) => {
       if (!data) {
         dispatch(actions.setVideos([]))
       } else {
-        console.log("Got vids from firestore:", data.playlist)
         dispatch(actions.setVideos(data.playlist))
       }
     })
@@ -60,15 +59,3 @@ export const usePlaylist = (groupID: string) => {
   }, [groupID])
   return playlist
 }
-
-// const getPlaylist = async (groupID: string): Promise<Video[]> => {
-//     const group = await firestore.collection('group').doc(groupID).get()
-//     if (group && group.exists) {
-//         const data = group.data()
-//         if (data) {
-//             return data.playlist
-//         }
-//     }
-//     console.log("nop")
-//     return []
-// }

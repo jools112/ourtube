@@ -14,7 +14,6 @@ const initialState: State = {
 const playlistReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case actions.SET_VIDEOS: {
-      console.log("Set videos to:", action.payload.videos)
       return {
         ...state,
         videos: action.payload.videos,

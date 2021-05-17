@@ -7,12 +7,10 @@ import { useSelector } from 'react-redux'
 const Playlist: React.FC = () => {
   const currentGroup = useSelector((state: any) => state.groups.currentGroup)
   const videos = usePlaylist(currentGroup).slice(1)
-  console.log("Mapping over vids", videos)
   return (
     <div className="playlist">
       <p>Playlist</p>
       {videos.map((video, index) => {
-        console.log(video, index)
         return <VideoSummary videoID={video.id} mini="true" key={index + ":" + video.id} />
       })}
     </div>
