@@ -37,11 +37,6 @@ function readCookie(name) {
 const UnconnectedVideoPlayer = (props) => {
   currentGroup = useSelector((state) => state.groups.currentGroup)
   useEffect(() => {
-    const scriptHtml5 = document.createElement('script')
-    scriptHtml5.src = 'html5-youtube.js'
-    scriptHtml5.async = false
-    scriptHtml5.type = 'jsx'
-    document.body.appendChild(scriptHtml5)
     const scriptYoutube = document.createElement('script')
     scriptYoutube.src = 'https://www.youtube.com/iframe_api'
     scriptYoutube.async = false
