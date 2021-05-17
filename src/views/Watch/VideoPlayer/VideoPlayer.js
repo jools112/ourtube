@@ -268,9 +268,6 @@ const UnconnectedVideoPlayer = (props) => {
           Next Video
         </Button>
       </p>
-      <p>
-        Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
-      </p>
 
       <div className="VideoPlayerContent">
         <SoftBox
