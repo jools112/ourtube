@@ -11,7 +11,7 @@ const Playlist: React.FC = () => {
     <div className="playlist">
       <p>Playlist</p>
       {videos.map((video, index) => {
-        return <VideoSummary videoID={video.id} mini="true" /*key={index}*/ />
+        return <VideoSummary videoID={video.id} mini="true" key={index + ":" + video.id} />
       })}
     </div>
   )
