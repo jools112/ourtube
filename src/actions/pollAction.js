@@ -1,29 +1,17 @@
 import firebase from '../firebase'
 
-export const pollAction = (selectedVal) => (dispatch, getState) => {
+export const pollAction = (choice) => (dispatch, getState) => {
   const ref = firebase.firestore().collection('group')
   const user = getState().login.username
-  const videoId = getState().playlist.videos[0].name
   const groupId = getState().groups.currentGroup
 
-  const mockData = {
-    choice: selectedVal,
-    user,
-    videoId,
-    groupId
-  }
-
   ref
-    .where('id', '==', mockData.groupId)
+    .where('id', '==', groupId)
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        /*console.log(
-          mockData.user + ' voted : ',
-          doc.data().poll.result[mockData.user]
-        )*/
         var testUpdate = {}
-        testUpdate['poll.result.' + mockData.user] = mockData.choice
+        testUpdate['poll.result.' + user] = choice
 
         ref.doc(doc.data().id).update(testUpdate)
       })
@@ -32,21 +20,13 @@ export const pollAction = (selectedVal) => (dispatch, getState) => {
 
 export const fetchPollData = () => (dispatch, getState) => {
   const ref = firebase.firestore().collection('group')
-  const user = getState().login.username
-  const videoId = getState().playlist.videos[0].name
   const groupId = getState().groups.currentGroup
-
-  const mockData = {
-    user,
-    videoId,
-    groupId
-  }
 
   let votes = [0, 0, 0]
   let pollData = []
   let fetched = {}
 
-  ref.where('id', '==', mockData.groupId).onSnapshot((snapshot) => {
+  ref.where('id', '==', groupId).onSnapshot((snapshot) => {
     snapshot.forEach((doc) => {
       fetched = doc.data().poll
       //console.log('fetching ', fetched)
