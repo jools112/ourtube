@@ -1,4 +1,10 @@
 .searchResults {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchResults > .SoftBox {
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 10px;
 }

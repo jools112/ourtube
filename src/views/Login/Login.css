@@ -2,10 +2,8 @@
   display: none;
 }
 
-.LoginSpan {
+.h2 {
   color: var(--vis-vis);
-  font-size: larger;
-  display: block;
 }
 
 .LoginTextfield,

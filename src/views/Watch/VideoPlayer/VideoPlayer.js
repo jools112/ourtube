@@ -16,6 +16,7 @@ import { SoftBox } from '../../../components/SoftBox'
 import { useSelector } from 'react-redux'
 import firebase from '../../../firebase'
 import { updateRelatedVideosFromID } from '../VideoSearch/RelatedSearch'
+import { Link } from 'react-router-dom'
 
 let currentGroup
 let conn
@@ -104,8 +105,8 @@ const UnconnectedVideoPlayer = (props) => {
 
   const leaveControlClick = () => {
     props.dispatchLeaveRoomActionCreator()
-    props.dispatchTakeControlActionCreator('--?')
-    conn.send('control ' + '--!')
+    props.dispatchTakeControlActionCreator('')
+    conn.send('control ' + '')
   }
 
   const leaveRoomClick = () => {
@@ -225,7 +226,6 @@ const UnconnectedVideoPlayer = (props) => {
     conn.send('control ' + name)
   }
 
-  console.log(props)
   return (
     <div>
       <div id="room" className="inactive">
@@ -240,9 +240,11 @@ const UnconnectedVideoPlayer = (props) => {
 
       <div className="VideoPlayerButtonContainer">
         <div className="VideoPlayerButton">
-          <Button onClick={leaveRoomClick} id="leave">
-            Leave Room
-          </Button>
+          <Link to="/explore">
+            <Button onClick={leaveRoomClick} id="leave">
+              Leave Room
+            </Button>
+          </Link>
         </div>
         <div className="VideoPlayerButton">
           <Button

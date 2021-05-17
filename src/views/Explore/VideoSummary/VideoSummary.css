@@ -8,10 +8,11 @@
 
 .videoSummaryContainerSmall {
   padding: 0.5rem;
-  border: 1px solid black;
+
   width: 180px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .videoSummaryThumbnail {

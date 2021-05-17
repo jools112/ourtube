@@ -24,11 +24,6 @@ export const unconnectedTopBar = (props) => {
           ''
         )}
       </div>
-      <div>
-        <Link to="/explore">
-          <Button>To Explore page</Button>
-        </Link>
-      </div>
     </div>
   )
 }

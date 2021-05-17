@@ -11,11 +11,10 @@ import { TextField } from '../../components/TextField'
 const unconnectedLogin = (props) => {
   return (
     <div className="LoginContent">
-      <span className="LoginSpan">
+      <h2>
         Welcome to OurTube! This is an app for watching videos together with
-        your friends. To start, chose a username and press Log in. Then you may
-        create a new or join an already existing Group...{' '}
-      </span>
+        your friends. To start, chose a username and press Log in.
+      </h2>
 
       <div className="LoginTextfield">
         <TextField

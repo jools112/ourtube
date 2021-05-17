@@ -1,6 +1,6 @@
 const initialState = {
   joined: false,
-  controlName: '--#',
+  controlName: '',
   userCount: 0,
   userNameJoined: '',
   videoId: ''

@@ -8,6 +8,7 @@ import { getIDsFromSearchResults, promiseNoData } from '../SearchUtil'
 import { addVideosToPlaylist } from '../../Playlist/playlistService'
 import { useSelector } from 'react-redux'
 import { updateRelatedVideosFromID } from '../RelatedSearch'
+import './SearchResults.css'
 // TODO: Make sure search is "current", aka we change search terms before the previous req has returned
 // TODO: Figure out what to do about terrible youtube quota
 export const SearchResults = (props) => {
@@ -68,7 +69,7 @@ const SearchResultsLoaded = (props) => {
         {props.results.map((videoID, index) => {
           return (
             <VideoSummary
-              key={videoID + ":" + index}
+              key={videoID + ':' + index}
               videoID={videoID}
               mini={props.mini}
               onClick={async (videoData) => {
@@ -86,7 +87,7 @@ const SearchResultsLoaded = (props) => {
                   if (!videos.length) {
                     await updateRelatedVideosFromID(currentGroup, videoID)
                   }
-                } catch { }
+                } catch {}
                 setLoading(false)
               }}
             />
