@@ -20,7 +20,7 @@ export const VideoSummary = (props) => {
         })
         .then(data => setVideoData(data))
         .catch(err => setError(err)));
-  }, []);
+  }, [props.videoID]);
   return promiseNoData(videoDataPromise, videoData, error, <div>Loading video...</div>) || <VideoSummaryLoaded videoData={videoData.items[0]} mini={props.mini} onClick={props.onClick} />
 }
 
