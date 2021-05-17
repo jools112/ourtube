@@ -8,7 +8,7 @@ export const RatedVideos: React.FC = () => {
     <>
       <p>Top rated videos on OurTube</p>
       {videos.slice(0).map((id, index) => (
-        <VideoSummary videoID={id} key={index} />
+        <VideoSummary videoID={id} key={id + ":" + index} />
       ))}
     </>
   )

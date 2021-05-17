@@ -52,6 +52,7 @@ export const usePlaylist = (groupID: string) => {
       if (!data) {
         dispatch(actions.setVideos([]))
       } else {
+        console.log("Got vids from firestore:", data.playlist)
         dispatch(actions.setVideos(data.playlist))
       }
     })

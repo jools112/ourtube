@@ -65,9 +65,10 @@ const SearchResultsLoaded = (props) => {
   if (props.results.length != 0) {
     return (
       <div className="searchResults">
-        {props.results.map((videoID) => {
+        {props.results.map((videoID, index) => {
           return (
             <VideoSummary
+              key={videoID + ":" + index}
               videoID={videoID}
               mini={props.mini}
               onClick={async (videoData) => {
@@ -85,7 +86,7 @@ const SearchResultsLoaded = (props) => {
                   if (!videos.length) {
                     await updateRelatedVideosFromID(currentGroup, videoID)
                   }
-                } catch {}
+                } catch { }
                 setLoading(false)
               }}
             />
