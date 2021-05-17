@@ -49,9 +49,11 @@ const UnconnectedVideoPlayer = (props) => {
     let videoId = ''
     groupRef.onSnapshot((doc) => {
       if (doc.exists) {
-        videoId = doc.data().playlist[0].id
-        props.dispatchVideoIdActionCreator(videoId)
-        player.src = videoId
+        if (doc.data().playlist.length[0]) {
+          videoId = doc.data().playlist[0].id
+          props.dispatchVideoIdActionCreator(videoId)
+          player.src = videoId
+        }
       }
     })
     let elPlayer = document.querySelector('.js-player')
@@ -194,9 +196,11 @@ const UnconnectedVideoPlayer = (props) => {
           }
           groupRef.onSnapshot((doc) => {
             if (doc.exists) {
-              let videoId = doc.data().playlist[0].id
-              props.dispatchVideoIdActionCreator(videoId)
-              player.src = videoId
+              if (doc.data().playlist.length[0]) {
+                let videoId = doc.data().playlist[0].id
+                props.dispatchVideoIdActionCreator(videoId)
+                player.src = videoId
+              }
             }
           })
         } else {
