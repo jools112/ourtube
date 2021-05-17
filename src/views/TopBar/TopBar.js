@@ -29,11 +29,6 @@ export const unconnectedTopBar = (props) => {
           <Button>To Explore page</Button>
         </Link>
       </div>
-      <div>
-        <Link to="/watch">
-          <Button>To Watch page</Button>
-        </Link>
-      </div>
     </div>
   )
 }
