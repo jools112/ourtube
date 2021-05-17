@@ -35,13 +35,12 @@ function readCookie(name) {
 
 const UnconnectedVideoPlayer = (props) => {
   currentGroup = useSelector((state) => state.groups.currentGroup)
-  //debugger
+  //
   var groupRef = ref.collection('group').doc(currentGroup)
   let videoId = ''
   groupRef
     .get()
     .then((doc) => {
-      debugger
       if (doc.exists) {
         videoId = doc.data().playlist[0].id
         props.dispatchVideoIdActionCreator(videoId)
@@ -105,7 +104,7 @@ const UnconnectedVideoPlayer = (props) => {
       conn.send(player.currentTime)
   }
   const timePause = () => {
-    //debugger
+    //
     if (props.stateControlName == props.newStateUserName)
       conn.send('pause ' + player.currentTime)
   }
@@ -188,7 +187,7 @@ const UnconnectedVideoPlayer = (props) => {
         if (doc.exists) {
           playlist = doc.data().playlist
           let foundSong = playlist.filter((e) => e.id == currentVideoId)
-          debugger
+
           if (foundSong) {
             newPlaylist = playlist.filter((e) => e.id != currentVideoId)
             groupRef
@@ -203,7 +202,6 @@ const UnconnectedVideoPlayer = (props) => {
               })
           }
           groupRef.onSnapshot((doc) => {
-            debugger
             if (doc.exists) {
               videoId = doc.data().playlist[0].id
               props.dispatchVideoIdActionCreator(videoId)

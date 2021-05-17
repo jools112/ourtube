@@ -36,14 +36,16 @@ export const SearchResults = (props) => {
     return () => {
       ignore = true
     }
-<<<<<<< HEAD
+    return () => {
+      ignore = true
+    }
   }, [props.query])
   return (
     promiseNoData(
       searchDataPromise,
       searchData,
       error,
-      <SearchResultsLoading mini={props.mini} />
+      <div>Searching...</div>
     ) || (
       <SearchResultsLoaded
         results={getIDsFromSearchResults(searchData)}
@@ -52,25 +54,6 @@ export const SearchResults = (props) => {
       />
     )
   )
-}
-
-// TODO make this a bit more generic and move out of this file?
-const promiseNoData = (promise, data, error, placeholder) => {
-  return (
-    (!promise && <span></span>) ||
-    (promise && !data && !error && placeholder) ||
-    (error && <span>err: {error.toString()}</span>) ||
-    false
-  )
-}
-
-const SearchResultsLoading = () => {
-  return <div>NO DATA YET</div>
-=======
-    return () => { ignore = true };
-  }, [props.query]);
-  return promiseNoData(searchDataPromise, searchData, error, <div>Searching...</div>) || <SearchResultsLoaded results={getIDsFromSearchResults(searchData)} mini={props.mini} onSelect={props.onSelect} />
->>>>>>> ed1f146de3aa150c2950e07d10a0bfcaf229e9dc
 }
 
 const SearchResultsLoaded = (props) => {
