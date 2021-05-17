@@ -114,7 +114,6 @@ const UnconnectedVideoPlayer = (props) => {
     groupRef
       .get()
       .then((doc) => {
-        debugger
         if (doc.exists) {
           usersJoined = doc.data().membersjoined
           if (usersJoined.includes(props.newStateUserName)) {
