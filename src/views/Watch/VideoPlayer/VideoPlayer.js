@@ -117,6 +117,7 @@ const UnconnectedVideoPlayer = (props) => {
     groupRef
       .get()
       .then((doc) => {
+        debugger
         if (doc.exists) {
           usersJoined = doc.data().membersjoined
           if (usersJoined.includes(props.newStateUserName)) {
@@ -147,7 +148,7 @@ const UnconnectedVideoPlayer = (props) => {
   const joinRoomClick = () => {
     let groupRef = ref.collection('group').doc(currentGroup)
     let usersJoined = []
-    groupRef.onSnapshot((doc) => {
+    groupRef.get().then((doc) => {
       if (doc.exists) {
         usersJoined = doc.data().membersjoined
         if (!usersJoined.includes(props.newStateUserName)) {
@@ -163,7 +164,17 @@ const UnconnectedVideoPlayer = (props) => {
               console.error(err)
             })
         }
-        props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+        //  props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!')
+      }
+    })
+    let usersJoined2 = []
+    groupRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        usersJoined2 = doc.data().membersjoined
+        props.dispatchUserNameJoinedActionCreator(usersJoined2.join(', '))
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!')
