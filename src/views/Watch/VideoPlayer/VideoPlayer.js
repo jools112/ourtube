@@ -35,7 +35,6 @@ function readCookie(name) {
 
 const UnconnectedVideoPlayer = (props) => {
   currentGroup = useSelector((state) => state.groups.currentGroup)
-
   useEffect(() => {
     const scriptHtml5 = document.createElement('script')
     scriptHtml5.src = 'html5-youtube.js'
@@ -265,15 +264,7 @@ const UnconnectedVideoPlayer = (props) => {
       <p>
         Users joined: <span id="userJoined">{props.stateUserNameJoined}</span>
       </p>
-      <p>
-        Controller: <span id="controller">{props.stateControlName}</span>
-        <Button
-          onClick={() => takeControlRoomClick(props.newStateUserName)}
-          id="takeControl"
-        >
-          Take Control
-        </Button>
-      </p>
+
       <div className="VideoPlayerContent">
         <SoftBox
           title="VIDEO PLAYER"

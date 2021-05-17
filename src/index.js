@@ -6,12 +6,12 @@ import reportWebVitals from './reportWebVitals'
 import '@fortawesome/fontawesome-free/js/all.js'
 
 import { Provider } from 'react-redux'
-import configureStore from './store'
+import { getStore } from './store'
 import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={configureStore()}>
+    <Provider store={getStore()}>
       <App />
     </Provider>
   </React.StrictMode>,
