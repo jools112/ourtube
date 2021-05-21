@@ -135,11 +135,11 @@ const UnconnectedVideoPlayer = (props) => {
           props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
         } else {
           // doc.data() will be undefined in this case
-          console.log('No such document!')
+          console.error('No such document!')
         }
       })
       .catch((error) => {
-        console.log('Error getting document:', error)
+        console.error('Error getting document:', error)
       })
   }
   const joinRoomClick = () => {
@@ -161,10 +161,9 @@ const UnconnectedVideoPlayer = (props) => {
               console.error(err)
             })
         }
-        //  props.dispatchUserNameJoinedActionCreator(usersJoined.join(', '))
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such document!')
+        console.error('No such document!')
       }
     })
     let usersJoined2 = []
@@ -174,7 +173,7 @@ const UnconnectedVideoPlayer = (props) => {
         props.dispatchUserNameJoinedActionCreator(usersJoined2.join(', '))
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such document!')
+        console.error('No such document!')
       }
     })
   }
@@ -215,11 +214,11 @@ const UnconnectedVideoPlayer = (props) => {
           })
         } else {
           // doc.data() will be undefined in this case
-          console.log('No such document!')
+          console.error('No such document!')
         }
       })
       .catch((error) => {
-        console.log('Error getting document:', error)
+        console.error('Error getting document:', error)
       })
   }
   const takeControlRoomClick = (name) => {

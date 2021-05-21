@@ -49,16 +49,20 @@ export const endPollAction = () => (dispatch, getState) => {
     [winner.alternative],
     false,
     true
-  )
-  const ref = firestore.collection('group').doc(getState().groups.currentGroup)
-  firestore.runTransaction(async (transaction) => {
-    transaction.update(ref, {
-      poll: {
-        alternatives: [],
-        result: {}
-      }
+  ).then(() => {
+    const ref = firestore
+      .collection('group')
+      .doc(getState().groups.currentGroup)
+    firestore.runTransaction(async (transaction) => {
+      transaction.update(ref, {
+        poll: {
+          alternatives: [],
+          result: {}
+        }
+      })
     })
   })
+
   //console.log('the winner is.... ', winner, '!!!!!!!!')
 }
 

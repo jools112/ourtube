@@ -10,11 +10,9 @@ import { getStore } from './store'
 import './index.css'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={getStore()}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={getStore()}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 )
 

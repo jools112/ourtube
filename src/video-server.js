@@ -10,7 +10,6 @@ server.on('connection', function (conn) {
     log('message logged ' + message)
     if (message.includes('ipaddress')) {
       let ipAddress = message.split(':')[1]
-      log('ipAddress console log' + ipAddress)
       if (!usersConnectedIpAddress.has(ipAddress)) {
         usersConnectedIpAddress.set(ipAddress)
         server.broadcast('userCount ' + ++userCount)
@@ -25,10 +24,6 @@ server.on('connection', function (conn) {
 server.on('close', function (conn) {
   server.broadcast('userCount ' + --userCount)
 })
-
-function log(msg) {
-  console.log(+new Date() + ' - ' + msg.toString())
-}
 
 server.broadcast = (msg) => {
   log(msg)

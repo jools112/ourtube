@@ -9,19 +9,31 @@ export const VideoSummary = (props) => {
   const [videoData, setVideoData] = React.useState(null)
   const [error, setError] = React.useState(null)
   const [videoDataPromise, setVideoDataPromise] = React.useState(null)
+
+  // TODO: Clean this up
+  let rejector = () => false
+
   React.useEffect(() => {
-    setVideoDataPromise(
-      getVideoData(props.videoID)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.items.length == 0) {
-            throw new Error('No results.')
-          }
-          return data
-        })
-        .then((data) => setVideoData(data))
-        .catch((err) => setError(err))
-    )
+    new Promise((resolve, reject) => {
+      const vPromise = getVideoData(props.videoID)
+      setVideoDataPromise(vPromise)
+
+      rejector = reject
+      vPromise.then((response) => resolve(response))
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.items.length == 0) {
+          throw new Error('No results.')
+        }
+        return data
+      })
+      .then((data) => setVideoData(data))
+      .catch((err) => setError(err))
+
+    return () => {
+      rejector()
+    }
   }, [props.videoID])
   return (
     promiseNoData(
@@ -43,7 +55,6 @@ export const VideoSummary = (props) => {
 const VideoSummaryLoaded = (props) => {
   const clickHandler = () => props.onClick && props.onClick(props.videoData)
   const videoData = props.videoData
-  console.log
   const videoTitle = videoData.snippet.title //yes!
   const channelTitle = videoData.snippet.channelTitle
   const _videoDuration = videoData.contentDetails.duration

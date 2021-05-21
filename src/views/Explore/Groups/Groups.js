@@ -77,8 +77,8 @@ export const unconnectedGroup = (props) => {
               title="GROUPS"
               content={
                 <div className="GroupsContainer">
-                  {props.mapGroups.map((group) => (
-                    <div className="GroupsSubContainer">
+                  {props.mapGroups.map((group, index) => (
+                    <div className="GroupsSubContainer" key={index}>
                       <SoftBox
                         title={group.name}
                         content={

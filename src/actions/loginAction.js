@@ -64,11 +64,7 @@ export const loginAction = (username) => (dispatch) => {
             groups: userData.groups,
             ratings: userData.ratings
           })
-          .then(() => {
-            console.log(
-              'Document successfully written for new user ' + userData.name
-            )
-          })
+
           .catch((error) => {
             console.error('Error writing document: ', error)
           })
