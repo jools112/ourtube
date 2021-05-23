@@ -261,7 +261,12 @@ const UnconnectedVideoPlayer = (props) => {
             <span id="userJoined">{props.stateUserNameJoined}</span>
           </h4>
           <h4>
-            Controller: <span id="controller">{props.stateControlName}</span>
+            Controller:{' '}
+            <span id="controller">
+              {props.stateControlName
+                ? props.stateControlName
+                : 'No one is in control.'}
+            </span>
           </h4>
           <div className="VideoPlayerButtonContainer">
             <div className="VideoPlayerButton">

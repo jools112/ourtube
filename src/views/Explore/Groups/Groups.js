@@ -56,7 +56,8 @@ export const unconnectedGroup = (props) => {
                     name,
                     description,
                     id: uuidv4(),
-                    playlist: []
+                    playlist: [],
+                    membersjoined: []
                   })
                 }
               >
@@ -95,12 +96,20 @@ export const unconnectedGroup = (props) => {
                                     member: props.mapUsername
                                   })
                                 }
+                                disabled={(group.members || []).includes(
+                                  props.mapUsername
+                                )}
                               >
                                 Join
                               </Button>
                               <Link to="/watch">
                                 <Button
                                   onClick={() => props.setGroupId(group.id)}
+                                  disabled={
+                                    !(group.members || []).includes(
+                                      props.mapUsername
+                                    )
+                                  }
                                 >
                                   Go to room
                                 </Button>

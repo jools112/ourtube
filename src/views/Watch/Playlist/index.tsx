@@ -14,17 +14,23 @@ const Playlist: React.FC = () => {
         title="Playlist"
         content={
           <div className="playlist">
-            <div className="playlistInner">
-              {videos.map((video, index) => {
-                return (
-                  <VideoSummary
-                    videoID={video.id}
-                    mini="true"
-                    key={index + ':' + video.id}
-                  />
-                )
-              })}
-            </div>
+            {usePlaylist(currentGroup).length > 1 ? (
+              <div>
+                <div className="playlistInner">
+                  {videos.map((video, index) => {
+                    return (
+                      <VideoSummary
+                        videoID={video.id}
+                        mini="true"
+                        key={index + ':' + video.id}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            ) : (
+              "Add more videos by using the below search bar. Type in a search term and click on the result you'd like to add."
+            )}
           </div>
         }
       />

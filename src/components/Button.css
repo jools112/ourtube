@@ -10,3 +10,9 @@
   padding: 5px;
   cursor: pointer;
 }
+
+.DisabledButton {
+  color: var(--livid-brown);
+  background-color: var(--ironside-grey);
+  cursor: not-allowed;
+}
